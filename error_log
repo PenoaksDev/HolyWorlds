@@ -1,0 +1,1 @@
+[31-May-2016 02:22:01 UTC] PHP Fatal error:  Class 'Krucas\Notification\NotificationServiceProvider' not found in /home/holyworlds/html/staging_dev/vendor/laravel/framework/src/Illuminate/Foundation/ProviderRepository.php on line 146
