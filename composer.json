@@ -20,7 +20,8 @@
         "intervention/image": "^2.3",
         "barryvdh/laravel-debugbar": "^2.2",
         "intervention/imagecache": "^2.3",
-        "fenos/notifynder": "^3.2"
+        "fenos/notifynder": "^3.2",
+        "guzzlehttp/guzzle": "~5.3|~6.0"
     },
     "require-dev": {
     },
