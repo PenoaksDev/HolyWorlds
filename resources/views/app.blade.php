@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Rusty Nails Adventurers - @yield('title') - @yield('subtitle')</title>
+    <title>Holy Worlds - @yield('title')</title>
 
     <link href="{{ elixir('css/rna.css') }}" rel="stylesheet">
 
@@ -19,6 +19,9 @@
     <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#3a3c46">
     <meta name="msapplication-TileColor" content="#dd2c00">
     <meta name="theme-color" content="#ffffff">
+
+	<script src="https://autobahn.s3.amazonaws.com/js/autobahn.min.js"></script>
+	<script src="js/pushService.js"></script>
 </head>
 <body class="@yield('body_class')">
     <div id="top-bar" class="navbar-fixed">

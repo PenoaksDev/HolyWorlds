@@ -179,7 +179,7 @@ class AuthController extends Controller
         ]);
 
         // Given them the default role
-        $user->roles()->attach(Setting::get('default_role', 3));
+        $user->roles()->attach(Setting::get('default_role', 100));
 
         // Give the user a profile
         UserProfile::create(['user_id' => $user->id]);
@@ -199,7 +199,7 @@ class AuthController extends Controller
             $socialiteUser = Session::pull('pending_user_auth');
             $provider = Session::pull('pending_user_auth_provider');
             $auth = UserAuth::createFromSocialite($user, $provider, $socialiteUser);
-            Notification::success("Your TRN account has been linked to {$provider}.");
+            Notification::success("Your account has been linked to {$provider}.");
         }
 
         return redirect('/');

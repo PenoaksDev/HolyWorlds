@@ -2,7 +2,7 @@
 
 @section('body_class', 'home')
 
-@section('title', 'Rusty Nails Adventurers')
+@section('title', 'Community of Christ-centered Creativity')
 @section('subtitle', "<em>{$quote}</em>")
 
 @section('content')

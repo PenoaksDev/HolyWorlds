@@ -11,6 +11,10 @@
 |
 */
 
+$r->get("chat", function(){
+    return view("chat");
+});
+
 // Auth
 $r->group(['prefix' => 'auth'], function ($r) {
     // Registration

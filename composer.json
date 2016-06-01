@@ -21,7 +21,9 @@
         "barryvdh/laravel-debugbar": "^2.2",
         "intervention/imagecache": "^2.3",
         "fenos/notifynder": "^3.2",
-        "guzzlehttp/guzzle": "~5.3|~6.0"
+        "guzzlehttp/guzzle": "~5.3|~6.0",
+	"cboden/ratchet": "0.3.*",
+        "react/zmq": "0.2.*|0.3.*"
     },
     "require-dev": {
     },
@@ -31,7 +33,7 @@
         ],
         "psr-4": {
             "App\\": "app/"
-        }
+	}
     },
     "autoload-dev": {
     },
