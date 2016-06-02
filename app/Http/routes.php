@@ -11,9 +11,7 @@
 |
 */
 
-$r->get("chat", function(){
-    return view("chat");
-});
+$r->get("messages", "MessageController@index");
 
 // Auth
 $r->group(['prefix' => 'auth'], function ($r) {
@@ -98,7 +96,7 @@ $r->group(['prefix' => 'articles', 'as' => 'article.'], function ($r) {
     );
 });
 
-// Events
+/*
 $r->group(['prefix' => 'events', 'as' => 'event.'], function ($r) {
     $r->get('/', 'EventController@index');
     $r->get(
@@ -106,6 +104,7 @@ $r->group(['prefix' => 'events', 'as' => 'event.'], function ($r) {
         ['as' => 'show', 'uses' => 'EventController@show']
     );
 });
+*/
 
 // Characters
 $r->group(['prefix' => 'characters', 'as' => 'character.'], function ($r) {
@@ -188,10 +187,22 @@ $r->group(['prefix' => 'comments', 'as' => 'comment.'], function ($r) {
 // Tags
 $r->get('tagged/{tag}', 'TagController@show');
 
+$r->group(["prefix" => "dev", "namespace" => "Dev"], function($r){
+    $r->get("restartPushServer", "DevController@restartPushServer");
+
+    $r->get("broadcast", "DevController@broadcast");
+});
+
 // Admin
 $r->group(['prefix' => 'admin', 'namespace' => 'Admin'], function ($r) {
     // Dashboard
     $r->get('/', 'AdminController@getDashboard');
+
+    $r->resource('groups', 'GroupController');
+
+    $r->resource('users', 'UserController');
+
+    $r->get("users/{userId}/groups", ["as" => "admin.users.groups", "uses" => "UserController@listGroups"] );
 
     // Articles
     $r->resource('article', 'ArticleController');

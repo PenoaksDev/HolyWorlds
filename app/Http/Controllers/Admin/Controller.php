@@ -9,8 +9,6 @@ class Controller extends \App\Http\Controllers\Controller
      */
     public function __construct()
     {
-        if (!App::runningInConsole()) {
-            $this->authorize('admin');
-        }
+    	$this->middleware("perms:sys.admin");
     }
 }

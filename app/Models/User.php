@@ -6,201 +6,213 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
-    use Notifable;
+	use Notifable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = [
-        'name', 'email', 'password', 'activated',
-    ];
+	/**
+	* The attributes that are mass assignable.
+	*
+	* @var array
+	*/
+	protected $fillable = [
+	'name', 'email', 'password', 'activated',
+	];
 
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [
-        'password', 'remember_token',
-    ];
+	/**
+	* The attributes that should be hidden for arrays.
+	*
+	* @var array
+	*/
+	protected $hidden = [
+	'password', 'remember_token',
+	];
 
-    /**
-     * Relationship: profile
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
-     */
-    public function profile()
-    {
-        return $this->hasOne(UserProfile::class);
-    }
+	protected $primaryKey = "userId";
 
-    /**
-     * Relationship: socialite auths
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function auths()
-    {
-        return $this->hasMany(UserAuth::class);
-    }
+	/**
+	* Relationship: profile
+	*
+	* @return \Illuminate\Database\Eloquent\Relations\HasOne
+	*/
+	public function profile()
+	{
+		return $this->hasOne(UserProfile::class);
+	}
 
-    /**
-     * Relationship: comments
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function comments()
-    {
-        return $this->hasMany(Comment::class);
-    }
+	/**
+	* Relationship: socialite auths
+	*
+	* @return \Illuminate\Database\Eloquent\Relations\HasMany
+	*/
+	public function auths()
+	{
+		return $this->hasMany(UserAuth::class);
+	}
 
-    /**
-     * Relationship: characters
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function characters()
-    {
-        return $this->hasMany(Character::class);
-    }
+	/**
+	* Relationship: comments
+	*
+	* @return \Illuminate\Database\Eloquent\Relations\HasMany
+	*/
+	public function comments()
+	{
+		return $this->hasMany(Comment::class);
+	}
 
-    /**
-     * Relationship: roles
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    public function roles()
-    {
-        return $this->belongsToMany(Role::class)->withTimestamps();
-    }
+	/**
+	* Relationship: characters
+	*
+	* @return \Illuminate\Database\Eloquent\Relations\HasMany
+	*/
+	public function characters()
+	{
+		return $this->hasMany(Character::class);
+	}
 
-    /**
-     * Scope: activated
-     *
-     * @param  \Illuminate\Database\Query\Builder
-     * @return \Illuminate\Database\Query\Builder
-     */
-    public function scopeActivated($query)
-    {
-        return $query->where('activated', 1);
-    }
+	/**
+	* Scope: activated
+	*
+	* @param  \Illuminate\Database\Query\Builder
+	* @return \Illuminate\Database\Query\Builder
+	*/
+	public function scopeActivated($query)
+	{
+		return $query->where('activated', 1);
+	}
 
-    /**
-     * Attribute: display name
-     *
-     * @return string
-     */
-    public function getDisplayNameAttribute()
-    {
-        if (!is_null($this->profile->family_name)) {
-            return "{$this->name} ({$this->profile->family_name})";
-        }
+	/**
+	* Attribute: display name
+	*
+	* @return string
+	*/
+	public function getDisplayNameAttribute()
+	{
+		if (!is_null($this->profile->family_name)) {
+			return "{$this->name} ({$this->profile->family_name})";
+		}
 
-        return $this->name;
-    }
+		return $this->name;
+	}
 
-    /**
-     * Attribute: role list
-     *
-     * @return string
-     */
-    public function getRoleListAttribute()
-    {
-        return implode(', ', $this->roles()->lists('name')->toArray());
-    }
+	/**
+	* Attribute: main character
+	*
+	* @return string
+	*/
+	public function getMainCharacterAttribute()
+	{
+		return $this->characters()->where('main', 1)->first();
+	}
 
-    /**
-     * Attribute: main character
-     *
-     * @return string
-     */
-    public function getMainCharacterAttribute()
-    {
-        return $this->characters()->where('main', 1)->first();
-    }
+	/**
+	* Attribute: determine if the user is considered to be new
+	*
+	* @return bool
+	*/
+	public function getIsNewAttribute()
+	{
+		return $this->hasPermission(Setting::get('default_group', 'sys.user'));
+	}
 
-    /**
-     * Attribute: determine if the user is considered to be new
-     *
-     * @return bool
-     */
-    public function getIsNewAttribute()
-    {
-        return $this->hasRole(Setting::get('new_user_role', 'New user'));
-    }
+	/**
+	* Attribute: slugified name
+	*
+	* @return string
+	*/
+	public function getSlugAttribute()
+	{
+		return str_slug($this->name, '-');
+	}
 
-    /**
-     * Attribute: slugified name
-     *
-     * @return string
-     */
-    public function getSlugAttribute()
-    {
-        return str_slug($this->name, '-');
-    }
+	/**
+	* Attribute: profile URL
+	*
+	* @return string
+	*/
+	public function getProfileUrlAttribute()
+	{
+		return url("user/{$this->id}-{$this->slug}");
+	}
 
-    /**
-     * Attribute: profile URL
-     *
-     * @return string
-     */
-    public function getProfileUrlAttribute()
-    {
-        return url("user/{$this->id}-{$this->slug}");
-    }
+	public function groups()
+	{
+		$groups = array();
+		foreach( $this->inheritance as $heir )
+			$groups[] = $heir->group;
+		return $groups;
+	}
 
-    /**
-     * Helper: determine if the user has a given role (or one of multiple given roles)
-     *
-     * @param  string|array  $role
-     * @return bool
-     */
-    public function hasRole($role)
-    {
-        if (is_array($role)) {
-            foreach ($role as $r) {
-                if ($this->hasRole($r)) return true;
-            }
+	public function inheritance()
+	{
+		return $this->hasMany(GroupInheritance::class, "child", "userId");
+	}
 
-            return false;
-        }
+	public function permissions()
+	{
+		return $this->hasMany(Permission::class, "name", "userId");
+	}
 
-        foreach ($this->roles as $r) {
-            if ($r->name == $role) return true;
-        }
+	public function hasPermission( $node )
+	{
+		$node = strtolower( $node );
 
-        return false;
-    }
+		foreach( $this->permissions as $p )
+		{
+			if ( empty( $p->permission ) )
+				continue; // Ignore empty permission nodes
 
-    /**
-     * Helper: activate the user
-     *
-     * @return void
-     */
-    public function activate()
-    {
-        if ($this->activated) {
-            return;
-        }
+			if ( strtolower( $p->permission ) == $node )
+				return true;
 
-        $this->activated = 1;
-        $this->save();
-    }
+			try
+			{
+				if ( preg_match( "/" . strtolower( $p->permission ) . "/", $node ) )
+					return true;
+			}
+			catch ( Exception $e )
+			{
+				// Ignore preg_match() exceptions
+			}
+		}
 
-    /**
-     * Helper: deactivate the user
-     *
-     * @return void
-     */
-    public function deactivate()
-    {
-        if (!$this->activated) {
-            return;
-        }
+		// Directly assigned permissions do not match, check with the Groups next
 
-        $this->activated = 0;
-        $this->save();
-    }
+		foreach ( $this->groups() as $group )
+		{
+			$result = $group->hasPermission( $node );
+			if ( $result )
+				return true;
+		}
+
+		return false;
+	}
+
+	/**
+	* Helper: activate the user
+	*
+	* @return void
+	*/
+	public function activate()
+	{
+		if ($this->activated) {
+			return;
+		}
+
+		$this->activated = 1;
+		$this->save();
+	}
+
+	/**
+	* Helper: deactivate the user
+	*
+	* @return void
+	*/
+	public function deactivate()
+	{
+		if (!$this->activated) {
+			return;
+		}
+
+		$this->activated = 0;
+		$this->save();
+	}
 }

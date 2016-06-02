@@ -1,4 +1,0 @@
-[31-May-2016 22:03:37 UTC] PHP Fatal error:  Class 'App\PusherService' not found in /home/holyworlds/html/staging_dev/bin/PusherServer.php on line 5
-[31-May-2016 22:03:58 UTC] PHP Warning:  require(/home/holyworlds/html/staging_dev/../vendor/autoload.php): failed to open stream: No such file or directory in /home/holyworlds/html/staging_dev/bin/PusherServer.php on line 2
-[31-May-2016 22:03:58 UTC] PHP Warning:  require(/home/holyworlds/html/staging_dev/../vendor/autoload.php): failed to open stream: No such file or directory in /home/holyworlds/html/staging_dev/bin/PusherServer.php on line 2
-[31-May-2016 22:03:58 UTC] PHP Fatal error:  require(): Failed opening required '/home/holyworlds/html/staging_dev/../vendor/autoload.php' (include_path='.:/usr/lib/php:/usr/local/lib/php') in /home/holyworlds/html/staging_dev/bin/PusherServer.php on line 2

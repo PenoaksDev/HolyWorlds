@@ -9,6 +9,12 @@
 
     <link href="{{ elixir('css/rna.css') }}" rel="stylesheet">
 
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+
+	<script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
     <link rel="apple-touch-icon" sizes="57x57" href="/apple-touch-icon-57x57.png">
     <link rel="apple-touch-icon" sizes="60x60" href="/apple-touch-icon-60x60.png">
     <link rel="apple-touch-icon" sizes="72x72" href="/apple-touch-icon-72x72.png">
@@ -21,7 +27,7 @@
     <meta name="theme-color" content="#ffffff">
 
 	<script src="https://autobahn.s3.amazonaws.com/js/autobahn.min.js"></script>
-	<script src="js/pushService.js"></script>
+	<script src="/js/jquery.push-service.js"></script>
 </head>
 <body class="@yield('body_class')">
     <div id="top-bar" class="navbar-fixed">
@@ -35,7 +41,7 @@
                     <ul class="side-nav" id="mobile-links">
                         <li><a href="{{ url('/') }}">Home</a></li>
                         <li><a href="{{ url('forum') }}">Forum</a></li>
-                        <li><a href="{{ url('events') }}">Events</a></li>
+                        <!-- <li><a href="{{ url('events') }}">Events</a></li> -->
                         @can('viewCharacters')
                             <li><a href="{{ url('characters') }}">Characters</a></li>
                         @endcan
@@ -63,7 +69,7 @@
                     </ul>
                     <ul class="right hide-on-med-and-down">
                         <li><a class="dropdown-button" href="{{ url('forum') }}" data-activates="forum-links" data-beloworigin="true" data-constrainwidth="false" data-hover="true">Forum&nbsp; <i class="fa fa-caret-down" aria-hidden="true"></i></a></li>
-                        <li><a href="{{ url('events') }}">Events</a></li>
+                        <!-- <li><a href="{{ url('events') }}">Events</a></li> -->
                         @can('viewCharacters')
                             <li><a href="{{ url('characters') }}">Characters</a></li>
                         @endcan
@@ -90,14 +96,15 @@
 
                     <ul id="forum-links" class="dropdown-content">
                         <li><a href="{{ url('forum') }}">Forum index</a></li>
-                        <li><a href="{{ url('forum/new') }}">New & updated</a></li>
+                        <li><a href="{{ url('forum/new') }}">New &amp; updated</a></li>
                     </ul>
                     @if (Auth::check())
                         @can('admin')
                             <ul id="admin-links" class="dropdown-content">
                                 <li><a href="{{ url('admin/article') }}">Articles</a></li>
-                                <li><a href="{{ url('admin/event') }}">Events</a></li>
+                                <!-- <li><a href="{{ url('admin/event') }}">Events</a></li> -->
                                 <li><a href="{{ url('admin/forum/category') }}">Forum Categories</a></li>
+                                <li><a href="{{ url('admin/users') }}">Users</a></li>
                             </ul>
                         @endcan
                         <ul id="user-links" class="dropdown-content">

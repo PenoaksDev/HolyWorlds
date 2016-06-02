@@ -10,37 +10,19 @@ class UserProfile extends Model
 {
     use Commentable, HasAttachments, HasOwner;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
     protected $fillable = ['user_id', 'family_name', 'about', 'signature'];
-
-    /**
-     * User-friendly model name.
-     *
-     * @return string
-     */
     public $friendlyName = 'User Profile';
+    protected $primaryKey = "user_id";
+    public $timestamps = false;
+    public $incrementing = false;
 
-    /**
-     * Attribute: avatar.
-     *
-     * @return \TeamTeaTime\Filer\Attachment
-     */
     public function getAvatarAttribute()
     {
-        return Cache::remember("user_{$this->user->id}_avatar", 5, function () {
+        return Cache::remember("user_{$this->user->userId}_avatar", 5, function () {
             return $this->findAttachmentByKey('avatar');
         });
     }
 
-    /**
-     * Attribute: avatar URL.
-     *
-     * @return string
-     */
     public function getAvatarUrlAttribute()
     {
         return (is_null($this->avatar))
@@ -48,13 +30,8 @@ class UserProfile extends Model
             : $this->avatar->getUrl();
     }
 
-    /**
-     * Attribute: URL.
-     *
-     * @return string
-     */
     public function getUrlAttribute()
     {
-        return route('user.profile', ['id' => $this->user->id, 'name' => str_slug($this->user->name)]);
+        return route('user.profile', ['user_id' => $this->user->userId, 'name' => str_slug($this->user->name)]);
     }
 }

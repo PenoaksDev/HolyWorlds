@@ -1,6 +1,7 @@
 <?php namespace App\Policies;
 
 use App\Models\User;
+use App\Models\Setting;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class AdminPolicy
@@ -15,6 +16,6 @@ class AdminPolicy
      */
     public function admin(User $user)
     {
-        return $user->hasRole(['Guild Master', 'Officer', 'Webmaster']);
+        return $user->hasPermission(Setting::get('admin_group', 'sys.admin'));
     }
 }
