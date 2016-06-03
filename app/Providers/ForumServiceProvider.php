@@ -1,4 +1,5 @@
-<?php namespace Riari\Forum;
+<?php
+namespace App\Providers;
 
 use Illuminate\Auth\Access\Gate;
 use Illuminate\Contracts\Auth\Access\Gate as GateContract;

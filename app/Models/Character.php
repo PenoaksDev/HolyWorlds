@@ -1,4 +1,5 @@
-<?php namespace App\Models;
+<?php
+namespace App\Models;
 
 use App\Models\Traits\HasOwner;
 use Illuminate\Database\Eloquent\Model;

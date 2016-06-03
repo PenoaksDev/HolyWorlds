@@ -1,4 +1,5 @@
-<?php namespace App\Forum\Support;
+<?php
+namespace App\Forum\Support;
 
 use Illuminate\Routing\Router;
 use App\Models\Category;
@@ -23,7 +24,7 @@ class Forum
             $alerts = Session::get('alerts');
         }
 
-        $message = trans_choice("forum::{$transKey}", $transCount, $transParameters);
+        $message = trans_choice("forum.{$transKey}", $transCount, $transParameters);
 
         array_push($alerts, compact('type', 'message'));
 

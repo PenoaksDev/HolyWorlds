@@ -1,4 +1,5 @@
-<?php namespace App\Models\Observers;
+<?php
+namespace App\Models\Observers;
 
 use Carbon\Carbon;
 

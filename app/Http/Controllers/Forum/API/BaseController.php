@@ -1,4 +1,5 @@
-<?php namespace App\Http\Controllers\API;
+<?php
+namespace App\Http\Controllers\Forum\API;
 
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -320,6 +321,6 @@ abstract class BaseController extends Controller
     protected function trans($key, $count = 1)
     {
         $file = $this->translationFile();
-        return trans_choice("forum::{$file}.{$key}", $count);
+        return trans_choice("forum.{$file}.{$key}", $count);
     }
 }

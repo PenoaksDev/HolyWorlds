@@ -1,4 +1,5 @@
-<?php namespace App\Support\Traits;
+<?php
+namespace App\Support\Traits;
 
 use Cache;
 use ReflectionClass;

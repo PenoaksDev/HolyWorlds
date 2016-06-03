@@ -41,8 +41,8 @@
 		});
 
 		$(document).on( "push:connected", function(){
-			console("<i>Connected to Holy Worlds Push Service</i>")
-		} )
+			console("<i>Connected to Holy Worlds Push Service</i>");
+		});
 
 		var d = new Date();
 

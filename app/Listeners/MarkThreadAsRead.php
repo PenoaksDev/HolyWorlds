@@ -1,6 +1,7 @@
-<?php namespace App\Forum\Listeners;
+<?php
+namespace App\Forum\Listeners;
 
-use App\Forum\Events\UserViewingThread;
+use App\Events\Forum\UserViewingThread;
 use Illuminate\Contracts\Auth\Guard;
 
 class MarkThreadAsRead

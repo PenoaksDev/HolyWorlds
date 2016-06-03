@@ -1,4 +1,5 @@
-<?php namespace App\Http\Controllers\Admin\Forum;
+<?php
+namespace App\Http\Controllers\Admin\Forum;
 
 use App\Http\Controllers\Admin\Controller;
 use App\Models\Forum\Category;

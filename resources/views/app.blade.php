@@ -8,6 +8,7 @@
     <title>Holy Worlds - @yield('title')</title>
 
     <link href="{{ elixir('css/rna.css') }}" rel="stylesheet">
+	<link href="{{ URL::asset('css/style.css') }}" rel="stylesheet" />
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
@@ -174,10 +175,24 @@
                     </div>
                 </div>
             </div>
+			
+			<div id="chat">
+				
+				<div id="chat_header">
+					<span id="chat_header_title">Chat</span>
+					<span id="chat_header_open" class="fa fa-comments fa-3x"></span>
+				</div>
+				
+				<div id="chat_box">
+					<div id="chat_box_content"></div>
+					<input type="text" id="chat_input" placeholder="chat" />
+				</div>
+			</div>
         </div>
     </div>
 
     <script src="{{ elixir('js/rna.js') }}"></script>
+	<script src="{{ URL::asset('js/init.js') }}"></script>
     @yield('bottom')
 </body>
 </html>

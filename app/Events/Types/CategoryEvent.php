@@ -1,4 +1,5 @@
-<?php namespace App\Forum\Events\Types;
+<?php
+namespace App\Events\Forum\Types;
 
 use App\Models\Category;
 

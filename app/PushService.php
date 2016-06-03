@@ -26,7 +26,7 @@ class PushService implements WampServerInterface
 
 	public function onOpen(ConnectionInterface $conn)
 	{
-		
+		$this->send(json_encode(array('channel' => 'chatPublic', 'data'=>'testing....')));
 	}
 
 	public function onClose(ConnectionInterface $conn)

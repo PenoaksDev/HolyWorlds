@@ -7,7 +7,7 @@
         <table class="bordered">
             <thead>
                 <th>
-                    <a href="{{ Forum::route('category.show', $category) }}" class="title">
+                    <a href="{{ route('forum.category.show', $category) }}" class="title">
                         {{ $category->title }}
                     </a>
                     <br>

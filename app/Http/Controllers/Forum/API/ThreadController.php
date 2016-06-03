@@ -1,4 +1,5 @@
-<?php namespace App\Http\Controllers\API;
+<?php
+namespace App\Http\Controllers\Forum\API;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -93,7 +94,7 @@ class ThreadController extends BaseController
         $this->authorize('createThreads', $category);
 
         if (!$category->threadsEnabled) {
-            return $this->buildFailedValidationResponse($request, trans('forum::validation.category_threads_enabled'));
+            return $this->buildFailedValidationResponse($request, trans('forum.validation.category_threads_enabled'));
         }
 
         $thread = $this->model()->create($request->only(['category_id', 'author_id', 'title']));
@@ -192,7 +193,7 @@ class ThreadController extends BaseController
         $category = Category::find($request->input('category_id'));
 
         if (!$category->threadsEnabled) {
-            return $this->buildFailedValidationResponse($request, trans('forum::validation.category_threads_enabled'));
+            return $this->buildFailedValidationResponse($request, trans('forum.validation.category_threads_enabled'));
         }
 
         return $this->updateModel($thread, ['category_id' => $category->id], ['moveThreadsTo', $category]);

@@ -6,15 +6,13 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Exception\HttpResponseException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Routing\Controller;
 use Illuminate\Support\Collection;
 use App\API\Dispatcher;
 use App\Contracts\API\ReceiverContract;
+use App\Http\Controllers\Controller;
 
 abstract class BaseController extends Controller implements ReceiverContract
 {
-    use AuthorizesRequests, ValidatesRequests;
-
     /**
      * @var Dispatcher
      */

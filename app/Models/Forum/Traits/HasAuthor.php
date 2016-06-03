@@ -1,4 +1,5 @@
-<?php namespace App\Models\Traits;
+<?php
+namespace App\Models\Traits;
 
 trait HasAuthor
 {

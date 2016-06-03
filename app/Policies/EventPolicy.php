@@ -1,4 +1,5 @@
-<?php namespace App\Policies;
+<?php
+namespace App\Policies;
 
 use App\Models\Event;
 use App\Models\User;

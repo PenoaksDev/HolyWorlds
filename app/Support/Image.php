@@ -1,4 +1,5 @@
-<?php namespace App\Support;
+<?php
+namespace App\Support;
 
 use Illuminate\Http\UploadedFile;
 use Image as InterventionImage;

@@ -1,4 +1,5 @@
-<?php namespace App\Models\Traits;
+<?php
+namespace App\Models\Traits;
 
 use App\Models\User;
 

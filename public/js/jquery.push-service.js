@@ -28,6 +28,6 @@
 
 	window.pushMessage = function( channel, msg )
 	{
-		conn.publish( channel, {msg: msg} )
+		conn.publish( channel, {msg: msg} );
 	}
 }( jQuery ));

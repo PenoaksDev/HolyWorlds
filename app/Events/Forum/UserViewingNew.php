@@ -1,4 +1,5 @@
-<?php namespace App\Forum\Events;
+<?php
+namespace App\Events\Forum;
 
 use Illuminate\Database\Eloquent\Collection;
 

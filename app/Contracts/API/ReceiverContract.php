@@ -1,4 +1,5 @@
-<?php namespace App\Contracts\API;
+<?php
+namespace App\Contracts\API;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;

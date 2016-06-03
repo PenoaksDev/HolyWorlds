@@ -1,4 +1,5 @@
-<?php namespace App\Http\Controllers\Dev;
+<?php
+namespace App\Http\Controllers\Dev;
 
 use React\ZMQ\Context;
 
@@ -40,10 +41,10 @@ class DevController extends \App\Http\Controllers\Controller
 
     public function broadcast()
     {
-			$context = new \ZMQContext();
-			$socket = $context->getSocket(\ZMQ::SOCKET_PUSH, 'push service');
-			$socket->connect("tcp://localhost:5555");
+		$context = new \ZMQContext();
+		$socket = $context->getSocket(\ZMQ::SOCKET_PUSH, 'push service');
+		$socket->connect("tcp://localhost:5555");
 
-			$socket->send(json_encode(array("channel" => "chatPublic", "data" => "Hello World!")));
+		$socket->send(json_encode(array("channel" => "chatPublic", "data" => "Hello World!")));
     }
 }

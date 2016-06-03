@@ -1,11 +1,11 @@
 <?php
-namespace App\Forum;
+namespace App\Providers;
 
 use Illuminate\Contracts\Events\Dispatcher as DispatcherContract;
 use Illuminate\Foundation\AliasLoader;
 use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider;
-use App\Forum\Events\UserViewingThread;
+use App\Events\Forum\UserViewingThread;
 use App\Forum\Listeners\MarkThreadAsRead;
 use App\Forum\Support\Forum;
 

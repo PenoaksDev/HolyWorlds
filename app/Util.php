@@ -1,4 +1,5 @@
-<?php namespace App;
+<?php
+namespace App;
 
 use Calendar;
 use Illuminate\Http\UploadedFile;
@@ -60,13 +61,9 @@ class Util
 		if ( $letters )
 			$allowedChars = array_merge( $allowedChars, array( "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z" ) );
 
-		var_dump( $allowedChars );
-
 		$rtn = "";
 		for ( $i = 0; $i < $length; $i++ )
 			$rtn .= $allowedChars[ rand( 0, count( $allowedChars ) - 1 ) ];
-
-		var_dump( $rtn );
 
 		return $rtn;
 	}
@@ -75,7 +72,7 @@ class Util
 	    {
 	    	$x = 0;
 	    	echo("<table id=\"" . $tableID . "\" class=\"altrowstable\">");
-	    
+
 	    	if (is_array($headerArray) && count($headerArray) > 0)
 	    	{
 	    		echo("<tr>");
@@ -85,15 +82,15 @@ class Util
 	    		}
 	    		echo("</tr>");
 	    	}
-	    
+
 	    	foreach($tableArray as $row)
 	    	{
 	    		$class = ($x % 2 == 0) ? "evenrowcolor" : "oddrowcolor";
 	    		echo("<tr id=\"" . $row["rowId"] . "\" rel=\"" . $row["metaData"] . "\" class=\"" . $class . "\">");
-	    			
+
 	    		$row["metaData"] = null;
 	    		$row["rowId"] = null;
-	    			
+
 	    		if (is_array($row))
 	    		{
 	    			$cc = 0;
@@ -102,7 +99,7 @@ class Util
 	    				if ( !is_null( $col ) )
 	    				{
 	    					$subclass = (empty($col)) ? " emptyCol" : "";
-	    
+
 	    					echo("<td id=\"col_" . $cc . "\" class=\"" . $subclass . "\">" . $col . "</td>");
 	    					$cc++;
 	    				}

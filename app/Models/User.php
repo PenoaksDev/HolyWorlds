@@ -121,11 +121,6 @@ class User extends Authenticatable
 		return false;
 	}
 
-	public static function activated()
-	{
-		return self::where("activation_token", null);
-	}
-
 	public function isActivated()
 	{
 		return empty( $this->activation_token );
@@ -141,11 +136,29 @@ class User extends Authenticatable
 		$this->save();
 	}
 
+	public function scopeActivated($query)
+	{
+		return $query->where("activation_token", null);
+	}
+
+	public function scopeForToken($query, $token)
+	{
+		return $query->where('activation_token', $token);
+	}
+
+	public function activationToken()
+	{
+		if ( $this->isActivated() )
+			return null;
+		return $this->activation_token;
+	}
+
 	public function deactivate()
 	{
 		if ( !$this->isActivated() )
 			return;
 
+		$token = null;
 		do
 		{
 			$token = str_random(32);
@@ -155,6 +168,8 @@ class User extends Authenticatable
 		$this->activation_token = $token;
 		$this->activation_updated = new Carbon();
 		$this->save();
+
+		return $token;
 	}
 
 	public static function boot()

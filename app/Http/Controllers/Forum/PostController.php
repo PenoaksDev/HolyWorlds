@@ -2,9 +2,9 @@
 namespace App\Http\Controllers\Forum;
 
 use Illuminate\Http\Request;
-use App\Forum\Events\UserCreatingPost;
-use App\Forum\Events\UserEditingPost;
-use App\Forum\Events\UserViewingPost;
+use App\Events\Forum\UserCreatingPost;
+use App\Events\Forum\UserEditingPost;
+use App\Events\Forum\UserViewingPost;
 
 class PostController extends BaseController
 {
@@ -23,7 +23,7 @@ class PostController extends BaseController
         $thread = $post->thread;
         $category = $thread->category;
 
-        return view('forum::post.show', compact('category', 'thread', 'post'));
+        return view('forum.post.show', compact('category', 'thread', 'post'));
     }
 
     /**
@@ -45,7 +45,7 @@ class PostController extends BaseController
             $post = $thread->posts->find($request->input('post'));
         }
 
-        return view('forum::post.create', compact('thread', 'post'));
+        return view('forum.post.create', compact('thread', 'post'));
     }
 
     /**
@@ -100,7 +100,7 @@ class PostController extends BaseController
         $thread = $post->thread;
         $category = $post->thread->category;
 
-        return view('forum::post.edit', compact('category', 'thread', 'post'));
+        return view('forum.post.edit', compact('category', 'thread', 'post'));
     }
 
     /**

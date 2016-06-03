@@ -1,4 +1,5 @@
-<?php namespace App\Policies\Forum;
+<?php
+namespace App\Policies\Forum;
 
 use Gate;
 use App\Models\Post;

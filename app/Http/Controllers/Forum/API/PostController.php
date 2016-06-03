@@ -1,4 +1,5 @@
-<?php namespace App\Http\Controllers\API;
+<?php
+namespace App\Http\Controllers\Forum\API;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;

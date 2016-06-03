@@ -3,8 +3,9 @@ namespace App\Http\Controllers\Forum;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
-use App\Forum\Events\UserViewingCategory;
-use App\Forum\Events\UserViewingIndex;
+use App\Events\Forum\UserViewingCategory;
+use App\Events\Forum\UserViewingIndex;
+use App\Models\Forum\Category;
 
 class CategoryController extends BaseController
 {
@@ -16,13 +17,16 @@ class CategoryController extends BaseController
      */
     public function index(Request $request)
     {
-        $categories = $this->api('category.index')
-                           ->parameters(['where' => ['category_id' => 0], 'orderBy' => 'weight', 'orderDir' => 'asc', 'with' => ['children']])
-                           ->get();
+        $categories = Category::where("category_id", 0)->orderBy("weight", "asc");
+
+        $categories = $categories->get()->filter(function ($category)
+        {
+            return empty( $category->permission ) || Auth::user() != null && Auth::user()->hasPermission( $category->permission );
+        });
 
         event(new UserViewingIndex);
 
-        return view('forum::category.index', compact('categories'));
+        return view('forum.category.index', compact('categories'));
     }
 
     /**
@@ -42,7 +46,7 @@ class CategoryController extends BaseController
             $categories = $this->api('category.index')->parameters(['where' => ['category_id' => 0]])->get();
         }
 
-        return view('forum::category.show', compact('categories', 'category', 'threads'));
+        return view('forum.category.show', compact('categories', 'category', 'threads'));
     }
 
     /**

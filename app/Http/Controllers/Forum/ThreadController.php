@@ -4,10 +4,10 @@ namespace App\Http\Controllers\Forum;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Gate;
-use App\Forum\Events\UserCreatingThread;
-use App\Forum\Events\UserMarkingNew;
-use App\Forum\Events\UserViewingNew;
-use App\Forum\Events\UserViewingThread;
+use App\Events\Forum\UserCreatingThread;
+use App\Events\Forum\UserMarkingNew;
+use App\Events\Forum\UserViewingNew;
+use App\Events\Forum\UserViewingThread;
 
 class ThreadController extends BaseController
 {
@@ -32,7 +32,7 @@ class ThreadController extends BaseController
 
         event(new UserViewingNew($threads));
 
-        return view('forum::thread.index-new', compact('threads'));
+        return view('forum.thread.index-new', compact('threads'));
     }
 
     /**
@@ -81,7 +81,7 @@ class ThreadController extends BaseController
             $categories = $this->api('category.index')->parameters(['where' => ['category_id' => 0]], ['where' => ['enable_threads' => 1]])->get();
         }
 
-        return view('forum::thread.show', compact('categories', 'category', 'thread'));
+        return view('forum.thread.show', compact('categories', 'category', 'thread'));
     }
 
     /**
@@ -102,7 +102,7 @@ class ThreadController extends BaseController
 
         event(new UserCreatingThread($category));
 
-        return view('forum::thread.create', compact('category'));
+        return view('forum.thread.create', compact('category'));
     }
 
     /**

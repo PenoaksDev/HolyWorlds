@@ -1,4 +1,5 @@
-<?php namespace App\Policies\Forum;
+<?php
+namespace App\Policies\Forum;
 
 class ForumPolicy extends \App\Policies\ForumPolicy
 {

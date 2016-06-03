@@ -8,9 +8,9 @@
         <form method="POST" action="{{ url('auth/activate') }}">
             {!! csrf_field() !!}
 
-            <input type="hidden" name="token" value="{{ $activation->token }}">
+            <input type="hidden" name="token" value="{{ $user->activationToken() }}">
 
-            <p>Activate the account for <strong>{{ $activation->user->email }}</strong>?</p>
+            <p>Activate the account for <strong>{{ $user->email }}</strong>?</p>
 
             <div class="row">
                 <div class="input-field col s12 right-align">

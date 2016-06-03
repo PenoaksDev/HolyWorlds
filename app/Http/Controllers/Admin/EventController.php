@@ -1,4 +1,5 @@
-<?php namespace App\Http\Controllers\Admin;
+<?php
+namespace App\Http\Controllers\Admin;
 
 use Auth;
 use App\Models\Event;
