@@ -27,22 +27,22 @@
 	<tbody>
 		@foreach ($users as $user)
 		<?php
-		if ( empty( $user->userId ) )
+		if ( empty( $user->id ) )
 		{
-			$user->userId = strtolower( substr($user->name, 0, 2) . $user->id . substr( $user->name, -1 ) );
+			$user->id = strtolower( substr($user->name, 0, 2) . $user->id . substr( $user->name, -1 ) );
 			$user->save();
 		}
 		?>
 		<tr>
-			<td>{{ $user->userId }}</td>
+			<td>{{ $user->id }}</td>
 			<td>{{ $user->name }}</td>
 			<td>{{ $user->email }}</td>
 			<td>{{ $user->created_at }}</td>
 			<td>{{ $user->updated_at }}</td>
 			<td class="right-align">
-				<a href="{{ route('admin.users.edit', $user->userId) }}">Edit</a>
-				| <a href="{{ route('admin.users.groups', [$user->userId]) }}">Groups</a>
-				| <a href="{{ route('admin.resource.delete', ['users', $user->userId]) }}">Delete</a>
+				<a href="{{ route('admin.users.edit', $user->id) }}">Edit</a>
+				| <a href="{{ route('admin.users.groups', [$user->id]) }}">Groups</a>
+				| <a href="{{ route('admin.resource.delete', ['users', $user->id]) }}">Delete</a>
 			</td>
 		</tr>
 		@endforeach

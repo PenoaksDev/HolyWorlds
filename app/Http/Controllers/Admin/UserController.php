@@ -11,17 +11,17 @@ class UserController extends Controller
 	public function index()
 	{
 		return view('admin.users.index', [
-			'users' => User::orderBy('userId', 'desc')->get()
+			'users' => User::orderBy('id', 'desc')->get()
 			]);
 	}
 
-	public function listGroups( $userId )
+	public function listGroups( $id )
 	{
-		$user = User::find($userId);
+		$user = User::find($id);
 		return view('admin.users.groups', ["user" => $user] );
 	}
 
-	public function edit( $userId )
+	public function edit( $id )
 	{
 		return view('admin.users.edit');
 	}
@@ -31,7 +31,7 @@ class UserController extends Controller
 		return view('admin.users.edit');
 	}
 
-	public function delete( $userId )
+	public function delete( $id )
 	{
 		return view('admin.users.delete');
 	}

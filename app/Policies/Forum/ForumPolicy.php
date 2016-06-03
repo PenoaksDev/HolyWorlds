@@ -1,6 +1,6 @@
 <?php namespace App\Policies\Forum;
 
-class ForumPolicy extends \Riari\Forum\Policies\ForumPolicy
+class ForumPolicy extends \App\Policies\ForumPolicy
 {
     /**
      * Permission: Create categories.

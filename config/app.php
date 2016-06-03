@@ -157,8 +157,6 @@ return [
         App\Providers\RouteServiceProvider::class,
         Krucas\Notification\NotificationServiceProvider::class,
         Laravel\Socialite\SocialiteServiceProvider::class,
-        Riari\Forum\ForumServiceProvider::class,
-        Riari\Forum\Frontend\ForumFrontendServiceProvider::class,
         TeamTeaTime\Filer\FilerServiceProvider::class,
         GrahamCampbell\Markdown\MarkdownServiceProvider::class,
         Conner\Tagging\Providers\TaggingServiceProvider::class,

@@ -6,29 +6,115 @@ use Illuminate\Support\Collection;
 
 class Util
 {
-    /**
-     * Create a Calendar with the given collection of events.
-     *
-     * @param  Collection  $events
-     * @return array
-     */
-    public static function createCalendarFromEvents(Collection $events)
-    {
-        $calendarEvents = [];
-        foreach ($events as $event) {
-            $calendarEvents[] = Calendar::event(
-                $event->title,
-                $event->all_day,
-                $event->starts,
-                $event->ends,
-                $event->id,
-                [
-                    'url' => $event->url,
-                    'color' => '#f44336'
-                ]
-            );
-        }
+	/**
+	* Create a Calendar with the given collection of events.
+	*
+	* @param  Collection  $events
+	* @return array
+	*/
+	public static function createCalendarFromEvents(Collection $events)
+	{
+		$calendarEvents = [];
+		foreach ($events as $event) {
+			$calendarEvents[] = Calendar::event(
+				$event->title,
+				$event->all_day,
+				$event->starts,
+				$event->ends,
+				$event->id,
+				[
+				'url' => $event->url,
+				'color' => '#f44336'
+				]
+			);
+		}
 
-        return Calendar::addEvents($calendarEvents);
-    }
+		return Calendar::addEvents($calendarEvents);
+	}
+
+	public static function format_phone($phone)
+	{
+		$phone = preg_replace("/[^0-9]/", "", $phone);
+
+		if(strlen($phone) == 7)
+			return preg_replace("/([0-9]{3})([0-9]{4})/", "$1-$2", $phone);
+		elseif(strlen($phone) == 10)
+			return preg_replace("/([0-9]{3})([0-9]{3})([0-9]{4})/", "($1) $2-$3", $phone);
+		else
+			return $phone;
+	}
+
+	public static function clean($Arr, $AllowedKeys)
+	{
+		return array_intersect_key($Arr, array_flip($AllowedKeys));
+	}
+
+	public static function rand( $length, $numbers = true, $letters = true, $allowedChars = array() )
+	{
+		if ( $allowedChars == null )
+			$allowedChars = array();
+
+		if ( $numbers )
+			$allowedChars = array_merge( $allowedChars, array( "1", "2", "3", "4", "5", "6", "7", "8", "9", "0" ) );
+
+		if ( $letters )
+			$allowedChars = array_merge( $allowedChars, array( "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z" ) );
+
+		var_dump( $allowedChars );
+
+		$rtn = "";
+		for ( $i = 0; $i < $length; $i++ )
+			$rtn .= $allowedChars[ rand( 0, count( $allowedChars ) - 1 ) ];
+
+		var_dump( $rtn );
+
+		return $rtn;
+	}
+
+	public static function create_table($tableArray, $headerArray = "", $tableID = "")
+	    {
+	    	$x = 0;
+	    	echo("<table id=\"" . $tableID . "\" class=\"altrowstable\">");
+	    
+	    	if (is_array($headerArray) && count($headerArray) > 0)
+	    	{
+	    		echo("<tr>");
+	    		foreach($headerArray as $col)
+	    		{
+	    			echo("<th>" . $col . "</th>");
+	    		}
+	    		echo("</tr>");
+	    	}
+	    
+	    	foreach($tableArray as $row)
+	    	{
+	    		$class = ($x % 2 == 0) ? "evenrowcolor" : "oddrowcolor";
+	    		echo("<tr id=\"" . $row["rowId"] . "\" rel=\"" . $row["metaData"] . "\" class=\"" . $class . "\">");
+	    			
+	    		$row["metaData"] = null;
+	    		$row["rowId"] = null;
+	    			
+	    		if (is_array($row))
+	    		{
+	    			$cc = 0;
+	    			foreach($row as $col)
+	    			{
+	    				if ( !is_null( $col ) )
+	    				{
+	    					$subclass = (empty($col)) ? " emptyCol" : "";
+	    
+	    					echo("<td id=\"col_" . $cc . "\" class=\"" . $subclass . "\">" . $col . "</td>");
+	    					$cc++;
+	    				}
+	    			}
+	    		}
+	    		else
+	    		{
+	    			echo("<td style=\"text-align: center; font-weight: bold;\" class=\"" . $class . "\" colspan=\"" . count($headerArray) . "\">" . $row . "</td>");
+	    		}
+	    		echo("</tr>");
+	    		$x++;
+	    	}
+	    	echo("</table>");
+	    }
 }

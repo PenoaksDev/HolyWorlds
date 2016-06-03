@@ -1,9 +1,9 @@
 <?php namespace App\Policies\Forum;
 
 use Gate;
-use Riari\Forum\Models\Thread;
+use App\Models\Thread;
 
-class ThreadPolicy extends \Riari\Forum\Policies\ThreadPolicy
+class ThreadPolicy extends \App\Policies\ThreadPolicy
 {
     /**
      * Permission: Delete posts in thread.

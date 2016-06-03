@@ -11,14 +11,14 @@ class GroupInheritance extends Model
 
     public function group()
     {
-        return $this->hasOne(Group::class, "groupId", "parent");
+        return $this->hasOne(Group::class, "id", "parent");
     }
 
     public function assignedTo()
     {
         if ( $this->type == 0 )
-            return $this->belongsTo( Group::class, "child", "groupId" );
+            return $this->belongsTo( Group::class, "child" );
         if ( $this->type == 1 )
-            return $this->belongsTo( User::class, "child", "userId" );
+            return $this->belongsTo( User::class, "child" );
     }
 }

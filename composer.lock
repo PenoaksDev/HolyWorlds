@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "7829842711bead867d2868803487f626",
-    "content-hash": "fa7ce6e37f38a738aa59e6546dd80222",
+    "hash": "e2a667fadb62c6106f1fb7c6e6a6efaf",
+    "content-hash": "aaa4c416d6439bc112e97ba2ff341014",
     "packages": [
         {
             "name": "barryvdh/laravel-debugbar",
@@ -2867,99 +2867,6 @@
             "time": "2014-05-25 17:54:51"
         },
         {
-            "name": "riari/laravel-forum",
-            "version": "3.1.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/Riari/laravel-forum.git",
-                "reference": "560923eae6fc21b2a467a5ca1a0a82df33aa0dea"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/Riari/laravel-forum/zipball/560923eae6fc21b2a467a5ca1a0a82df33aa0dea",
-                "reference": "560923eae6fc21b2a467a5ca1a0a82df33aa0dea",
-                "shasum": ""
-            },
-            "require": {
-                "doctrine/dbal": "^2.5",
-                "laravel/framework": "~5.1",
-                "php": ">=5.4.0"
-            },
-            "suggest": {
-                "riari/laravel-forum-frontend": "The standard forum frontend that provides views written with Bootstrap 3"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Riari\\Forum\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Riari",
-                    "email": "hello@ricko.me"
-                }
-            ],
-            "description": "A Laravel 4/5 package providing a solid foundation for building discussion forums",
-            "keywords": [
-                "discuss",
-                "forum",
-                "laravel",
-                "laravel-4",
-                "laravel-5"
-            ],
-            "time": "2016-05-26 11:00:19"
-        },
-        {
-            "name": "riari/laravel-forum-frontend",
-            "version": "1.1.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/Riari/laravel-forum-frontend.git",
-                "reference": "2142f3c2d02f6553eb61a0b29c6e0e6517eb458a"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/Riari/laravel-forum-frontend/zipball/2142f3c2d02f6553eb61a0b29c6e0e6517eb458a",
-                "reference": "2142f3c2d02f6553eb61a0b29c6e0e6517eb458a",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.4.0",
-                "riari/laravel-forum": "~3.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Riari\\Forum\\Frontend\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Riari",
-                    "email": "hello@ricko.me"
-                }
-            ],
-            "description": "A frontend for riari/laravel-forum providing views written with Bootstrap 3",
-            "keywords": [
-                "discuss",
-                "forum",
-                "frontend",
-                "laravel",
-                "laravel-4",
-                "laravel-5"
-            ],
-            "time": "2016-05-26 22:07:33"
-        },
-        {
             "name": "rtconner/laravel-tagging",
             "version": "2.1.0",
             "source": {
@@ -3894,16 +3801,16 @@
         },
         {
             "name": "teamteatime/laravel-filer",
-            "version": "1.0.1",
+            "version": "1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Team-Tea-Time/laravel-filer.git",
-                "reference": "003e43e447d771682c4f962f3b58671947b155a0"
+                "reference": "a72e391a9b5a346c1f0c7647642f8e15d5f6a011"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Team-Tea-Time/laravel-filer/zipball/003e43e447d771682c4f962f3b58671947b155a0",
-                "reference": "003e43e447d771682c4f962f3b58671947b155a0",
+                "url": "https://api.github.com/repos/Team-Tea-Time/laravel-filer/zipball/a72e391a9b5a346c1f0c7647642f8e15d5f6a011",
+                "reference": "a72e391a9b5a346c1f0c7647642f8e15d5f6a011",
                 "shasum": ""
             },
             "require": {
@@ -3936,7 +3843,7 @@
                 "laravel",
                 "laravel-5"
             ],
-            "time": "2016-05-31 10:10:13"
+            "time": "2016-06-02 16:49:09"
         },
         {
             "name": "vlucas/phpdotenv",

@@ -5,8 +5,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Group extends Model
 {
-	protected $fillable = ["groupId", "displayName"];
+	protected $fillable = ["id", "displayName"];
 	public $timestamps = false;
+	public $incrementing = false;
 
 	public function groups()
 	{
@@ -53,16 +54,16 @@ class Group extends Model
 
 	public function inheritance()
 	{
-		return $this->hasMany(GroupInheritance::class, "child", "groupId");
+		return $this->hasMany(GroupInheritance::class, "child");
 	}
 
 	public function permissions()
 	{
-		return $this->hasMany(Permission::class, "name", "groupId");
+		return $this->hasMany(Permission::class, "name");
 	}
 
 	public function children()
 	{
-		return $this->hasMany(GroupInheritance::class, "parent", "groupId");
+		return $this->hasMany(GroupInheritance::class, "parent");
 	}
 }

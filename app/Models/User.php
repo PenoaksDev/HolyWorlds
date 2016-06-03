@@ -1,89 +1,44 @@
-<?php namespace App\Models;
+<?php
+namespace App\Models;
 
+use App\Util;
+use Carbon\Carbon;
+use App\Models\Traits\UuidAsKey;
 use App\Models\Setting;
 use Fenos\Notifynder\Notifable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
-	use Notifable;
+	use Notifable, UuidAsKey;
 
-	/**
-	* The attributes that are mass assignable.
-	*
-	* @var array
-	*/
-	protected $fillable = [
-	'name', 'email', 'password', 'activated',
-	];
+	protected $fillable = ['name', 'email', 'password', 'activated'];
+	protected $hidden = ["password", "remember_token", "activation_token"];
+	public $incrementing = false;
 
-	/**
-	* The attributes that should be hidden for arrays.
-	*
-	* @var array
-	*/
-	protected $hidden = [
-	'password', 'remember_token',
-	];
-
-	protected $primaryKey = "userId";
-
-	/**
-	* Relationship: profile
-	*
-	* @return \Illuminate\Database\Eloquent\Relations\HasOne
-	*/
 	public function profile()
 	{
-		return $this->hasOne(UserProfile::class);
+		$result = $this->hasOne(UserProfile::class, "id");
+		if ( !$result->exists() )
+			$result->create([]);
+		return $result;
 	}
 
-	/**
-	* Relationship: socialite auths
-	*
-	* @return \Illuminate\Database\Eloquent\Relations\HasMany
-	*/
 	public function auths()
 	{
 		return $this->hasMany(UserAuth::class);
 	}
 
-	/**
-	* Relationship: comments
-	*
-	* @return \Illuminate\Database\Eloquent\Relations\HasMany
-	*/
 	public function comments()
 	{
 		return $this->hasMany(Comment::class);
 	}
 
-	/**
-	* Relationship: characters
-	*
-	* @return \Illuminate\Database\Eloquent\Relations\HasMany
-	*/
 	public function characters()
 	{
 		return $this->hasMany(Character::class);
 	}
 
-	/**
-	* Scope: activated
-	*
-	* @param  \Illuminate\Database\Query\Builder
-	* @return \Illuminate\Database\Query\Builder
-	*/
-	public function scopeActivated($query)
-	{
-		return $query->where('activated', 1);
-	}
-
-	/**
-	* Attribute: display name
-	*
-	* @return string
-	*/
 	public function getDisplayNameAttribute()
 	{
 		if (!is_null($this->profile->family_name)) {
@@ -93,41 +48,21 @@ class User extends Authenticatable
 		return $this->name;
 	}
 
-	/**
-	* Attribute: main character
-	*
-	* @return string
-	*/
 	public function getMainCharacterAttribute()
 	{
 		return $this->characters()->where('main', 1)->first();
 	}
 
-	/**
-	* Attribute: determine if the user is considered to be new
-	*
-	* @return bool
-	*/
 	public function getIsNewAttribute()
 	{
 		return $this->hasPermission(Setting::get('default_group', 'sys.user'));
 	}
 
-	/**
-	* Attribute: slugified name
-	*
-	* @return string
-	*/
 	public function getSlugAttribute()
 	{
 		return str_slug($this->name, '-');
 	}
 
-	/**
-	* Attribute: profile URL
-	*
-	* @return string
-	*/
 	public function getProfileUrlAttribute()
 	{
 		return url("user/{$this->id}-{$this->slug}");
@@ -143,12 +78,12 @@ class User extends Authenticatable
 
 	public function inheritance()
 	{
-		return $this->hasMany(GroupInheritance::class, "child", "userId");
+		return $this->hasMany(GroupInheritance::class, "child");
 	}
 
 	public function permissions()
 	{
-		return $this->hasMany(Permission::class, "name", "userId");
+		return $this->hasMany(Permission::class, "name");
 	}
 
 	public function hasPermission( $node )
@@ -170,7 +105,7 @@ class User extends Authenticatable
 			}
 			catch ( Exception $e )
 			{
-				// Ignore preg_match() exceptions
+			// Ignore preg_match() exceptions
 			}
 		}
 
@@ -186,33 +121,51 @@ class User extends Authenticatable
 		return false;
 	}
 
-	/**
-	* Helper: activate the user
-	*
-	* @return void
-	*/
+	public static function activated()
+	{
+		return self::where("activation_token", null);
+	}
+
+	public function isActivated()
+	{
+		return empty( $this->activation_token );
+	}
+
 	public function activate()
 	{
-		if ($this->activated) {
+		if ( $this->isActivated() )
 			return;
-		}
 
-		$this->activated = 1;
+		$this->activation_token = null;
+		$this->activation_updated = new Carbon();
 		$this->save();
 	}
 
-	/**
-	* Helper: deactivate the user
-	*
-	* @return void
-	*/
 	public function deactivate()
 	{
-		if (!$this->activated) {
+		if ( !$this->isActivated() )
 			return;
-		}
 
-		$this->activated = 0;
+		do
+		{
+			$token = str_random(32);
+		}
+		while (static::where("activation_token", $token)->first() instanceof User);
+
+		$this->activation_token = $token;
+		$this->activation_updated = new Carbon();
 		$this->save();
+	}
+
+	public static function boot()
+	{
+		parent::boot();
+
+		static::creating(function($user)
+		{
+			// Set a activation token for every new User
+			$user->deactivate();
+			$user->id = strtolower( Util::rand(2, FALSE, TRUE) ) . Util::rand(3, TRUE, FALSE) . Util::rand(1, FALSE, TRUE);
+		});
 	}
 }

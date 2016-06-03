@@ -1,9 +1,9 @@
 <?php namespace App\Policies\Forum;
 
 use Gate;
-use Riari\Forum\Models\Post;
+use App\Models\Post;
 
-class PostPolicy extends \Riari\Forum\Policies\PostPolicy
+class PostPolicy extends \App\Policies\PostPolicy
 {
     /**
      * Permission: Edit post.

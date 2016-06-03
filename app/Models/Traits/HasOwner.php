@@ -23,6 +23,6 @@ trait HasOwner
      */
     public function scopeByUser($query, User $user)
     {
-        return $query->where('userId', $user->userId);
+        return $query->where('id', $user->id);
     }
 }

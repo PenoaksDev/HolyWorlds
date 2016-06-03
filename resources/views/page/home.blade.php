@@ -33,7 +33,7 @@
 		<ul class="collection">
 			@foreach ($newUsers as $user)
 			<li class="collection-item right-align">
-				<a href="<?php if(!$user->profile == null) $user->profile->url ?>" class="pull-left">
+				<a href="{{ $user->profile->url }}" class="pull-left">
 					{{ $user->name }}
 				</a>
 				<span class="grey-text">joined {{ $user->created_at->diffForHumans() }}</span>

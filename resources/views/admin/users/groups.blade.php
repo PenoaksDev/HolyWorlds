@@ -26,12 +26,12 @@
 		{{ var_dump( $user ) }}
 		foreach ($user->groups() as $group)
 		<tr>
-			<td> $group->groupId }}</td>
+			<td> $group->id }}</td>
 			<td> $group->displayName }}</td>
 			<td class="right-align">
-				<a href=" route('admin.users.edit', $user->userId) }}">Edit</a>
-				| <a href=" route('admin.groups.list', [$user->userId]) }}">Groups</a>
-				| <a href=" route('admin.resource.delete', ['users', $user->userId]) }}">Delete</a>
+				<a href=" route('admin.users.edit', $user->id) }}">Edit</a>
+				| <a href=" route('admin.groups.list', [$user->id]) }}">Groups</a>
+				| <a href=" route('admin.resource.delete', ['users', $user->id]) }}">Delete</a>
 			</td>
 		</tr>
 		endforeach

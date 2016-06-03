@@ -3,7 +3,7 @@ namespace App\Models\Traits;
 
 use Ramsey\Uuid\Uuid;
 
-trait UuidForKey
+trait UuidAsKey
 {
     /**
      * Boot the Uuid trait for the model.

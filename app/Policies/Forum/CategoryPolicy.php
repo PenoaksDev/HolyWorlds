@@ -1,8 +1,8 @@
 <?php namespace App\Policies\Forum;
 
-use Riari\Forum\Models\Category;
+use App\Models\Category;
 
-class CategoryPolicy extends \Riari\Forum\Policies\CategoryPolicy
+class CategoryPolicy extends \App\Policies\CategoryPolicy
 {
     /**
      * Permission: Create threads in category.
