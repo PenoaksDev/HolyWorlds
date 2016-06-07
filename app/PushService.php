@@ -26,7 +26,6 @@ class PushService implements WampServerInterface
 
 	public function onOpen(ConnectionInterface $conn)
 	{
-		$this->send(json_encode(array('channel' => 'chatPublic', 'data'=>'testing....')));
 	}
 
 	public function onClose(ConnectionInterface $conn)
@@ -59,6 +58,7 @@ class PushService implements WampServerInterface
 
 		$channel = $this->subscribed[ $channel ];
 		$channel->broadcast( $data );	
+		$channel->broadcast('test');
 	}
 
 	/**
@@ -75,7 +75,7 @@ class PushService implements WampServerInterface
 		}
 		else
 		{
-			$this->broadcast( $d["channel"], $d["data"] );
+			$this->broadcast( $d["channel"], $d["data"] . 'test');
 		}
 	}
 }

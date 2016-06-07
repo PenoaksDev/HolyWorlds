@@ -4,7 +4,7 @@
 @section('subtitle', "Category: {$category->title}")
 
 @section ('content')
-    <form method="POST" action="{{ Forum::route('thread.store', $category) }}">
+    <form method="POST" action="{{ route('forum.thread.store', $category) }}">
         {!! csrf_field() !!}
         {!! method_field('post') !!}
 

@@ -40,7 +40,7 @@
 			console(e.msg);
 		});
 
-		$(document).on( "push:connected", function(){
+		$(document).on( "push:connected", function() {
 			console("<i>Connected to Holy Worlds Push Service</i>");
 		});
 

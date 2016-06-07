@@ -13,13 +13,7 @@ class AdminController extends Controller
      */
     public function getDashboard()
     {
-        $links = [
-            'article'           => 'Articles',
-            'event'             => 'Events',
-            'forum/category'    => 'Forum Categories'
-        ];
-
-        return view('admin.dashboard', compact('links'));
+        return view('admin.dashboard');
     }
 
     /**

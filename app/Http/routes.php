@@ -177,10 +177,12 @@ $r->group(['prefix' => 'admin', 'namespace' => 'Admin'], function ($r) {
 // Dashboard
 	$r->get('/', 'AdminController@getDashboard');
 
-	$r->resource('groups', 'GroupController');
+	$r->get("groups/ajax", ["as" => "admin.groups.ajax", "uses" => "GroupController@ajax"] );
 
+	$r->resource('groups', 'GroupController');
 	$r->resource('users', 'UserController');
 
+	// $r->get("groups/{groupId}", ["as" => "admin.groups.tree", "uses" => "GroupController@groupTree"] );
 	$r->get("users/{userId}/groups", ["as" => "admin.users.groups", "uses" => "UserController@listGroups"] );
 
 // Articles
@@ -211,6 +213,12 @@ $r->model('event', \App\Models\Event::class);
 
 $r->group(["prefix" => "forum", "namespace" => "Forum", "as" => "forum."], function ($r){
 	$r->get("/", "CategoryController@index");
+
+	$r->group(['prefix' => 'category', 'as' => 'category.'], function ($r)
+	{
+		$r->get('/', ['as' => 'list', 'uses' => 'CategoryController@list']);
+		$r->get('{id}', ['as' => 'show', 'uses' => 'CategoryController@show']);
+	});
 
 	$r->group(['prefix' => 'api', 'namespace' => 'API', 'as' => 'api.', 'middleware' => 'forum.api.auth'], function ($r)
 	{

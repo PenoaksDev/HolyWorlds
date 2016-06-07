@@ -4,10 +4,12 @@
 
 (function( $ ) {
 	var conn = new ab.Session('wss://api.holyworlds.org/pusher',
+	
+		// On open
 		function()
 		{
 			$.event.trigger( "push:connected" );
-
+			
 			conn.subscribe('chatPublic', function( channel, data )
 			{
 				$.event.trigger({
@@ -17,11 +19,15 @@
 				});
 			});
 		},
+		
+		// On close
 		function()
 		{
 			console.warn('WebSocket connection closed');
 			$.event.trigger( "push:closed" );
 		},
+		
+		// Additional Params
 		{
 			'skipSubprotocolCheck': true
 		});

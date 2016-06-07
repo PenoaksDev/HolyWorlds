@@ -4,7 +4,7 @@
 @section ('content')
     <div id="category">
         @if (!$category->children->isEmpty())
-            <table class="bordered">
+            <table class="table">
                 <thead>
                     <tr>
                         <th>{{ trans_choice('categories.category', 1) }}</th>
@@ -16,7 +16,7 @@
                 </thead>
                 <tbody>
                     @foreach ($category->children as $subcategory)
-                        @include ('category.partials.list', ['category' => $subcategory])
+                        @include ('forum.category.partials.list', ['category' => $subcategory])
                     @endforeach
                 </tbody>
             </table>
@@ -26,7 +26,7 @@
             <div class="col s4">
                 @if ($category->threadsEnabled)
                     @can ('createThreads', $category)
-                        <a href="{{ Forum::route('thread.create', $category) }}" class="waves-effect waves-light btn-large">{{ trans('threads.new_thread') }}</a>
+                        <a href="{{ route('forum.thread.create', $category) }}" class="waves-effect waves-light btn-large">{{ trans('threads.new_thread') }}</a>
                     @endcan
                 @endif
             </div>
@@ -37,7 +37,7 @@
 
         @if (!$category->threadsPaginated->isEmpty())
             @can ('manageThreads', $category)
-                <form action="{{ Forum::route('bulk.thread.update') }}" method="POST" data-actions-form>
+                <form action="{{ route('forum.bulk.thread.update') }}" method="POST" data-actions-form>
                     {!! csrf_field() !!}
                     {!! method_field('delete') !!}
             @endcan
@@ -74,7 +74,7 @@
                                             <span class="label label-danger">{{ trans('general.deleted') }}</span>
                                         @endif
                                     </span>
-                                    <a href="{{ Forum::route('thread.show', $thread) }}">
+                                    <a href="{{ route('forum.thread.show', $thread) }}">
                                         <strong>{{ $thread->title }}</strong>
                                     </a>
                                     <br>
@@ -98,7 +98,7 @@
                                         <br>
                                         <span class="grey-text">({{ $thread->lastPost->posted }})</span>
                                         <br>
-                                        <a href="{{ Forum::route('thread.show', $thread->lastPost) }}">{{ trans('posts.view') }}</a>
+                                        <a href="{{ route('forum.thread.show', $thread->lastPost) }}">{{ trans('posts.view') }}</a>
                                     </td>
                                 @endif
                                 @can ('manageThreads', $category)
@@ -116,7 +116,7 @@
                             </td>
                             <td class="right-align" colspan="3">
                                 @can ('createThreads', $category)
-                                    <a href="{{ Forum::route('thread.create', $category) }}">{{ trans('threads.post_the_first') }}</a>
+                                    <a href="{{ route('forum.thread.create', $category) }}">{{ trans('threads.post_the_first') }}</a>
                                 @endcan
                             </td>
                         </tr>
@@ -136,7 +136,7 @@
             <div class="col s4">
                 @if ($category->threadsEnabled)
                     @can ('createThreads', $category)
-                        <a href="{{ Forum::route('thread.create', $category) }}" class="waves-effect waves-light btn-large">{{ trans('threads.new_thread') }}</a>
+                        <a href="{{ route('forum.thread.create', $category) }}" class="waves-effect waves-light btn-large">{{ trans('threads.new_thread') }}</a>
                     @endcan
                 @endif
             </div>
@@ -149,7 +149,7 @@
             @can ('markNewThreadsAsRead')
                 <hr>
                 <div class="center-align">
-                    <form action="{{ Forum::route('mark-new') }}" method="POST" data-confirm>
+                    <form action="{{ route('forum.mark-new') }}" method="POST" data-confirm>
                         {!! csrf_field() !!}
                         {!! method_field('patch') !!}
                         <input type="hidden" name="category_id" value="{{ $category->id }}">
@@ -166,7 +166,7 @@
 @section('after_content')
 @can ('manageCategories')
     <hr>
-    <form action="{{ Forum::route('category.update', $category) }}" method="POST" data-actions-form>
+    <form action="{{ route('forum.category.update', $category) }}" method="POST" data-actions-form>
         {!! csrf_field() !!}
         {!! method_field('patch') !!}
 

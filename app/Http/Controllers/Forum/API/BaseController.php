@@ -310,17 +310,4 @@ abstract class BaseController extends Controller
             ? new JsonResponse($content, 422)
             : new Response($content, 422);
     }
-
-    /**
-     * Fetch a translated string.
-     *
-     * @param  string  $key
-     * @param  int  $count
-     * @return string
-     */
-    protected function trans($key, $count = 1)
-    {
-        $file = $this->translationFile();
-        return trans_choice("forum.{$file}.{$key}", $count);
-    }
 }

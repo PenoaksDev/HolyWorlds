@@ -79,4 +79,24 @@ abstract class BaseController extends Controller implements ReceiverContract
 
         return redirect()->back();
     }
+
+    /**
+     * Fetch a translated string.
+     *
+     * @param  string  $key
+     * @param  int  $count
+     * @return string
+     */
+    protected function trans($key, $count = 1)
+    {
+        $file = $this->translationFile();
+        return trans_choice("forum.{$file}.{$key}", $count);
+    }
+
+    /**
+     * Return the translation file name to use for this controller.
+     *
+     * @return string
+     */
+    abstract protected function translationFile();
 }

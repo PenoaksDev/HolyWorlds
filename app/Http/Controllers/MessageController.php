@@ -16,4 +16,10 @@ class MessageController extends Controller
 	{
 		return view("messages/index");
 	}
+	
+	public function chatroom() {
+		return view('messages/chatroom', [
+			'floatingChat' => 'none'
+		]);
+	}
 }

@@ -76,6 +76,11 @@ class User extends Authenticatable
 		return $groups;
 	}
 
+	public function addGroup( $parent )
+	{
+		$this->inheritance()->create(["parent" => ( $parent instanceof Group ) ? $parent->id : $parent, "type" => 1]);
+	}
+
 	public function inheritance()
 	{
 		return $this->hasMany(GroupInheritance::class, "child");
@@ -84,6 +89,28 @@ class User extends Authenticatable
 	public function permissions()
 	{
 		return $this->hasMany(Permission::class, "name");
+	}
+
+	public static function stats()
+	{
+		$result = self::get();
+
+		$activated = 0;
+		$registered = 0;
+
+		foreach ( $result as $user )
+		{
+			if ( $user->isActivated() )
+				$activated++;
+			else
+				$registered++;
+		}
+
+		$stats = [];
+		$stats[] = ["label" => "Registered", "data" => $activated];
+		$stats[] = ["label" => "Unactivated", "data" => $registered];
+		$stats[] = ["label" => "Online", "data" => 0];
+		return $stats;
 	}
 
 	public function hasPermission( $node )

@@ -11,9 +11,7 @@ class UserController extends Controller
 {
 	public function index()
 	{
-		return view('admin.users.index', [
-			'users' => User::orderBy('id', 'desc')->get()
-			]);
+		return view('admin.users.index', ['users' => User::orderBy('id', 'desc')->get()]);
 	}
 
 	public function listGroups( $id )

@@ -1,7 +1,7 @@
 <?php
 namespace App\Events\Forum\Types;
 
-use App\Models\Category;
+use App\Models\Forum\Category;
 
 class CategoryEvent
 {

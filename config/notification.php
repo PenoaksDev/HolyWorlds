@@ -58,7 +58,7 @@ return [
     |
     */
 
-    'default_format' => '<div class="alert :type">:message</div>',
+    'default_format' => '<div class="alert alert-:type">:message</div>',
 
     /*
     |--------------------------------------------------------------------------
@@ -95,10 +95,10 @@ return [
     */
 
     'default_formats' => [
-        'info'      => '<div class="alert info">:message</div>',
-        'success'   => '<div class="alert success">:message</div>',
-        'warning'   => '<div class="alert warning">:message</div>',
-        'error'     => '<div class="alert error">:message</div>',
+        'info'      => '<div class="alert alert-info">:message</div>',
+        'success'   => '<div class="alert alert-success">:message</div>',
+        'warning'   => '<div class="alert alert-warning">:message</div>',
+        'error'     => '<div class="alert alert-error">:message</div>',
     ],
 
     /*

@@ -4,18 +4,17 @@
 
 @section('breadcrumbs')
 @parent
-<span class="breadcrumb">Users</span>
+<li>Users</li>
 @append
 
 @section('content')
 <div class="right-align">
-	<a href="{{ route('admin.users.create') }}" class="waves-effect waves-light btn-large">
-		Create user
-	</a>
+	<a href="{{ route('admin.users.create') }}" class="btn btn-success">Create User</a>
 </div>
-<table class="bordered">
+<table class="table">
 	<thead>
 		<tr>
+			<th></th>
 			<th>User #</th>
 			<th>Username</th>
 			<th>E-mail</th>
@@ -28,16 +27,17 @@
 	<tbody>
 		@foreach ($users as $user)
 		<tr>
+			<td>@include('user.partials.avatar', ['user' => $user])</td>
 			<td>{{ $user->id }}</td>
 			<td>{{ $user->name }}</td>
 			<td>{{ $user->email }}</td>
 			<td>{{ $user->created_at }}</td>
 			<td>{{ $user->updated_at }}</td>
-			<td>{{ $user->isActivated() ? "Yes" : "No" }}</td>
+			<td><span class="glyphicon glyphicon-{{ $user->isActivated() ? "ok" : "remove" }}"></span></td>
 			<td class="right-align">
-				<a href="{{ route('admin.users.edit', $user->id) }}">Edit</a>
-				| <a href="{{ route('admin.users.groups', [$user->id]) }}">Groups</a>
-				| <a href="{{ route('admin.resource.delete', ['users', $user->id]) }}">Delete</a>
+				<a href="{{ route('admin.users.edit', $user->id) }}"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+				| <a href="{{ route('admin.users.groups', [$user->id]) }}"><i class="fa fa-users" aria-hidden="true"></i></a>
+				| <a href="{{ route('admin.resource.delete', ['users', $user->id]) }}"><i class="fa fa-trash" aria-hidden="true"></i></a>
 			</td>
 		</tr>
 		@endforeach

@@ -7,19 +7,17 @@ $(function() {
 		if ( chatBox.hasClass('active') ) {
 			
 			// Animate the chat box
-			chatBox.children().fadeOut();
-			
 			chatBox
 				.animate({
 					height: 0,
 					width: '62px',
 					display: 'none'
 				}, 1000)
-				.fadeOut()
-				.removeClass('active');
+				.removeClass('active')
+				.children().fadeOut();
 			
 			// Change the chat button
-			$('#chat_header_open').fadeOut(500, function() { 
+			$('#chat_header_icon').fadeOut(500, function() { 
 				$(this).removeClass('fa-times');
 				$(this).addClass('fa-comments');
 				$(this).fadeIn(500);
@@ -42,10 +40,11 @@ $(function() {
 					height: '35vh',
 					width: '300px'
 				}, 1000)
-				.addClass('active');
+				.addClass('active')
+				.children().fadeIn();
 			
 			// Change the chat button
-			$('#chat_header_open').fadeOut(500, function() { 
+			$('#chat_header_icon').fadeOut(500, function() { 
 				$(this).removeClass('fa-comments');
 				$(this).addClass('fa-times');
 				$(this).fadeIn(500);

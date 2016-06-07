@@ -1,10 +1,11 @@
-{{-- $category is passed as NULL to the master layout view to prevent it from showing in the breadcrumbs --}}
 @extends ('master', ['category' => null])
+
+@section ('pagetitle', 'Forum Index')
 
 @section ('content')
 <div id="index">
     @foreach ($categories as $category)
-        <table class="bordered">
+        <table class="table">
             <thead>
                 <th>
                     <a href="{{ route('forum.category.show', $category) }}" class="title">
@@ -18,10 +19,10 @@
                 <th class="right-align hide-on-small-only" style="width:20%;">{{ trans('threads.newest') }}</th>
                 <th class="right-align" style="width:20%;">{{ trans('posts.last') }}</th>
             </thead>
-            <tbody>
+            <tbody class="table-striped">
                 @if (!$category->children->isEmpty())
                     @foreach ($category->children as $subcategory)
-                        @include ('category.partials.list', ['category' => $subcategory])
+                        @include ('forum.category.partials.list', ['category' => $subcategory])
                     @endforeach
                 @endif
             </tbody>

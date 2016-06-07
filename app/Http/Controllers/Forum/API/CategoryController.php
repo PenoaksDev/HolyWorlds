@@ -19,16 +19,6 @@ class CategoryController extends BaseController
     }
 
     /**
-     * Return the translation file name to use for this controller.
-     *
-     * @return string
-     */
-    protected function translationFile()
-    {
-        return 'categories';
-    }
-
-    /**
      * GET: Return an index of categories.
      *
      * @param  Request  $request

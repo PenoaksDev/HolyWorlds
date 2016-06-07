@@ -27,10 +27,10 @@
                                     <span class="label label-primary">{{ trans($thread->userReadStatus) }}</span>
                                 @endif
                             </span>
-                            <a href="{{ Forum::route('thread.show', $thread) }}">{{ $thread->title }}</a>
+                            <a href="{{ route('forum.thread.show', $thread) }}">{{ $thread->title }}</a>
                             <p>
                                 {{ $thread->authorName }}
-                                <span class="text-muted">(<em><a href="{{ Forum::route('category.show', $thread->category) }}">{{ $thread->category->title }}</a></em>, {{ $thread->posted }})</span>
+                                <span class="text-muted">(<em><a href="{{ route('forum.category.show', $thread->category) }}">{{ $thread->category->title }}</a></em>, {{ $thread->posted }})</span>
                             </p>
                         </td>
                         <td class="center-align">
@@ -39,7 +39,7 @@
                         <td class="right-align">
                             {{ $thread->lastPost->authorName }}
                             <p class="text-muted">({{ $thread->lastPost->posted }})</p>
-                            <a href="{{ Forum::route('thread.show', $thread->lastPost) }}">{{ trans('posts.view') }} &raquo;</a>
+                            <a href="{{ route('forum.thread.show', $thread->lastPost) }}">{{ trans('posts.view') }} &raquo;</a>
                         </td>
                     </tr>
                 @endforeach
@@ -48,7 +48,7 @@
 
         @can ('markNewThreadsAsRead')
             <div class="text-center">
-                <form action="{{ Forum::route('mark-new') }}" method="POST" data-confirm>
+                <form action="{{ route('forum.mark-new') }}" method="POST" data-confirm>
                     {!! csrf_field() !!}
                     {!! method_field('patch') !!}
                     <button class="waves-effect waves-light btn-large btn-small">{{ trans('general.mark_read') }}</button>

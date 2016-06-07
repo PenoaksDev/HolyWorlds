@@ -1,7 +1,7 @@
 <?php
 namespace App\Events\Forum\Types;
 
-use App\Models\Thread;
+use App\Models\Forum\Thread;
 
 class ThreadEvent
 {

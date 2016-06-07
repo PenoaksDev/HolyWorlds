@@ -35,18 +35,26 @@ class CategoryController extends BaseController
      * @param  Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request)
+    public function show($id, Request $request)
     {
-        $category = $this->api('category.fetch', $request->route('category'))->get();
+        $category = Category::find( $id );
 
-        event(new UserViewingCategory($category));
-
-        $categories = [];
-        if (Gate::allows('moveCategories')) {
-            $categories = $this->api('category.index')->parameters(['where' => ['category_id' => 0]])->get();
+        if (is_null($category) || !$category->exists)
+        {
+            return view("errors.404");
         }
 
-        return view('forum.category.show', compact('categories', 'category', 'threads'));
+        if ( empty( $category->permission ) || Auth::user() != null && Auth::user()->hasPermission( $category->permission ) )
+        {
+            event(new UserViewingCategory($category));
+
+            $categories = [];
+            if (Gate::allows('moveCategories')) {
+                $categories = Category::where("category_id", 0)->get();
+            }
+
+            return view('forum.category.show', compact('categories', 'category', 'threads'));
+        }
     }
 
     /**
@@ -94,5 +102,10 @@ class CategoryController extends BaseController
         Forum::alert('success', 'categories.deleted', 1);
 
         return redirect(config('forum.routing.root'));
+    }
+
+    protected function translationFile()
+    {
+        return 'categories';
     }
 }

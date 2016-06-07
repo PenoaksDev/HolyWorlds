@@ -20,7 +20,7 @@
         "intervention/imagecache": "^2.3",
         "fenos/notifynder": "^3.2",
         "guzzlehttp/guzzle": "~5.3|~6.0",
-	"cboden/ratchet": "0.3.*",
+		"cboden/ratchet": "0.3.*",
         "react/zmq": "0.2.*|0.3.*",
         "ramsey/uuid": "^3.4",
         "ramsey/uuid-doctrine": "^1.2"

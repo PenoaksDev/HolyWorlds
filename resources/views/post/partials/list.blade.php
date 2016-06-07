@@ -32,7 +32,7 @@
             <p>
                 <strong>
                     {{ trans('general.response_to', ['item' => $post->parent->authorName]) }}
-                    (<a href="{{ Forum::route('post.show', $post->parent) }}">{{ trans('posts.view') }}</a>):
+                    (<a href="{{ route('forum.post.show', $post->parent) }}">{{ trans('posts.view') }}</a>):
                 </strong>
             </p>
             <blockquote>
@@ -63,7 +63,7 @@
     <td class="hide-on-small-only">
         @if (!$post->trashed())
             @can ('edit', $post)
-                <a href="{{ Forum::route('post.edit', $post) }}">{{ trans('general.edit') }}</a>
+                <a href="{{ route('forum.post.edit', $post) }}">{{ trans('general.edit') }}</a>
             @endcan
         @endif
     </td>
@@ -74,19 +74,19 @@
         <span class="hide-on-med-and-up">
             @if (!$post->trashed())
                 @can ('edit', $post)
-                    <a href="{{ Forum::route('post.edit', $post) }}">{{ trans('general.edit') }}</a>
+                    <a href="{{ route('forum.post.edit', $post) }}">{{ trans('general.edit') }}</a>
                 @endcan
             @endif
         </span>
         <span class="pull-right">
-            <a href="{{ Forum::route('thread.show', $post) }}">#{{ $post->sequenceNumber }}</a>
+            <a href="{{ route('forum.thread.show', $post) }}">#{{ $post->sequenceNumber }}</a>
             @if (!$post->trashed())
                 @can ('reply', $post->thread)
-                    - <a href="{{ Forum::route('post.create', $post) }}">{{ trans('general.reply') }}</a>
+                    - <a href="{{ route('forum.post.create', $post) }}">{{ trans('general.reply') }}</a>
                 @endcan
             @endif
-            @if (Request::fullUrl() != Forum::route('post.show', $post))
-                - <a href="{{ Forum::route('post.show', $post) }}">{{ trans('posts.view') }}</a>
+            @if (Request::fullUrl() != route('forum.post.show', $post))
+                - <a href="{{ route('forum.post.show', $post) }}">{{ trans('posts.view') }}</a>
             @endif
             @if (isset($thread))
                 @can ('deletePosts', $thread)

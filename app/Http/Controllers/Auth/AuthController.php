@@ -101,10 +101,10 @@ class AuthController extends Controller
      */
     public function postLogin(Request $request)
     {
-        $this->validate($request, ['name_or_email' => 'required']);
+        $this->validate($request, ['username' => 'required']);
 
-        $field = filter_var($request->input('name_or_email'), FILTER_VALIDATE_EMAIL) ? 'email' : 'name';
-        $request->merge([$field => $request->input('name_or_email')]);
+        $field = filter_var($request->input('username'), FILTER_VALIDATE_EMAIL) ? 'email' : 'name';
+        $request->merge([$field => $request->input('username')]);
         $this->username = $field;
 
         return self::login($request);
@@ -119,13 +119,14 @@ class AuthController extends Controller
      */
     protected function authenticated(Request $request, User $user)
     {
-        if (!$user->activated) {
+        if (!$user->isActivated()) {
             Auth::logout();
-            Notification::warning("Your account is not active. :(");
+            Notification::warning("Your account is not activated. :(");
+            // TODO Give the option to redispatch the activation e-mail
             return back();
         }
 
-        Notification::success("Welcome back, {$user->name}!");
+        Notification::success("Welcome, {$user->name}!");
         return redirect()->intended('/');
     }
 

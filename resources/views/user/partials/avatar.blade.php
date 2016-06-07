@@ -1,1 +1,1 @@
-<img src="{{ $user->profile->avatarUrl }}" alt="{{ $user->name }}'s avatar" class="avatar {{ isset($class) ? $class : '' }}">
+<!--  $user->profile->avatarUrl }} --><img src="https://gravatar.com/avatar/{{ md5($user->email) }}?s={{ isset($size) ? $size : 25 }}&amp;d=mm&amp;r=pg" alt="{{ $user->name }}'s avatar" class="avatar {{ isset($class) ? $class : '' }}">
