@@ -1,8 +1,19 @@
+# Ignore certain development and dependency directories
 /dev
 /vendor
 /node_modules
 /public/storage
+
+# Ignore error log files
 error_log
+
+# Ignore Homestead confif
 Homestead.yaml
 Homestead.json
+
+# Ignore dangerous stuff
 .env
+
+#Ignore Vim swap files
+.swp
+.swo
