@@ -168,7 +168,6 @@ $r->get('tagged/{tag}', 'TagController@show');
 
 $r->group(["prefix" => "dev", "namespace" => "Dev"], function($r){
 	$r->get("restartPushServer", "DevController@restartPushServer");
-
 	$r->get("broadcast", "DevController@broadcast");
 });
 
@@ -178,6 +177,7 @@ $r->group(['prefix' => 'admin', 'namespace' => 'Admin'], function ($r) {
 	$r->get('/', 'AdminController@getDashboard');
 
 	$r->get("groups/ajax", ["as" => "admin.groups.ajax", "uses" => "GroupController@ajax"] );
+	$r->get("groups/{groupId}/inheritance", ["as" => "admin.groups.inheritance", "uses" => "GroupController@inheritance"] );
 
 	$r->resource('groups', 'GroupController');
 	$r->resource('users', 'UserController');

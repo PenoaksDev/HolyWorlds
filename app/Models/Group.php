@@ -9,6 +9,12 @@ class Group extends Model
 	public $timestamps = false;
 	public $incrementing = false;
 
+	public function inheritance()
+	{
+		// What groups am I a member of?
+		return $this->hasMany(GroupInheritance::class, "child");
+	}
+
 	public function groups()
 	{
 		$groups = array();
@@ -20,6 +26,15 @@ class Group extends Model
 	public function hasGroups()
 	{
 		return $this->inheritance()->count() > 0;
+	}
+
+	public function addGroup( $parent )
+	{
+		$parent = ( $parent instanceof Group ) ? $parent->id : $parent;
+		if ( $this->id == $parent )
+			abort( 500, 'Group can not be a parent of ones self' );
+		if ( $this->inheritance()->where("child", "parent")->count() == 0 )
+			$this->inheritance()->create(["parent" => $parent, "type" => 0]);
 	}
 
 	public function hasPermission( $node )
@@ -57,12 +72,10 @@ class Group extends Model
 		return false;
 	}
 
-	public function addGroup( $parent )
+	public function hasChild( $child )
 	{
-		$parent = ( $parent instanceof Group ) ? $parent->id : $parent;
-		if ( $this->id == $parent )
-			abort( 500, 'Group can not be a parent of ones self' );
-		$this->inheritance()->create(["parent" => $parent, "type" => 0]);
+		$child = ( $child instanceof Group ) || ( $child instanceof User ) ? $child->id : $child;
+		return $this->children()->where("child", $child)->count() > 0;
 	}
 
 	public function addChild( $child )
@@ -71,12 +84,6 @@ class Group extends Model
 		if ( $this->id == $child )
 			abort( 500, 'Group can not be a child of ones self' );
 		$this->children()->create(["child" => $child, "type" => 0]);
-	}
-
-	public function inheritance()
-	{
-		// What groups am I a member of?
-		return $this->hasMany(GroupInheritance::class, "child");
 	}
 
 	public function permissions()

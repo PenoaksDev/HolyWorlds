@@ -5,10 +5,7 @@
 
 	RewriteEngine On
 
-	RewriteRule ^pusher - [L]
 	RewriteRule ^.well-known - [L] // Ignore Let's Encrypt Domain Verification Files
-
-	RewriteEngine On
 
 	RewriteCond %{HTTP_HOST} dev.holyworlds.org [NC]
 	RewriteCond %{HTTP_HOST} !^dev.holyworlds.org$ [NC]
