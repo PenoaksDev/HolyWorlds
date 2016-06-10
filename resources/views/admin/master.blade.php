@@ -1,6 +1,4 @@
-@extends('app')
-
-@section('body_class', 'admin')
+@extends('wrapper')
 
 @section('breadcrumbs')
 <li><a href="{{ url('admin') }}">Admin</a></li>

@@ -3,7 +3,7 @@
 @section('title', 'Group Inheritance')
 
 @section('breadcrumbs')
-	@parent
+@parent
 	<li><a href="{{ route( 'admin.groups.index' ) }}">Groups</a></li>
 	<li><a href="{{ route( 'admin.groups.show', $group->id ) }}">{{ $group->id }}</a></li>
 	<li>Inheritance</li>

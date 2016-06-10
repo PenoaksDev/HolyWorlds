@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Contracts\Auth\Access\Gate as GateContract;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Blade;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -29,6 +30,14 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot(GateContract $gate)
     {
+        Blade::directive('has', function($node) {
+            return "<?php if ( Auth::user()->hasPermission( $node ) ) { ?>";
+        });
+
+        Blade::directive('endHas', function() {
+            return "<?php } ?>";
+        });
+
         foreach(['AdminPolicy', 'GeneralPolicy'] as $policy) {
             $gate = $this->defineFromClass($gate, "App\\Policies\\{$policy}");
         }

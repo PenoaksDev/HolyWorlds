@@ -1,15 +1,21 @@
 <?php
 
-/*
-|--------------------------------------------------------------------------
-| Application Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register all of the routes for an application.
-| It's a breeze. Simply tell Laravel the URIs it should respond to
-| and give it the controller to call when that URI is requested.
-|
-*/
+use App\Models\Article;
+use App\Models\Event;
+use App\Models\Forum\Post;
+use App\Models\Forum\Thread;
+use App\Models\Session;
+use App\Models\User;
+
+$r->get('/', function(){
+	return view('index', [
+		'newUsers' => User::activated()->orderBy('created_at', 'desc')->limit(5)->get(),
+		'onlineUsers' => Session::authenticated()->groupBy('user_id')->recent()->limit(10)->get(),
+		'newThreads' => Thread::with(['author', 'posts'])->orderBy('created_at', 'desc')->limit(5)->get(),
+		'newPosts' => Post::where('post_id', '!=', null)->orderBy('created_at', 'DESC')->limit(5)->get(),
+		'articles' => Article::published()->orderBy('published_at', 'desc')->paginate()
+	]);
+});
 
 $r->get("messages", "MessageController@index");
 
@@ -63,9 +69,6 @@ $r->group(['prefix' => 'user', 'as' => 'user.'], function ($r) {
 // Profiles
 	$r->get('{id}-{name}',['as' => 'profile', 'uses' => 'User\ProfileController@show']);
 });
-
-// Home
-$r->get('/', ['as' => 'home', 'uses' => 'HomeController@show']);
 
 // Articles
 $r->group(['prefix' => 'articles', 'as' => 'article.'], function ($r) {
