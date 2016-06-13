@@ -1,31 +1,31 @@
 <?php
-namespace App\Models\Traits;
+namespace App\Models\Forum\Traits;
+
+use App\Models\User;
 
 trait HasAuthor
 {
-    /**
-     * Relationship: Author.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function author()
-    {
-        return $this->belongsTo(config('forum.integration.user_model'));
-    }
+	/**
+	 * Relationship: Author.
+	 *
+	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+	 */
+	public function author()
+	{
+		return $this->belongsTo( User::class, 'author_id' );
+	}
 
-    /**
-     * Attribute: Author name.
-     *
-     * @return mixed
-     */
-    public function getAuthorNameAttribute()
-    {
-        $attribute = config('forum.integration.user_name');
+	/**
+	 * Attribute: Author name.
+	 *
+	 * @return mixed
+	 */
+	public function getAuthorNameAttribute()
+	{
+		if (!is_null($this->author)) {
+			return $this->author->name;
+		}
 
-        if (!is_null($this->author)) {
-            return $this->author->$attribute;
-        }
-
-        return null;
-    }
+		return null;
+	}
 }

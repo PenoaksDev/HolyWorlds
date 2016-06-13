@@ -98,8 +98,20 @@ footer {
 }
 
 /* Misc */
+.smaller, smaller {
+	font-size: 75%;
+}
+
+.smallest, smallest {
+	font-size: 65%;
+}
+
 .avatar {
 	/* width: 25px; */
+}
+
+.text-gray {
+	color: #777;
 }
 
 h1, h2, h3, h4, h5, h6 {

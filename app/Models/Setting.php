@@ -5,62 +5,114 @@ use Illuminate\Database\Eloquent\Model;
 
 class Setting extends Model
 {
-    /**
-     * The primary key for the model.
-     *
-     * @var string
-     */
-    protected $primaryKey = 'key';
+	protected $primaryKey = 'key';
 
-    /**
-     * Indicates if the model should be timestamped.
-     *
-     * @var bool
-     */
-    public $timestamps = false;
+	public $timestamps = false;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = ['key', 'value'];
+	protected $fillable = ['key', 'global_perm', 'public_perm', 'global_only', 'type', 'enum', 'value'];
 
-    /**
-     * Helper: get a setting value by key, optionally with a default
-     *
-     * @param  string  $key
-     * @param  null|string  $default
-     * @return string
-     */
-    public static function get($key, $default = null)
-    {
-        $setting = static::where(compact('key'))->first();
-        return $setting instanceof static ? $setting->value : $default;
-    }
+	public static function boot()
+	{
+		Setting::creating( function ( $setting )
+		{
+			if ( empty( $setting->type ) )
+				$setting->type = gettype( $setting ) == 'boolean' ? 1 : 0;
+		} );
+	}
 
-    /**
-     * Helper: store a given value with the given key
-     *
-     * @param  string  $key
-     * @param  string  $value
-     * @return bool
-     */
-    public static function set($key, $value)
-    {
-        $setting = self::firstOrNew(['key' => $key]);
-        $setting->value = $value;
-        return $setting->save();
-    }
+	public static function get($key, $def = null, $user = null)
+	{
+		return static::findOrNew( $key )->value( $def, $user );
+	}
 
-    /**
-     * Helper: delete a setting
-     *
-     * @param  string  $key
-     * @return bool
-     */
-    public static function forget($key)
-    {
-        return self::where(compact('key'))->delete();
-    }
+	public function setDefault( $def, $user = null )
+	{
+		if ( is_null( $user ) )
+			$user = Auth::user();
+		if ( $this->global_perm && !$user->hasPermission( $this->global_perm ) )
+			return false;
+		if ( $this->type == 2 && !in_array( $value, $this->enumValues ) )
+			return false;
+		$this->def = $def;
+		return $this->save();
+	}
+
+	public function set( $value, $user = null )
+	{
+		if ( $this->global_only == 1 )
+			if ( is_null( $value ) )
+				return false;
+			else
+				return setDefault( $value, $user );
+		if ( is_null( $user ) )
+			$user = Auth::user();
+		if ( $this->public_perm && !$user->hasPermission( $this->public_perm ) )
+			return false;
+		if ( is_null( $value ) )
+		{
+			DB::table( 'settings_custom' )->where( [ 'key' => $this->key, 'owner' => $user->id ] )->delete();
+			return true;
+		}
+		if ( $this->type == 2 && !in_array( $value, $this->enumValues ) )
+			return false;
+
+		$custom = DB::table( 'settings_custom' )->where( [ 'key' => $this->key ] )->limit( 1 )->first();
+		if ( is_null( $custom ) )
+			DB::table( 'settings_custom' )->insert( [ 'key' => $this->key, 'owner' => $user->id, 'value' => $value ] );
+		else
+			DB::table( 'settings_custom' )->where( [ 'key' => $this->key, 'owner' => $user->id ] )->update( [ 'value' => $value ] );
+		return true;
+	}
+
+	public function value( $def = null, $user = null )
+	{
+		if ( $this->global_only == 1 )
+		{
+			if ( is_null( $def ) )
+				return $this->def;
+			else
+			{
+				if ( is_null( $this->def ) )
+					setDefault( $def, $user );
+				return $def;
+			}
+		}
+		if ( is_null( $user ) )
+			$user = Auth::user();
+		$custom = DB::table( 'settings_custom' )->where( 'key', $this->key )->limit( 1 )->first();
+		if ( is_null( $custom ) )
+			if ( is_null( $def ) )
+				return $this->def;
+			else
+			{
+				if ( is_null( $this->def ) )
+					setDefault( $def, $user );
+				return $def;
+			}
+		else
+			return $custom->value;
+	}
+
+	public function type()
+	{
+		switch ( $this->type )
+		{
+			case 0:
+				return "string";
+			case 1:
+				return "boolean";
+			case 2:
+				return "enum";
+		}
+	}
+
+	public function getEnumAttribute()
+	{
+		return explode('|', $this->enum);
+	}
+
+	public function forget( $user = null )
+	{
+		$this->set( null, $user );
+	}
 }

@@ -34,7 +34,7 @@ class AuthServiceProvider extends ServiceProvider
             return "<?php if ( Auth::user()->hasPermission( $node ) ) { ?>";
         });
 
-        Blade::directive('endHas', function() {
+        Blade::directive('endhas', function() {
             return "<?php } ?>";
         });
 

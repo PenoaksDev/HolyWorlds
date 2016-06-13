@@ -2,12 +2,12 @@
 namespace App\Models\Forum;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Models\Traits\HasAuthor;
+use App\Models\Forum\Traits\HasAuthor;
 use App\Support\Traits\CachesData;
 
 class Post extends BaseModel
 {
-    use SoftDeletes, HasAuthor, CachesData;
+    use SoftDeletes, CachesData, HasAuthor;
 
     /**
      * The table associated with the model.
@@ -21,7 +21,7 @@ class Post extends BaseModel
 	 *
 	 * @var array
 	 */
-    protected $fillable = ['thread_id', 'author_id', 'post_id', 'content'];
+    protected $fillable = ['id', 'thread_id', 'category_id', 'author_id', 'content', 'created_at', 'updated_at', 'deleted_at', 'post_id'];
 
 	/**
 	 * The relations to eager load on every query.
@@ -38,7 +38,7 @@ class Post extends BaseModel
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
-        $this->setPerPage(config('forum.preferences.pagination.posts'));
+        $this->setPerPage(25);
     }
 
     /**

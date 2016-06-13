@@ -8,210 +8,222 @@ use App\Events\Forum\UserCreatingThread;
 use App\Events\Forum\UserMarkingNew;
 use App\Events\Forum\UserViewingNew;
 use App\Events\Forum\UserViewingThread;
+use App\Models\Forum\Thread;
 
 class ThreadController extends BaseController
 {
-    /**
-     * @var Thread
-     */
-    protected $threads;
+	/**
+	 * @var Thread
+	 */
+	protected $threads;
 
-    /**
-     * @var Post
-     */
-    protected $posts;
+	/**
+	 * @var Post
+	 */
+	protected $posts;
 
-    /**
-     * GET: Return a new/updated threads view.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function indexNew()
-    {
-        $threads = $this->api('thread.index-new')->get();
+	/**
+	 * GET: Return a new/updated threads view.
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function indexNew()
+	{
+		$threads = $this->api('thread.index-new')->get();
 
-        event(new UserViewingNew($threads));
+		event(new UserViewingNew($threads));
 
-        return view('forum.thread.index-new', compact('threads'));
-    }
+		return view('forum.thread.index-new', compact('threads'));
+	}
 
-    /**
-     * PATCH: Mark new/updated threads as read for the current user.
-     *
-     * @param  Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function markNew(Request $request)
-    {
-        $threads = $this->api('thread.mark-new')->parameters($request->only('category_id'))->patch();
+	/**
+	 * PATCH: Mark new/updated threads as read for the current user.
+	 *
+	 * @param  Request  $request
+	 * @return \Illuminate\Http\Response
+	 */
+	public function markNew(Request $request)
+	{
+		$threads = $this->api('thread.mark-new')->parameters($request->only('category_id'))->patch();
 
-        event(new UserMarkingNew);
+		event(new UserMarkingNew);
 
-        if ($request->has('category_id')) {
-            $category = $this->api('category.fetch', $request->input('category_id'))->get();
+		if ($request->has('category_id')) {
+			$category = $this->api('category.fetch', $request->input('category_id'))->get();
 
-            if ($category) {
-                Forum::alert('success', 'categories.marked_read', 0, ['category' => $category->title]);
-                return redirect(Forum::route('category.show', $category));
-            }
-        }
+			if ($category) {
+				Forum::alert('success', 'categories.marked_read', 0, ['category' => $category->title]);
+				return redirect(Forum::route('category.show', $category));
+			}
+		}
 
-        Forum::alert('success', 'threads.marked_read');
-        return redirect(config('forum.routing.root'));
-    }
+		Forum::alert('success', 'threads.marked_read');
+		return redirect(config('forum.routing.root'));
+	}
 
-    /**
-     * GET: Return a thread view.
-     *
-     * @param  Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Request $request)
-    {
-        $thread = $this->api('thread.fetch', $request->route('thread'))
-                       ->parameters(['include_deleted' => auth()->check()])
-                       ->get();
+	/**
+	 * GET: Return a thread view.
+	 *
+	 * @param  Request  $request
+	 * @return \Illuminate\Http\Response
+	 */
+	public function show($id, Request $request)
+	{
+		// $thread = $request->input('include_deleted') ? Thread::withTrashed()->find($id) : Thread::find($id);
+		$thread = Thread::find($id);
 
-        event(new UserViewingThread($thread));
+		if (is_null($thread) || !$thread->exists) {
+			return "Thread not found";
+		}
 
-        $category = $thread->category;
+		if ($thread->trashed()) {
+			$this->authorize('delete', $thread);
+		}
 
-        $categories = [];
-        if (Gate::allows('moveThreadsFrom', $category)) {
-            $categories = $this->api('category.index')->parameters(['where' => ['category_id' => 0]], ['where' => ['enable_threads' => 1]])->get();
-        }
+		if ($thread->category->private) {
+			$this->authorize('view', $thread->category);
+		}
 
-        return view('forum.thread.show', compact('categories', 'category', 'thread'));
-    }
+		event(new UserViewingThread($thread));
 
-    /**
-     * GET: Return a 'create thread' view.
-     *
-     * @param  Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function create(Request $request)
-    {
-        $category = $this->api('category.fetch', $request->route('category'))->get();
+		$category = $thread->category;
 
-        if (!$category->threadsEnabled) {
-            Forum::alert('warning', 'categories.threads_disabled');
+		$categories = [];
+		if (Gate::allows('moveThreadsFrom', $category)) {
+			$categories = $this->api('category.index')->parameters(['where' => ['category_id' => 0]], ['where' => ['enable_threads' => 1]])->get();
+		}
 
-            return redirect(Forum::route('category.show', $category));
-        }
+		return view('forum.thread.show', compact('categories', 'category', 'thread'));
+	}
 
-        event(new UserCreatingThread($category));
+	/**
+	 * GET: Return a 'create thread' view.
+	 *
+	 * @param  Request  $request
+	 * @return \Illuminate\Http\Response
+	 */
+	public function create(Request $request)
+	{
+		$category = $this->api('category.fetch', $request->route('category'))->get();
 
-        return view('forum.thread.create', compact('category'));
-    }
+		if (!$category->threadsEnabled) {
+			Forum::alert('warning', 'categories.threads_disabled');
 
-    /**
-     * POST: Store a new thread.
-     *
-     * @param  Request  $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function store(Request $request)
-    {
-        $category = $this->api('category.fetch', $request->route('category'))->get();
+			return redirect(Forum::route('category.show', $category));
+		}
 
-        if (!$category->threadsEnabled) {
-            Forum::alert('warning', 'categories.threads_disabled');
+		event(new UserCreatingThread($category));
 
-            return redirect(Forum::route('category.show', $category));
-        }
+		return view('forum.thread.create', compact('category'));
+	}
 
-        $thread = [
-            'author_id'     => auth()->user()->getKey(),
-            'category_id'   => $category->id,
-            'title'         => $request->input('title'),
-            'content'       => $request->input('content')
-        ];
+	/**
+	 * POST: Store a new thread.
+	 *
+	 * @param  Request  $request
+	 * @return \Illuminate\Http\RedirectResponse
+	 */
+	public function store(Request $request)
+	{
+		$category = $this->api('category.fetch', $request->route('category'))->get();
 
-        $thread = $this->api('thread.store')->parameters($thread)->post();
+		if (!$category->threadsEnabled) {
+			Forum::alert('warning', 'categories.threads_disabled');
 
-        Forum::alert('success', 'threads.created');
+			return redirect(Forum::route('category.show', $category));
+		}
 
-        return redirect(Forum::route('thread.show', $thread));
-    }
+		$thread = [
+			'author_id'	 => auth()->user()->getKey(),
+			'category_id'   => $category->id,
+			'title'		 => $request->input('title'),
+			'content'	   => $request->input('content')
+		];
 
-    /**
-     * PATCH: Update a thread.
-     *
-     * @param  Request  $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function update(Request $request)
-    {
-        $action = $request->input('action');
+		$thread = $this->api('thread.store')->parameters($thread)->post();
 
-        $thread = $this->api("thread.{$action}", $request->route('thread'))->parameters($request->all())->patch();
+		Forum::alert('success', 'threads.created');
 
-        Forum::alert('success', 'threads.updated', 1);
+		return redirect(Forum::route('thread.show', $thread));
+	}
 
-        return redirect(Forum::route('thread.show', $thread));
-    }
+	/**
+	 * PATCH: Update a thread.
+	 *
+	 * @param  Request  $request
+	 * @return \Illuminate\Http\RedirectResponse
+	 */
+	public function update(Request $request)
+	{
+		$action = $request->input('action');
 
-    /**
-     * DELETE: Delete a thread.
-     *
-     * @param  Request  $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function destroy(Request $request)
-    {
-        $this->validate($request, ['action' => 'in:delete,permadelete']);
+		$thread = $this->api("thread.{$action}", $request->route('thread'))->parameters($request->all())->patch();
 
-        $permanent = !config('forum.preferences.soft_deletes') || ($request->input('action') == 'permadelete');
+		Forum::alert('success', 'threads.updated', 1);
 
-        $parameters = $request->all();
+		return redirect(Forum::route('thread.show', $thread));
+	}
 
-        if ($permanent) {
-            $parameters += ['force' => 1];
-        }
+	/**
+	 * DELETE: Delete a thread.
+	 *
+	 * @param  Request  $request
+	 * @return \Illuminate\Http\RedirectResponse
+	 */
+	public function destroy(Request $request)
+	{
+		$this->validate($request, ['action' => 'in:delete,permadelete']);
 
-        $thread = $this->api('thread.delete', $request->route('thread'))->parameters($parameters)->delete();
+		$permanent = !config('forum.preferences.soft_deletes') || ($request->input('action') == 'permadelete');
 
-        Forum::alert('success', 'threads.deleted', 1);
+		$parameters = $request->all();
 
-        return redirect($permanent ? Forum::route('category.show', $thread->category) : Forum::route('thread.show', $thread));
-    }
+		if ($permanent) {
+			$parameters += ['force' => 1];
+		}
 
-    /**
-     * DELETE: Delete threads in bulk.
-     *
-     * @param  Request  $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function bulkDestroy(Request $request)
-    {
-        $this->validate($request, ['action' => 'in:delete,permadelete']);
+		$thread = $this->api('thread.delete', $request->route('thread'))->parameters($parameters)->delete();
 
-        $parameters = $request->all();
+		Forum::alert('success', 'threads.deleted', 1);
 
-        if (!config('forum.preferences.soft_deletes') || ($request->input('action') == 'permadelete')) {
-            $parameters += ['force' => 1];
-        }
+		return redirect($permanent ? Forum::route('category.show', $thread->category) : Forum::route('thread.show', $thread));
+	}
 
-        $threads = $this->api('bulk.thread.delete')->parameters($parameters)->delete();
+	/**
+	 * DELETE: Delete threads in bulk.
+	 *
+	 * @param  Request  $request
+	 * @return \Illuminate\Http\RedirectResponse
+	 */
+	public function bulkDestroy(Request $request)
+	{
+		$this->validate($request, ['action' => 'in:delete,permadelete']);
 
-        return $this->bulkActionResponse($threads, 'threads.deleted');
-    }
+		$parameters = $request->all();
 
-    /**
-     * PATCH: Update threads in bulk.
-     *
-     * @param  Request  $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function bulkUpdate(Request $request)
-    {
-        $this->validate($request, ['action' => 'in:restore,move,pin,unpin,lock,unlock']);
+		if (!config('forum.preferences.soft_deletes') || ($request->input('action') == 'permadelete')) {
+			$parameters += ['force' => 1];
+		}
 
-        $action = $request->input('action');
+		$threads = $this->api('bulk.thread.delete')->parameters($parameters)->delete();
 
-        $threads = $this->api("bulk.thread.{$action}")->parameters($request->all())->patch();
+		return $this->bulkActionResponse($threads, 'threads.deleted');
+	}
 
-        return $this->bulkActionResponse($threads, 'threads.updated');
-    }
+	/**
+	 * PATCH: Update threads in bulk.
+	 *
+	 * @param  Request  $request
+	 * @return \Illuminate\Http\RedirectResponse
+	 */
+	public function bulkUpdate(Request $request)
+	{
+		$this->validate($request, ['action' => 'in:restore,move,pin,unpin,lock,unlock']);
+
+		$action = $request->input('action');
+
+		$threads = $this->api("bulk.thread.{$action}")->parameters($request->all())->patch();
+
+		return $this->bulkActionResponse($threads, 'threads.updated');
+	}
 }

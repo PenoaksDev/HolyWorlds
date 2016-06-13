@@ -291,8 +291,6 @@
 							// TODO Display AJAX error page
 							// Temp! Forcefully redirect so user can see exception page.
 							window.location = href;
-						}).always(function(jqXHR, textStatus, errorThrown){
-							$('#loadingModal').modal('hide');
 						});
 					}
 				});
