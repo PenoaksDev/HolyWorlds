@@ -38,7 +38,7 @@
 		@foreach ($articles as $article)
 			@include('article.partials.list')
 		@endforeach
-		@include('partials.pagination', ['paginator' => $articles])
+		@include('forum.partials.pagination', ['paginator' => $articles])
 	</div>
 	<div class="col s12 m12 l3">
 		<h4>Latest forum threads</h4>
@@ -66,9 +66,11 @@
 				{{ $post->thread->title }}
 			</a>
 			by
-			<a href="{{ $post->author->profile->url }}">
-				{{ $post->author->name }}
-			</a>
+			@if ( $post->author )
+				<a href="{{ $post->author->profile->url }}">
+					{{ $post->author->name }}
+				</a>
+			@endif
 			<br>
 			{{ $post->created_at->diffForHumans() }}
 		</li>

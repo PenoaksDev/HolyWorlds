@@ -12,7 +12,7 @@ class User extends Authenticatable
 {
 	use Notifable, UuidAsKey;
 
-	protected $fillable = ['name', 'email', 'password', 'activated'];
+	protected $fillable = ['id', 'oldid', 'name', 'email', 'password', 'activation_token', 'activation_updated', 'created_at', 'updated_at', 'visited_at', 'post_count', 'timezone', 'dst'];
 	protected $hidden = ["password", "remember_token", "activation_token"];
 	public $incrementing = false;
 
@@ -41,10 +41,9 @@ class User extends Authenticatable
 
 	public function getDisplayNameAttribute()
 	{
-		if (!is_null($this->profile->family_name)) {
+		/*if (!is_null($this->profile->family_name)) {
 			return "{$this->name} ({$this->profile->family_name})";
-		}
-
+		}*/
 		return $this->name;
 	}
 
@@ -74,6 +73,11 @@ class User extends Authenticatable
 		foreach( $this->inheritance as $heir )
 			$groups[] = $heir->group;
 		return $groups;
+	}
+
+	public function hasGroup( $group )
+	{
+		return $this->inheritance()->where( ["parent" => ( $group instanceof Group ) ? $group->id : $group, "type" => 1] )->exists();
 	}
 
 	public function addGroup( $parent )
@@ -207,7 +211,8 @@ class User extends Authenticatable
 		{
 			// Set a activation token for every new User
 			$user->deactivate();
-			$user->id = strtolower( Util::rand(2, FALSE, TRUE) ) . Util::rand(3, TRUE, FALSE) . Util::rand(1, FALSE, TRUE);
+			if ( !$user->id )
+				$user->id = strtolower( Util::rand(2, false, true) ) . Util::rand(3, true, false) . Util::rand(1, false, true);
 		});
 	}
 }

@@ -1,14 +1,15 @@
 <?php
-$breadcrumbs = ["<a href=\"" . route('forum.category.show', $category) . "\">" . $category->title . "</a>"];
+$breadcrumbs = [];
 $cat = $category;
-while ( !is_null($cat->parent) )
+do
 {
-	$cat = $cat->parent;
 	array_unshift($breadcrumbs, "<a href=\"" . route('forum.category.show', $cat) . "\">" . $cat->title . "</a>");
+	$cat = $cat->parent;
 }
+while ( $cat )
 ?>
-@extends ('forum.master', compact('breadcrumbs'))
 
+@extends ('forum.master', compact('breadcrumbs'))
 @section ('pagetitle', $category->title)
 
 	@section ('content')
@@ -30,7 +31,7 @@ while ( !is_null($cat->parent) )
 				@if ($category->threadsEnabled)
 					{{-- @can ('createThreads', $category) --}}
 					@has ('org.holyworlds.forum.thread.create.' . $category->id)
-						<a href="{{ route('forum.thread.create', $category) }}" class="btn btn-default">New Thread</a>
+					<a href="{{ route('forum.thread.create', $category) }}" class="btn btn-default">New Thread</a>
 					@endhas
 				@endif
 			</div>
@@ -172,7 +173,7 @@ while ( !is_null($cat->parent) )
 		@endif
 	</div>
 </div>
-@stop
+@endsection
 
 @section('after_content')
 	@can ('manageCategories')
@@ -184,4 +185,4 @@ while ( !is_null($cat->parent) )
 			@include ('category.partials.actions')
 		</form>
 	@endcan
-@stop
+@endsection

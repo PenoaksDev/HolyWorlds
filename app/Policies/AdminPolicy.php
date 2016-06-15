@@ -7,16 +7,16 @@ use Illuminate\Auth\Access\HandlesAuthorization;
 
 class AdminPolicy
 {
-    use HandlesAuthorization;
+	use HandlesAuthorization;
 
-    /**
-     * Determine if the given user has admin rights.
-     *
-     * @param  User  $user
-     * @return bool
-     */
-    public function admin(User $user)
-    {
-        return $user->hasPermission(Setting::get('admin_group', 'sys.admin'));
-    }
+	/**
+	 * Determine if the given user has admin rights.
+	 *
+	 * @param  User  $user
+	 * @return bool
+	 */
+	public function admin( User $user )
+	{
+		return $user->hasPermission( 'sys.admin' );
+	}
 }

@@ -5,6 +5,9 @@ use Illuminate\Console\Command;
 use App\Models\Forum\Thread;
 use App\Models\Forum\Post;
 use App\Models\User;
+use App\Models\UserAuth;
+use App\Models\UserProfile;
+use App\Models\Setting;
 use Carbon\Carbon;
 
 class MigrateHolyWorlds extends Command
@@ -47,52 +50,140 @@ class MigrateHolyWorlds extends Command
 		$chunks = 5000;
 
 		/*
+		 * Migrate phpBB users
+		 */
+		$this->info("Transcading users...");
+		User::getQuery()->delete();
+		UserAuth::getQuery()->delete();
+		UserProfile::getQuery()->delete();
+
+		$this->info("Migrating users...");
+		$query = $bh->table('users')->where('user_type', '!=', '2');
+		$defGroup = Setting::findOrNew('default_group')->value('member');
+		$userMapping = [];
+		$offset = 0;
+		$max = $query->count();
+		$this->info( "Found " . $max . " users to migrate, grabbing in chunks of " . $chunks . " rows." );
+		while( $offset < $max )
+		{
+			$this->info( "Querying for chunk " . ( round( $offset / $chunks ) + 1 ) . " of " . ( round( $max / $chunks ) + 1 ) );
+			$chunk = $query->offset( $offset )->limit( $chunks )->get();
+
+			foreach ( $chunk as $row )
+			{
+				$offset++;
+
+				$num = strlen( $row->user_id ) < 4 ? $row->user_id . \App\Util::rand( 4 - count( $row->user_id ), true, false ) : substr( $row->user_id, 0, 4 );
+				do
+				{
+					$id = strtolower( substr( $row->user_email, 0, 2 ) ) . $num . strtoupper( substr( $row->username, 0, 1 ) );
+					$num++;
+				}
+				while( User::where( 'id', $id )->exists() );
+
+				$this->info( "Row " . $offset . " of " . $max . ":: Migrating user # " . $row->user_id . " (as " . $id . ")" );
+
+				$email = $row->user_email;
+				$cnt = -1;
+				while ( User::where( 'email', $email )->exists() )
+				{
+					$cnt++;
+					$email = "DUPLICATE" . $cnt . '_' . $row->user_email;
+					$this->error("User # " . $row->user_id . " has a duplicate e-mail address: " . $row->user_email);
+				}
+
+				$user = User::create([
+					'id' => $id,
+					'oldid' => $row->user_id,
+					'name' => $row->username,
+					'email' => $email,
+					'password' => $row->user_password,
+					'activation_token' => 'MIGRATED',
+					'activation_updated' => Carbon::now(),
+					'post_count' => $row->user_posts,
+					'timezone' => $row->user_timezone,
+					'dst' => $row->user_dst,
+					'created_at' => Carbon::createFromTimestamp( $row->user_regdate ),
+					'updated_at' => Carbon::createFromTimestamp( $row->user_passchg > 0 ? $row->user_passchg : $row->user_regdate ),
+					'visited_at' => Carbon::createFromTimestamp( $row->user_lastvisit )
+				]);
+
+				$profile = UserProfile::create([
+					'id' => $id,
+					'avatar_url' => $row->user_avatar,
+					'signature' => str_replace( ':' . $row->user_sig_bbcode_uid, '', $row->user_sig ),
+					'location' => $row->user_from,
+					'website' => $row->user_website,
+					'occupation' => $row->user_occ,
+					'interests' => $row->user_interests
+				]);
+
+				$user->addGroup( $defGroup );
+				// TODO Group translations
+
+				$user->save();
+				$profile->save();
+
+				$userMapping[$row->user_id] = $user->id;
+			}
+
+			unset( $chunk );
+		}
+
+		/*
 		 * Migrate phpBB topics
 		 */
 		$this->info("Transcading topics table...");
 		Thread::getQuery()->delete();
 
 		$this->info("Migrating topics table...");
+		$query = $bh->table('holyworldsforum_topics');
 		$offset = 0;
-		$max = $bh->table('holyworldsforum_topics')->count();
+		$max = $query->count();
 		$this->info( "Found " . $max . " topics to migrate, grabbing in chunks of " . $chunks . " rows." );
 		while( $offset < $max )
 		{
-			$this->info( "Querying for chunk " . ( round( $offset / $chunks ) + 1 ) . " of " . round( $max / $chunks ) );
-			$topics = $bh->table( 'holyworldsforum_topics' )->offset( $offset )->limit( $chunks )->get();
+			$this->info( "Querying for chunk " . ( round( $offset / $chunks ) + 1 ) . " of " . ( round( $max / $chunks ) + 1 ) );
+			$chunk = $query->offset( $offset )->limit( $chunks )->get();
 
-			foreach ( $topics as $topic )
+			foreach ( $chunk as $row )
 			{
 				$offset++;
-				$this->info( "Row " . $offset . " of " . $max . ":: Migrated topic # " . $topic->topic_id );
+				$this->info( "Row " . $offset . " of " . $max . ":: Migrating topic # " . $row->topic_id );
 
-				$user = User::where('oldid', $topic->topic_poster)->limit(1)->first();
-				$author = ( $user == null ) ? $topic->topic_poster : $user->id;
+				$author = $row->topic_poster;
+				if ( array_key_exists( $row->topic_poster, $userMapping ) && ( $user = User::find( $userMapping[ $row->topic_poster ] ) ) != null )
+				{
+					$author = $user->id;
+				}
+				else {
+					$this->error( "User " . $row->topic_poster . " not found!" );
+				}
 
 				Thread::create([
-					'id' => $topic->topic_id,
-					'category_id' => $topic->forum_id,
+					'id' => $row->topic_id,
+					'category_id' => $row->forum_id,
 					'author_id' => $author,
-					'title' => $topic->topic_title,
-					'type' => $topic->topic_type,
-					'locked' => $topic->topic_status,
-					'last_thread' => $topic->topic_moved_id,
-					'last_post' => $topic->topic_last_post_id,
-					'count_views' => $topic->topic_views,
-					'count_posts' => $topic->topic_replies,
-					'created_at' => Carbon::createFromTimestamp( $topic->topic_time ),
-					'updated_at' => Carbon::createFromTimestamp( $topic->topic_last_post_time ),
+					'title' => $row->topic_title,
+					'type' => $row->topic_type,
+					'locked' => $row->topic_status,
+					'last_thread' => $row->topic_moved_id,
+					'last_post' => $row->topic_last_post_id,
+					'count_views' => $row->topic_views,
+					'count_posts' => $row->topic_replies,
+					'created_at' => Carbon::createFromTimestamp( $row->topic_time ),
+					'updated_at' => Carbon::createFromTimestamp( $row->topic_last_post_time ),
 					'deleted_at' => null,
-					'poll_title' => $topic->poll_title,
-					'poll_start' => $topic->poll_start,
-					'poll_length' => $topic->poll_length,
-					'poll_max_options' => $topic->poll_max_options,
-					'poll_last_vote' => $topic->poll_last_vote,
-					'poll_vote_change' => $topic->poll_vote_change
+					'poll_title' => $row->poll_title,
+					'poll_start' => $row->poll_start,
+					'poll_length' => $row->poll_length,
+					'poll_max_options' => $row->poll_max_options,
+					'poll_last_vote' => $row->poll_last_vote,
+					'poll_vote_change' => $row->poll_vote_change
 				])->save();
 			}
 
-			unset( $topics );
+			unset( $chunk );
 		}
 
 		/*
@@ -102,36 +193,43 @@ class MigrateHolyWorlds extends Command
 		Post::getQuery()->delete();
 
 		$this->info("Migrating posts table...");
+		$query = $bh->table( 'holyworldsforum_posts' );
 		$offset = 0;
-		$max = $bh->table('holyworldsforum_posts')->count();
+		$max = $query->count();
 		$this->info( "Found " . $max . " posts to migrate, grabbing in chunks of " . $chunks . " rows." );
 		while( $offset < $max )
 		{
-			$this->info( "Querying for chunk " . ( round( $offset / $chunks ) + 1 ) . " of " . round( $max / $chunks ) );
-			$posts = $bh->table( 'holyworldsforum_posts' )->offset( $offset )->limit( $chunks )->get();
+			$this->info( "Querying for chunk " . ( round( $offset / $chunks ) + 1 ) . " of " . ( round( $max / $chunks ) + 1 ) );
+			$chunk = $query->offset( $offset )->limit( $chunks )->get();
 
-			foreach ( $posts as $post )
+			foreach ( $chunk as $row )
 			{
 				$offset++;
-				$this->info( "Row " . $offset . " of " . $max . ":: Migrated post # " . $post->post_id );
+				$this->info( "Row " . $offset . " of " . $max . ":: Migrating post # " . $row->post_id );
 
-				$user = User::where('oldid', $post->poster_id)->limit(1)->first();
-				$author = ( $user == null ) ? $post->poster_id : $user->id;
+				$author = $row->poster_id;
+				if ( array_key_exists( $row->poster_id, $userMapping ) && ( $user = User::find( $userMapping[ $row->poster_id ] ) ) != null )
+				{
+					$author = $user->id;
+				}
+				else {
+					$this->error( "User " . $row->poster_id . " not found!" );
+				}
 
 				Post::create([
-					'id' => $post->post_id,
-					'thread_id' => $post->topic_id,
-					'category_id' => $post->forum_id,
+					'id' => $row->post_id,
+					'thread_id' => $row->topic_id,
+					'category_id' => $row->forum_id,
 					'author_id' => $author,
-					'content' => $post->post_text,
-					'created_at' => Carbon::createFromTimestamp( $post->post_time ),
-					'updated_at' => Carbon::createFromTimestamp( $post->post_edit_time == 0 ? $post->post_time : $post->post_edit_time ),
+					'content' => str_replace( ':' . $row->bbcode_uid, '', $row->post_text ),
+					'created_at' => Carbon::createFromTimestamp( $row->post_time ),
+					'updated_at' => Carbon::createFromTimestamp( $row->post_edit_time == 0 ? $row->post_time : $row->post_edit_time ),
 					'deleted_at' => null,
 					'post_id' => 0
 					])->save();
 			}
 
-			unset( $posts );
+			unset( $chunk );
 		}
 
 		$this->info("DONE!");

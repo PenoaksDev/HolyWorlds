@@ -1,13 +1,17 @@
 <?php
-$breadcrumbs = ["<a href=\"" . route('forum.thread.show', $thread) . "\">" . $thread->title . "</a>"];
+$breadcrumbs = [];
 $cat = App\Models\Forum\Category::find( $thread->category_id );
-while ( $cat && !is_null($cat->parent) )
-{
-	array_unshift($breadcrumbs, "<a href=\"" . route('forum.category.show', $cat) . "\">" . $cat->title . "</a>");
-	$cat = $cat->parent;
-}
+if ( !is_null( $cat ) )
+	do
+	{
+		array_unshift($breadcrumbs, "<a href=\"" . route('forum.category.show', $cat) . "\">" . $cat->title . "</a>");
+		$cat = $cat->parent;
+	}
+	while ( $cat );
 ?>
 @extends ('forum.master', compact('breadcrumbs'))
+
+@section('title', $thread->title);
 
 @section('subtitle')
 @if ($thread->trashed())

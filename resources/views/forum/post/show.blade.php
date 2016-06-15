@@ -3,8 +3,8 @@
 @section ('title', 'Viewing Thread')
 
 @section ('content')
-	<h2>{{ trans('posts.view') }} ({{ $thread->title }})</h2>
-	<a href="{{ route('forum.thread.show', $thread) }}" class="btn btn-default">&laquo; {{ trans('threads.view') }}</a>
+	<h2>View post ({{ $thread->title }})</h2>
+	<a href="{{ route('forum.thread.show', $thread) }}" class="btn btn-default">&laquo; View thread</a>
 
 	<div class="row">
 		<div class="col-md-2">
