@@ -12,7 +12,7 @@ class User extends Authenticatable
 {
 	use Notifable, UuidAsKey;
 
-	protected $fillable = ['id', 'oldid', 'name', 'email', 'password', 'activation_token', 'activation_updated', 'created_at', 'updated_at', 'visited_at', 'post_count', 'timezone', 'dst'];
+	protected $fillable = ['id', 'oldid', 'name', 'email', 'usebbhash', 'password', 'activation_token', 'activation_updated', 'created_at', 'updated_at', 'visited_at', 'post_count', 'timezone', 'dst'];
 	protected $hidden = ["password", "remember_token", "activation_token"];
 	public $incrementing = false;
 
@@ -209,8 +209,6 @@ class User extends Authenticatable
 
 		static::creating(function($user)
 		{
-			// Set a activation token for every new User
-			$user->deactivate();
 			if ( !$user->id )
 				$user->id = strtolower( Util::rand(2, false, true) ) . Util::rand(3, true, false) . Util::rand(1, false, true);
 		});

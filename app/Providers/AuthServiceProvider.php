@@ -5,6 +5,7 @@ namespace App\Providers;
 use Illuminate\Contracts\Auth\Access\Gate as GateContract;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Blade;
+use App\Models\User;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -36,6 +37,10 @@ class AuthServiceProvider extends ServiceProvider
 
 		Blade::directive('endhas', function() {
 			return "<?php } ?>";
+		});
+
+		\Auth::provider('custom', function( $provider ) {
+			return new \App\Auth\CustomUserProvider( $this->app['hash'], User::class );
 		});
 
 		foreach(['AdminPolicy', 'GeneralPolicy'] as $policy) {

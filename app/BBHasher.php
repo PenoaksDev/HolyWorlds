@@ -6,7 +6,7 @@ class BBHasher
 	/**
 	* Hash the password
 	*/
-	function phpbb_hash($password)
+	public static function phpbb_hash($password)
 	{
 		$itoa64 = './0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
 
@@ -32,7 +32,7 @@ class BBHasher
 			$random = substr($random, 0, $count);
 		}
 
-		$hash = _hash_crypt_private($password, _hash_gensalt_private($random, $itoa64), $itoa64);
+		$hash = self::_hash_crypt_private($password, self::_hash_gensalt_private($random, $itoa64), $itoa64);
 
 		if (strlen($hash) == 34)
 		{
@@ -45,12 +45,12 @@ class BBHasher
 	/**
 	* Check for correct password
 	*/
-	function phpbb_check_hash($password, $hash)
+	public static function phpbb_check_hash($password, $hash)
 	{
 		$itoa64 = './0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
 		if (strlen($hash) == 34)
 		{
-			return (_hash_crypt_private($password, $hash, $itoa64) === $hash) ? true : false;
+			return (self::_hash_crypt_private($password, $hash, $itoa64) === $hash) ? true : false;
 		}
 
 		return (md5($password) === $hash) ? true : false;
@@ -59,7 +59,7 @@ class BBHasher
 	/**
 	* Generate salt for hash generation
 	*/
-	function _hash_gensalt_private($input, &$itoa64, $iteration_count_log2 = 6)
+	public static function _hash_gensalt_private($input, &$itoa64, $iteration_count_log2 = 6)
 	{
 		if ($iteration_count_log2 < 4 || $iteration_count_log2 > 31)
 		{
@@ -68,7 +68,7 @@ class BBHasher
 
 		$output = '$H$';
 		$output .= $itoa64[min($iteration_count_log2 + ((PHP_VERSION >= 5) ? 5 : 3), 30)];
-		$output .= _hash_encode64($input, 6, $itoa64);
+		$output .= self::_hash_encode64($input, 6, $itoa64);
 
 		return $output;
 	}
@@ -76,7 +76,7 @@ class BBHasher
 	/**
 	* Encode hash
 	*/
-	function _hash_encode64($input, $count, &$itoa64)
+	public static function _hash_encode64($input, $count, &$itoa64)
 	{
 		$output = '';
 		$i = 0;
@@ -120,7 +120,7 @@ class BBHasher
 	/**
 	* The crypt function/replacement
 	*/
-	function _hash_crypt_private($password, $setting, &$itoa64)
+	public static function _hash_crypt_private($password, $setting, &$itoa64)
 	{
 		$output = '*';
 
@@ -173,7 +173,7 @@ class BBHasher
 		}
 
 		$output = substr($setting, 0, 12);
-		$output .= _hash_encode64($hash, 16, $itoa64);
+		$output .= self::_hash_encode64($hash, 16, $itoa64);
 
 		return $output;
 	}

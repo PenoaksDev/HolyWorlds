@@ -58,7 +58,7 @@ class MigrateHolyWorlds extends Command
 		UserProfile::getQuery()->delete();
 
 		$this->info("Migrating users...");
-		$query = $bh->table('users')->where('user_type', '!=', '2');
+		$query = $bh->table('users')->where('user_type', '!=', '2')->orderBy('user_id');
 		$defGroup = Setting::findOrNew('default_group')->value('member');
 		$userMapping = [];
 		$offset = 0;
@@ -73,13 +73,23 @@ class MigrateHolyWorlds extends Command
 			{
 				$offset++;
 
-				$num = strlen( $row->user_id ) < 4 ? $row->user_id . \App\Util::rand( 4 - count( $row->user_id ), true, false ) : substr( $row->user_id, 0, 4 );
+				$num = strlen( $row->user_id ) < 4 ? $row->user_id . \App\Util::rand( 4 - strlen( $row->user_id ), true, false ) : substr( $row->user_id, 0, 4 );
 				do
 				{
 					$id = strtolower( substr( $row->user_email, 0, 2 ) ) . $num . strtoupper( substr( $row->username, 0, 1 ) );
 					$num++;
 				}
 				while( User::where( 'id', $id )->exists() );
+
+				$activated = false;
+				// NOTE TEMP USER OVERRIDES
+				if ( $row->user_id == '65616' )
+				{
+					$activated = true;
+					$id = 'cg0092m';
+				}
+				if ( $row->user_id == '210' )
+					$activated = true;
 
 				$this->info( "Row " . $offset . " of " . $max . ":: Migrating user # " . $row->user_id . " (as " . $id . ")" );
 
@@ -89,16 +99,18 @@ class MigrateHolyWorlds extends Command
 				{
 					$cnt++;
 					$email = "DUPLICATE" . $cnt . '_' . $row->user_email;
-					$this->error("User # " . $row->user_id . " has a duplicate e-mail address: " . $row->user_email);
 				}
+				if ( $email != $row->user_email )
+					$this->error("User # " . $row->user_id . " has a duplicate e-mail address: " . $row->user_email);
 
 				$user = User::create([
 					'id' => $id,
 					'oldid' => $row->user_id,
 					'name' => $row->username,
 					'email' => $email,
+					'usebbhash' => true,
 					'password' => $row->user_password,
-					'activation_token' => 'MIGRATED',
+					'activation_token' => $activated ? null : 'MIGRATED',
 					'activation_updated' => Carbon::now(),
 					'post_count' => $row->user_posts,
 					'timezone' => $row->user_timezone,

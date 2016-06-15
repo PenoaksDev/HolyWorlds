@@ -1,4 +1,4 @@
-@extends('app')
+@extends('wrapper')
 
 @section('title', 'Sign in')
 

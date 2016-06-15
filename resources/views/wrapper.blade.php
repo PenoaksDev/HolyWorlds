@@ -220,7 +220,7 @@
 							html = html.replace(/<\/head>/gi, '</div>');
 							html = html.replace(/<\/body>/gi, '</div>');
 
-							html = $( html );
+							html = $( $.parseHTML( html ) );
 							head = $('div[rel=head]', html);
 							body = $('div[rel=body]', html);
 
