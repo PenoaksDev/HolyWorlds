@@ -3,9 +3,9 @@
 		<thead>
 			<tr>
 				<th>Category</th>
-				<th style="width:10%;">Threads</th>
-				<th style="width:20%;">Newest Thread</th>
-				<th style="width:20%;">Last Post</th>
+				<th style="width:10%;" class="hidden-xs hidden-sm">Threads</th>
+				<th style="width:20%;" class="hidden-xs hidden-sm">Newest Thread</th>
+				<th style="width:20%;" class="hidden-xs hidden-sm">Last Post</th>
 			</tr>
 		</thead>
 		<tbody>

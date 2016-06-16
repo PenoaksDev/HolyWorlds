@@ -12,7 +12,7 @@ class User extends Authenticatable
 {
 	use Notifable, UuidAsKey;
 
-	protected $fillable = ['id', 'oldid', 'name', 'email', 'usebbhash', 'password', 'activation_token', 'activation_updated', 'created_at', 'updated_at', 'visited_at', 'post_count', 'timezone', 'dst'];
+	protected $fillable = ['id', 'oldid', 'name', 'email', 'usebbhash', 'password', 'activation_token', 'activation_updated', 'created_at', 'updated_at', 'visited_at'];
 	protected $hidden = ["password", "remember_token", "activation_token"];
 	public $incrementing = false;
 
@@ -71,7 +71,8 @@ class User extends Authenticatable
 	{
 		$groups = array();
 		foreach( $this->inheritance as $heir )
-			$groups[] = $heir->group;
+			if ( false === array_search( $heir->group, $groups ) )
+				$groups[] = $heir->group;
 		return $groups;
 	}
 

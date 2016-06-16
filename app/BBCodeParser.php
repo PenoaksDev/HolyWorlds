@@ -3,7 +3,7 @@ namespace App;
 
 class BBCodeParser
 {
-	public $parsers = [
+	public static $parsers = [
 		'bold' => [
 			'pattern' => '/\[b\](.*?)\[\/b\]/s',
 			'replace' => '<strong>$1</strong>',
@@ -25,13 +25,18 @@ class BBCodeParser
 			'content' => '$1'
 		],
 		'size' => [
-			'pattern' => '/\[size\=([1-7])\](.*?)\[\/size\]/s',
-			'replace' => '<font size="$1">$2</font>',
+			'pattern' => '/\[size\=([0-9]*)\](.*?)\[\/size\]/s',
+			'replace' => '<span style="font-size: $1%">$2</span>',
 			'content' => '$2'
 		],
 		'color' => [
 			'pattern' => '/\[color\=(#[A-f0-9]{6}|#[A-f0-9]{3})\](.*?)\[\/color\]/s',
-			'replace' => '<font color="$1">$2</font>',
+			'replace' => '<span style="color: $1">$2</span>',
+			'content' => '$2'
+		],
+		'font' => [
+			'pattern' => '/\[font\=(.*?)\](.*?)\[\/font\]/s',
+			'replace' => '<span style="font-name: $1">$2</span>',
 			'content' => '$2'
 		],
 		'center' => [
@@ -90,7 +95,7 @@ class BBCodeParser
 			'content' => '$1'
 		],
 		'listitem' => [
-			'pattern' => '/\[\*\](.*)/',
+			'pattern' => '/\[\*\](.*)/s',
 			'replace' => '<li>$1</li>',
 			'content' => '$1'
 		],
@@ -104,6 +109,11 @@ class BBCodeParser
 			'replace' => '<iframe width="560" height="315" src="//www.youtube.com/embed/$1" frameborder="0" allowfullscreen></iframe>',
 			'content' => '$1'
 		],
+		'htmlchar' => [
+			'pattern' => '/\[e\](.*?)\[\/e\]/s',
+			'replace' => '&$1;',
+			'content' => ''
+		],
 		'bulletpoint' => [
 			'pattern' => '/\r?\n\*/',
 			'replace' => '<br />&#8226 ',
@@ -116,23 +126,16 @@ class BBCodeParser
 		]
 	];
 
-	private $enabledParsers;
-
-	public function __construct()
-	{
-		$this->enabledParsers = $this->parsers;
-	}
-
 	/**
 	* Parses the BBCode string
 	* @param  string $source String containing the BBCode
 	* @return string Parsed string
 	*/
-	public function parse($source, $caseInsensitive = false)
+	public static function parse($source, $caseInsensitive = false)
 	{
-		foreach ($this->enabledParsers as $name => $parser) {
+		foreach (self::$parsers as $name => $parser) {
 			$pattern = ($caseInsensitive) ? $parser['pattern'].'i' : $parser['pattern'];
-			$source = $this->searchAndReplace($pattern, $parser['replace'], $source);
+			$source = self::searchAndReplace($pattern, $parser['replace'], $source);
 		}
 		return $source;
 	}
@@ -142,10 +145,10 @@ class BBCodeParser
 	* @param  string $source
 	* @return string Parsed text
 	*/
-	public function stripBBCodeTags($source)
+	public static function stripBBCodeTags($source)
 	{
-		foreach ($this->parsers as $name => $parser) {
-			$source = $this->searchAndReplace($parser['pattern'].'i', $parser['content'], $source);
+		foreach (self::parsers as $name => $parser) {
+			$source = self::searchAndReplace($parser['pattern'].'i', $parser['content'], $source);
 		}
 		return $source;
 	}
@@ -157,7 +160,7 @@ class BBCodeParser
 	* @param  string $source Text to search in
 	* @return string Parsed text
 	*/
-	protected function searchAndReplace($pattern, $replace, $source)
+	protected static function searchAndReplace($pattern, $replace, $source)
 	{
 		while (preg_match($pattern, $source)) {
 			$source = preg_replace($pattern, $replace, $source);
@@ -170,9 +173,9 @@ class BBCodeParser
 	* @param  string $source String containing the BBCode
 	* @return string Parsed text
 	*/
-	public function parseCaseSensitive($source)
+	public static function parseCaseSensitive($source)
 	{
-		return $this->parse($source, false);
+		return self::parse($source, false);
 	}
 
 	/**
@@ -180,42 +183,18 @@ class BBCodeParser
 	* @param  string $source String containing the BBCode
 	* @return string Parsed text
 	*/
-	public function parseCaseInsensitive($source)
+	public static function parseCaseInsensitive($source)
 	{
-		return $this->parse($source, true);
-	}
-
-	/**
-	* Limits the parsers to only those you specify
-	* @param  mixed $only parsers
-	* @return object BBCodeParser object
-	*/
-	public function only($only = null)
-	{
-		$only = (is_array($only)) ? $only : func_get_args();
-		$this->enabledParsers = $this->arrayOnly($this->parsers, $only);
-		return $this;
-	}
-
-	/**
-	* Removes the parsers you want to exclude
-	* @param  mixed $except parsers
-	* @return object BBCodeParser object
-	*/
-	public function except($except = null)
-	{
-		$except = (is_array($except)) ? $except : func_get_args();
-		$this->enabledParsers = $this->arrayExcept($this->parsers, $except);
-		return $this;
+		return self::parse($source, true);
 	}
 
 	/**
 	* List of chosen parsers
 	* @return array array of parsers
 	*/
-	public function getParsers()
+	public static function getParsers()
 	{
-		return $this->enabledParsers;
+		return self::parsers;
 	}
 
 	/**
@@ -227,26 +206,21 @@ class BBCodeParser
 	* @param string $content Parsed text pattern
 	* @return void
 	*/
-	public function setParser($name, $pattern, $replace, $content)
+	public static function setParser($name, $pattern, $replace, $content)
 	{
-		$this->parsers[$name] = array(
-			'pattern' => $pattern,
-			'replace' => $replace,
-			'content' => $content
-		);
-		$this->enabledParsers[$name] = array(
+		self::$parsers[$name] = array(
 			'pattern' => $pattern,
 			'replace' => $replace,
 			'content' => $content
 		);
 	}
 
-	private function arrayOnly(array $parsers, $only)
+	private static function arrayOnly(array $parsers, $only)
 	{
 		return array_intersect_key($parsers, array_flip((array) $only));
 	}
 
-	private function arrayExcept(array $parsers, $except)
+	private static function arrayExcept(array $parsers, $except)
 	{
 		return array_diff_key($parsers, array_flip((array) $except));
 	}

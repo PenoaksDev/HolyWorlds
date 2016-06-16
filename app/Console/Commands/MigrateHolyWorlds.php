@@ -112,9 +112,6 @@ class MigrateHolyWorlds extends Command
 					'password' => $row->user_password,
 					'activation_token' => $activated ? null : 'MIGRATED',
 					'activation_updated' => Carbon::now(),
-					'post_count' => $row->user_posts,
-					'timezone' => $row->user_timezone,
-					'dst' => $row->user_dst,
 					'created_at' => Carbon::createFromTimestamp( $row->user_regdate ),
 					'updated_at' => Carbon::createFromTimestamp( $row->user_passchg > 0 ? $row->user_passchg : $row->user_regdate ),
 					'visited_at' => Carbon::createFromTimestamp( $row->user_lastvisit )
@@ -124,10 +121,14 @@ class MigrateHolyWorlds extends Command
 					'id' => $id,
 					'avatar_url' => $row->user_avatar,
 					'signature' => str_replace( ':' . $row->user_sig_bbcode_uid, '', $row->user_sig ),
+					'signature_bbcode' => true,
 					'location' => $row->user_from,
 					'website' => $row->user_website,
 					'occupation' => $row->user_occ,
-					'interests' => $row->user_interests
+					'interests' => $row->user_interests,
+					'post_count' => $row->user_posts,
+					'timezone' => $row->user_timezone,
+					'dst' => $row->user_dst
 				]);
 
 				$user->addGroup( $defGroup );

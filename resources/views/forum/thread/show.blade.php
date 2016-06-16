@@ -24,7 +24,7 @@ if ( !is_null( $cat ) )
 	[{{ trans('threads.pinned') }}]
 @endif
 {{ $thread->title }}
-@stop
+@endsection
 
 @section ('content')
 	<div id="thread">

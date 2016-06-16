@@ -30,273 +30,293 @@
 		<meta name="theme-color" content="#ffffff">
 	</head>
 	<body>
-		@if ( !Request::ajax() )
+		<nav id="mainmenu" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
 			<div class="container">
-				<div class="header-container">
-					<div class="header">
-						<a href="{{ url('/') }}"><img src="{{ url('images/logo.png') }}" style="height: 128px;" /></a>
-						<!-- <h1><a href="{{ url('/') }}">Holy Worlds</a></h1> -->
-						<p>Community of Christ-centered Creativity</p>
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle collapsed" data-toggle="offcanvas" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+						<span class="glyphicon glyphicon-th-list"></span> Menu
+					</button>
+					<a style="margin: 8px 0 8px 15px; padding: 0; height: 40px; color: #fff;" class="navbar-brand visible-xs-block" href="{{ url('/') }}">
+						{{-- <img id="brand1" src="{{ URL::asset('images/brand.png') }}" alt="Holy Worlds Brand" style="height: 40px; display: none;" /> --}}
+						<span><img id="brand" src="{{ URL::asset('images/brand.png') }}" alt="Holy Worlds Brand" style="height: 40px;" /> Holy Worlds</span>
+					</a>
+				</div>
+				<div id="navbar" class="navbar-collapse collapse">
+					<ul class="nav navbar-nav">
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-book"></span> Forum <span class="caret"></span></a>
+							<ul class="dropdown-menu">
+								<li><a href="{{ url('forum') }}"><span class="glyphicon glyphicon-book"></span> Forum Index</a></li>
+								<li><a href="{{ url('forum') }}"><span class="glyphicon glyphicon-book"></span> New &amp; Updated</a></li>
+							</ul>
+						</li>
+						<li><a href="{{ url('gallery') }}"><span class="glyphicon glyphicon-picture"></span> Gallery</a></li>
+						<li><a href="{{ url('pages/about') }}"><span class="glyphicon glyphicon-heart"></span> About</a></li>
+						<li><a href="{{ url('pages/contact') }}"><span class="glyphicon glyphicon-envelope"></span> Contact</a></li>
+					</ul>
+					<ul style="margin-right: 15px;" class="nav navbar-nav navbar-right">
+						@if (Auth::guest())
+							<li><p class="navbar-text">Welcome Guest</p></li>
+							<li><a href="{{ url('auth/login') }}"><i class="fa fa-sign-in" aria-hidden="true"></i> Sign In</a></li>
+							<li><a href="{{ url('auth/register') }}"><i class="fa fa-user-plus" aria-hidden="true"></i> Register</a></li>
+						@else
+							<li class="dropdown"> <!-- {{ url('account/notifications') }} -->
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" id="notification">
+									<i class="fa fa-bell-o" aria-hidden="true"></i>
+									<span class="badge">{{ Auth::user()->countNotificationsNotRead() }}</span>
+								</a>
+								<div class="dropdown-menu">
+									<center><p style="color: #fff;">No Notifications</p></center>
+								</div>
+							</li>
+							<li>
+								<a href="{{ url('chat') }}" id="chat">
+									<i class="fa fa-comments-o" aria-hidden="true"></i>
+									<span class="badge">0</span>
+								</a>
+							</li>
+							<li class="dropdown">
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+									@include('user.partials.avatar', ['user' => Auth::user()])
+									Welcome {{ Auth::user()->name }}
+									<span class="caret"></span>
+								</a>
+								<ul class="dropdown-menu">
+									<li><a href="{{ url('account/profile') }}"><i class="fa fa-tachometer" aria-hidden="true"></i> My Dashboard</a></li>
+
+									@if (Auth::user()->hasPermission("sys.admin"))
+										<li><a href="{{ url('admin') }}"><i class="fa fa-lock" aria-hidden="true"></i> Administrator</a></li>
+									@endif
+									<li role="separator" class="divider"></li>
+									<li><a href="{{ url('auth/logout') }}"><i class="fa fa-sign-out" aria-hidden="true"></i> Sign Out</a></li>
+								</ul>
+							</li>
+						@endif
+					</ul>
+				</div>
+			</div>
+		</nav>
+
+		<div id="wrapper">
+			<div id="wrapper-inner">
+				@if ( !Request::ajax() )
+				<div class="overlay"></div>
+
+				<div class="container">
+					<div class="header-container">
+						<div class="header hidden-xs">
+							<a href="{{ url('/') }}"><img src="{{ url('images/logo.png') }}" style="height: 128px;" /></a>
+							<!-- <h1><a href="{{ url('/') }}">Holy Worlds</a></h1> -->
+							<p>Community of Christ-centered Creativity</p>
+						</div>
 					</div>
 				</div>
-				<nav id="mainmenu" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-					<div class="container">
-						<div class="navbar-header">
-							<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-								<span style="color: #fff;" class="sr-only"><span class="glyphicon glyphicon-th-list"></span> Menu</span>
-							</button>
-							<a style="padding: 5px 15px;" class="navbar-brand" href="{{ url('/') }}">
-								<img id="brand1" src="{{ URL::asset('images/brand.png') }}" alt="Holy Worlds Brand" style="height: 40px; display: none;" />
-								<img id="brand2" src="{{ URL::asset('images/brand.png') }}" alt="Holy Worlds Brand" style="height: 40px;" />
-							</a>
+
+				<div class="container" id="loadingContent" style="display: none;">
+					<div class="panel panel-default">
+						<div class="panel-body">
+							<center>
+								<img src="{{ URL::asset('images/loading_default.gif') }}" /><br />
+							</center>
 						</div>
-						<div id="navbar" class="navbar-collapse collapse">
-							<ul class="nav navbar-nav">
-								<li class="dropdown">
-									<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-book"></span> Forum <span class="caret"></span></a>
-									<ul class="dropdown-menu">
-										<li><a href="{{ url('forum') }}"><span class="glyphicon glyphicon-book"></span> Forum Index</a></li>
-										<li><a href="{{ url('forum') }}"><span class="glyphicon glyphicon-book"></span> New &amp; Updated</a></li>
+					</div>
+				</div>
+				@endif
+
+				<div class="container" id="pageBody">
+					@yield('before_content')
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h4 class="pull-left" style="margin: 5px 0; padding: 0;"><?php if ( empty( $__env->yieldContent('pagetitle') ) ) echo $__env->yieldContent('title'); else echo $__env->yieldContent('pagetitle'); ?></h4>
+							@if (array_key_exists('breadcrumbs', View::getSections()))
+							<ol class="hidden-xs hidden-sm breadcrumb pull-right" style="margin: 0;">
+								<li><a href="{{ url('/') }}">Home</a></li>
+								@section('breadcrumbs')
+								@show
+							</ol>
+							@endif
+							<div class="clearfix"></div>
+						</div>
+						<div class="panel-body">
+							{!! Notification::showAll() !!}
+							@if (isset($errors) && count($errors) > 0)
+								<div class="alert error">
+									<ul>
+										@foreach ($errors->all() as $error)
+											<li>{{ $error }}</li>
+										@endforeach
 									</ul>
-								</li>
-								@can('viewCharacters')
-									<li><a href="{{ url('characters') }}"><span class="glyphicon glyphicon-heart"></span> Characters</a></li>
-								@endcan
-								<li><a href="{{ url('gallery') }}"><span class="glyphicon glyphicon-picture"></span> Gallery</a></li>
-								<li><a href="{{ url('pages/about') }}"><span class="glyphicon glyphicon-heart"></span> About</a></li>
-								<li><a href="{{ url('pages/contact') }}"><span class="glyphicon glyphicon-envelope"></span> Contact</a></li>
-							</ul>
-							<ul class="nav navbar-nav navbar-right">
-								@if (Auth::guest())
-									<li><p class="navbar-text">Welcome Guest</p></li>
-									<li><a href="{{ url('auth/login') }}"><i class="fa fa-sign-in" aria-hidden="true"></i> Sign In</a></li>
-									<li><a href="{{ url('auth/register') }}"><i class="fa fa-user-plus" aria-hidden="true"></i> Register</a></li>
-								@else
-									<li class="dropdown"> <!-- {{ url('account/notifications') }} -->
-										<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" id="notification">
-											<i class="fa fa-bell-o" aria-hidden="true"></i>
-											<span class="badge">{{ Auth::user()->countNotificationsNotRead() }}</span>
-										</a>
-										<div class="dropdown-menu">
-											<center><p style="color: #fff;">No Notifications</p></center>
-										</div>
-									</li>
-									<li>
-										<a href="{{ url('messages') }}" id="notification">
-											<i class="fa fa-comments-o" aria-hidden="true"></i>
-											<span class="badge">0</span>
-										</a>
-									</li>
-									<li class="dropdown">
-										<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-											@include('user.partials.avatar', ['user' => Auth::user()])
-											Welcome {{ Auth::user()->name }}
-											<span class="caret"></span>
-										</a>
-										<ul class="dropdown-menu">
-											<li><a href="{{ url('account/profile') }}"><i class="fa fa-tachometer" aria-hidden="true"></i> My Dashboard</a></li>
-
-											@if (Auth::user()->hasPermission("sys.admin"))
-												<li><a href="{{ url('admin') }}"><i class="fa fa-lock" aria-hidden="true"></i> Administrator</a></li>
-											@endif
-											<li role="separator" class="divider"></li>
-											<li><a href="{{ url('auth/logout') }}"><i class="fa fa-sign-out" aria-hidden="true"></i> Sign Out</a></li>
-										</ul>
-									</li>
-								@endif
-							</ul>
+								</div>
+							@endif
+							@yield('content')
 						</div>
 					</div>
-				</nav>
-			</div>
+					@yield('after_content')
+					@yield('bottom')
+				</div>
 
-			<div class="container" id="loadingContent" style="display: none;">
-				<div class="panel panel-default">
-					<div class="panel-body">
-						<center>
-							<img src="{{ URL::asset('images/loading_default.gif') }}" /><br />
-						</center>
+				@if ( !Request::ajax() )
+					<div class="container">
+						<hr />
+						<footer>
+							<p class="pull-right"><a href="{{ url("pages/privacy") }}">Privacy</a> &#8226; <a href="{{ url("pages/terms") }}">Terms</a> &#8226; <a href="javascript: $(this).scrollTop(0);">Back to top</a></p>
+							<p>&copy; 2016 Holy Worlds &#8226; A subsidiary of <a target="_blank" href="http://penoaks.com">Penoaks Publishing Co.</a> &#8226; All rights reserved</p>
+						</footer>
 					</div>
-				</div>
-			</div>
-		@endif
+				@endif
 
-		<div class="container" id="pageBody">
-			@yield('before_content')
-			<div class="panel panel-default">
-				<div class="panel-heading">
-					<h3 class="pull-left" style="margin: 5px 0; padding: 0;"><?php if ( empty( $__env->yieldContent('pagetitle') ) ) echo $__env->yieldContent('title'); else echo $__env->yieldContent('pagetitle'); ?></h3>
-					@if (array_key_exists('breadcrumbs', View::getSections()))
-					<ol class="breadcrumb pull-right" style="margin: 0;">
-						<li><a href="{{ url('/') }}">Home</a></li>
-						@section('breadcrumbs')
-						@show
-					</ol>
-					@endif
-					<div class="clearfix"></div>
-				</div>
-				<div class="panel-body">
-					{!! Notification::showAll() !!}
-					@if (isset($errors) && count($errors) > 0)
-						<div class="alert error">
-							<ul>
-								@foreach ($errors->all() as $error)
-									<li>{{ $error }}</li>
-								@endforeach
-							</ul>
-						</div>
-					@endif
-					@yield('content')
-				</div>
-			</div>
-			@yield('after_content')
-			@yield('bottom')
-		</div>
+				{{-- Javascript --}}
+				<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+				<script type="text/javascript" src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js" integrity="sha256-xNjb53/rY+WmG+4L6tTl9m6PpqknWZvRt0rO1SRnJzw=" crossorigin="anonymous"></script>
+				<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.0.0/imagesloaded.pkgd.min.js" integrity="sha384-lo1387qiXiWtLqo43qlYIRguUcLZVLBF6O4zWv/qyj8GbS5fQ09Jn7HEdPw/QnXt" crossorigin="anonymous"></script>
+				<script type="text/javascript" src="https://autobahn.s3.amazonaws.com/js/autobahn.min.js"></script>
+				<script type="text/javascript" src="https://www.google.com/recaptcha/api.js"></script>
+				<script type="text/javascript" src="{{ URL::asset('js/history/scripts/bundled/html4+html5/jquery.history.js') }}"></script>
+				<script type="text/javascript" src="{{ URL::asset('js/jquery.push-service.js') }}"></script>
+				<script type="text/javascript" src="{{ URL::asset('js/global.js') }}"></script>
+				<script type="text/javascript" src="{{ URL::asset('js/init-chat.js') }}"></script>
 
-		@if ( !Request::ajax() )
-			<div class="container">
-				<hr />
-				<footer>
-					<p class="pull-right"><a href="{{ url("pages/privacy") }}">Privacy</a> &#8226; <a href="{{ url("pages/terms") }}">Terms</a> &#8226; <a href="javascript: $(this).scrollTop(0);">Back to top</a></p>
-					<p>&copy; 2016 Holy Worlds &#8226; A subsidiary of <a target="_blank" href="http://penoaks.com">Penoaks Publishing Co.</a> &#8226; All rights reserved</p>
-				</footer>
-			</div>
-		@endif
+				{{-- TODO Implement Google Analytics --}}
+				@if ( !Request::ajax() )
+					<script type="text/javascript">
+						$(document).ready( function(){
+							var lastHref = null;
 
-		{{-- Javascript --}}
-		<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
-		<script type="text/javascript" src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js" integrity="sha256-xNjb53/rY+WmG+4L6tTl9m6PpqknWZvRt0rO1SRnJzw=" crossorigin="anonymous"></script>
-		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.0.0/imagesloaded.pkgd.min.js" integrity="sha384-lo1387qiXiWtLqo43qlYIRguUcLZVLBF6O4zWv/qyj8GbS5fQ09Jn7HEdPw/QnXt" crossorigin="anonymous"></script>
-		<script type="text/javascript" src="https://autobahn.s3.amazonaws.com/js/autobahn.min.js"></script>
-		<script type="text/javascript" src="https://www.google.com/recaptcha/api.js"></script>
-		<script type="text/javascript" src="{{ URL::asset('js/history/scripts/bundled/html4+html5/jquery.history.js') }}"></script>
-		<script type="text/javascript" src="{{ URL::asset('js/jquery.push-service.js') }}"></script>
-		<script type="text/javascript" src="{{ URL::asset('js/global.js') }}"></script>
-		<script type="text/javascript" src="{{ URL::asset('js/init-chat.js') }}"></script>
-
-		{{-- TODO Implement Google Analytics --}}
-		@if ( !Request::ajax() )
-			<script type="text/javascript">
-				$(document).ready( function(){
-					var lastHref = null;
-
-					History.Adapter.bind(window, 'statechange', function(){
-						navigate( History.getState().url, window.location );
-					});
-
-					onClickEvent = function(e){
-						var href = $(this).attr('href');
-						var referrer = '' + window.location;
-						e.preventDefault();
-						navigate(href, referrer);
-					}
-
-					$('a:not(.noAjax):not([class^="phpdebugbar"]):not([href^="javascript"])[rel!="external"][target!="_blank"][href!="#"], .ajaxLink').click(onClickEvent);
-
-					function navigate(href, referrer){
-						// Ignore empty hash and repeated navigation from state changes
-						if ( href == "#" || href == lastHref )
-							return;
-
-						// Show loading message
-						$('#pageBody').fadeOut(100, function(){
-							$('#loadingContent').fadeIn(100);
-						});
-						lastHref = href;
-
-						// DO AJAX
-						$.ajax({
-							url: href
-						}).done(function (html, textStatus, jqXHR){
-							var title = null;
-
-							// Reference: https://github.com/browserstate/ajaxify
-							// https://github.com/browserstate/history.js
-
-							html = html.replace(/<html( .+?)?>/gi, '<div$1>');
-							html = html.replace(/<head( .+?)?>/gi, '<div rel="head"$1>');
-							html = html.replace(/<body( .+?)?>/gi, '<div rel="body"$1>');
-							html = html.replace(/<\/html>/gi, '</div>');
-							html = html.replace(/<\/head>/gi, '</div>');
-							html = html.replace(/<\/body>/gi, '</div>');
-
-							html = $( $.parseHTML( html ) );
-							head = $('div[rel=head]', html);
-							body = $('div[rel=body]', html);
-
-							loaded = [];
-							$('script').each(function(){
-								if ( $(this).attr('src') !== undefined )
-									loaded.push( $(this).attr('src') );
-							});
-							$('head link').each(function(){
-								loaded.push( $(this).attr('href') );
+							History.Adapter.bind(window, 'statechange', function(){
+								navigate( History.getState().url, window.location );
 							});
 
-							if ( head !== undefined )
-							{
-								head.find('script').each(function(){
-									if ( $(this).attr('src') !== undefined && $.inArray( $(this).attr('src'), loaded ) < 0 ) {
-										if ( console )
-											console.info( "Loading SCRIPT " + $(this).attr('src') )
-										$('head').append( this );
-									}
-								});
-								head.find('link').each(function(){
-									if ( $(this).attr('href') !== undefined && $.inArray( $(this).attr('href'), loaded ) < 0 ) {
-										if ( console )
-											console.info( "Loading CSS " + $(this).attr('href') )
-										$('head').append( this );
-									}
-								});
-
-								title = head.find('title').text();
+							onClickEvent = function(e){
+								var href = $(this).attr('href');
+								var referrer = '' + window.location;
+								e.preventDefault();
+								navigate(href, referrer);
 							}
 
-							body.find('script').each(function(){
-								if ( $(this).attr('src') !== undefined && $.inArray( $(this).attr('src'), loaded ) < 0 ) {
+							$('a:not(.noAjax):not([class^="phpdebugbar"]):not([href^="javascript"])[rel!="external"][target!="_blank"][href!="#"], .ajaxLink').click(onClickEvent);
+
+							function navigate(href, referrer){
+								// Ignore empty hash and repeated navigation from state changes
+								if ( href == "#" || href == lastHref )
+									return;
+
+								navigating = true;
+
+								hideMenu();
+								$(document).scrollTop(0);
+
+								// Show loading message
+								$('#pageBody').fadeOut(100, function(){
+									$('#loadingContent').fadeIn(100);
+								});
+								lastHref = href;
+
+								// DO AJAX
+								$.ajax({
+									url: href
+								}).done(function (html, textStatus, jqXHR){
+									var title = null;
+
+									// Reference: https://github.com/browserstate/ajaxify
+									// https://github.com/browserstate/history.js
+
+									html = html.replace(/<html( .+?)?>/gi, '<div$1>');
+									html = html.replace(/<head( .+?)?>/gi, '<div rel="head"$1>');
+									html = html.replace(/<body( .+?)?>/gi, '<div rel="body"$1>');
+									html = html.replace(/<\/html>/gi, '</div>');
+									html = html.replace(/<\/head>/gi, '</div>');
+									html = html.replace(/<\/body>/gi, '</div>');
+
+									html = $( $.parseHTML( html ) );
+									head = $('div[rel=head]', html);
+									body = $('div[rel=body]', html);
+
+									loaded = [];
+									$('script').each(function(){
+										if ( $(this).attr('src') !== undefined )
+											loaded.push( $(this).attr('src') );
+									});
+									$('head link').each(function(){
+										loaded.push( $(this).attr('href') );
+									});
+
+									if ( head !== undefined )
+									{
+										head.find('script').each(function(){
+											if ( $(this).attr('src') !== undefined && $.inArray( $(this).attr('src'), loaded ) < 0 ) {
+												if ( console )
+													console.info( "Loading SCRIPT " + $(this).attr('src') )
+												$('head').append( this );
+											}
+										});
+										head.find('link').each(function(){
+											if ( $(this).attr('href') !== undefined && $.inArray( $(this).attr('href'), loaded ) < 0 ) {
+												if ( console )
+													console.info( "Loading CSS " + $(this).attr('href') )
+												$('head').append( this );
+											}
+										});
+
+										title = head.find('title').text();
+									}
+
+									body.find('script').each(function(){
+										if ( $(this).attr('src') !== undefined && $.inArray( $(this).attr('src'), loaded ) < 0 ) {
+											if ( console )
+												console.info( "Loading SCRIPT " + $(this).attr('src') )
+											$('head').append( this );
+										}
+									});
+									html.find('style').each(function(){
+										$('body').append( this );
+									});
+
+									History.pushState( null, title, href );
+
+									// Defer crossfade until page body is updated and parsed.
+									var defer = $.Deferred();
+									var chain = defer.then(function(){
+										$('#pageBody').html( $('#pageBody', html).exists() ? $('#pageBody', html).html() : $(html).html() );
+										$('#pageBody').find('a:not(.noAjax):not([class^="phpdebugbar"]):not([href^="javascript"])[rel!="external"][target!="_blank"][href!="#"], .ajaxLink').click(onClickEvent);
+									});
+									defer.resolve(5);
+									chain.done(function(){
+										$('#loadingContent').fadeOut(100, function(){
+											$('#pageBody').fadeIn(100);
+										});
+									});
+
 									if ( console )
-										console.info( "Loading SCRIPT " + $(this).attr('src') )
-									$('head').append( this );
-								}
-							});
-							html.find('style').each(function(){
-								$('body').append( this );
-							});
+										console.info( "Successfully AJAX navigated to " + href );
 
-							History.pushState( null, title, href );
-
-							// Defer crossfade until page body is updated and parsed.
-							var defer = $.Deferred();
-							var chain = defer.then(function(){
-								$('#pageBody').html( $('#pageBody', html).exists() ? $('#pageBody', html).html() : $(html).html() );
-								$('#pageBody').find('a:not(.noAjax):not([class^="phpdebugbar"]):not([href^="javascript"])[rel!="external"][target!="_blank"][href!="#"], .ajaxLink').click(onClickEvent);
-							});
-							defer.resolve(5);
-							chain.done(function(){
-								$('#loadingContent').fadeOut(100, function(){
-									$('#pageBody').fadeIn(100);
+									if(_gaq) {
+										// Send ajax analytic data to Google
+										_gaq.push(['_setReferrerOverride', referrer]);
+										_gaq.push(['_trackPageview', href]);
+									}
+								}).fail(function(jqXHR, textStatus, errorThrown){
+									// TODO Display AJAX error page
+									// Temp! Forcefully redirect so user can see exception page.
+									window.location = href;
 								});
-							});
-
-							if ( console )
-								console.info( "Successfully AJAX navigated to " + href );
-
-							if(_gaq) {
-								// Send ajax analytic data to Google
-								_gaq.push(['_setReferrerOverride', referrer]);
-								_gaq.push(['_trackPageview', href]);
 							}
-						}).fail(function(jqXHR, textStatus, errorThrown){
-							// TODO Display AJAX error page
-							// Temp! Forcefully redirect so user can see exception page.
-							window.location = href;
-						});
-					}
-				});
-			</script>
-		@endif
 
-		{{-- @include('messages.chat') --}}
+							function hideMenu()
+							{
+								$('#wrapper-inner, .navbar-collapse').removeClass('toggled');
+								$('.overlay').removeClass('visible');
+							}
+
+							$('[data-toggle="offcanvas"]').click( function () {
+								$('#wrapper-inner, .navbar-collapse').toggleClass('toggled');
+								$('.overlay').toggleClass('visible');
+							});
+						});
+					</script>
+				@endif
+
+				{{-- @include('messages.chat') --}}
+			</div>
+		</div>
 	</body>
 </html>

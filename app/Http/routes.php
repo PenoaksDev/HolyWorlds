@@ -17,7 +17,7 @@ $r->get('/', function(){
 	]);
 });
 
-$r->get("messages", "MessageController@index");
+$r->get("chat", "ChatController@index");
 
 // Auth
 $r->group(['prefix' => 'auth'], function ($r) {

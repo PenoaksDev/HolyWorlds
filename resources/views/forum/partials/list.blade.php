@@ -7,14 +7,14 @@
 		<smaller class="text-gray">{{ $category->description }}</smaller>
 	</td>
 	@if ($category->threadsEnabled)
-	<td class="center-align hide-on-small-only">
+	<td class="center-align hidden-xs hidden-sm">
 		@if( $category->threadCount == 0 )
 		<small><span class="label label-danger">No Threads</span></small>
 		@else
 		{{ $category->threadCount }}
 		@endif
 	</td>
-	<td class="right-align hide-on-small-only">
+	<td class="right-align hidden-xs hidden-sm">
 		@if ($category->newestThread)
 		<a href="{{ route('forum.thread.show', $category->newestThread) }}">
 			{{ $category->newestThread->title }}<br />
@@ -22,7 +22,7 @@
 		</a>
 		@endif
 	</td>
-	<td class="right-align">
+	<td class="right-align hidden-xs hidden-sm">
 		@if ($category->latestActiveThread && $category->latestActiveThread->lastPost)
 		<a href="{{ route('forum.thread.show', $category->latestActiveThread->lastPost) }}">
 			{{ $category->latestActiveThread->title }} <br />

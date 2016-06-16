@@ -1,4 +1,4 @@
-@extends('app')
+@extends('wrapper')
 
 @section('title', "Access Denied")
 @section('subtitle')

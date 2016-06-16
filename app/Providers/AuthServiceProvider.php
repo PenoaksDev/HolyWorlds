@@ -5,7 +5,9 @@ namespace App\Providers;
 use Illuminate\Contracts\Auth\Access\Gate as GateContract;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Blade;
+use App\Auth\CustomUserProvider;
 use App\Models\User;
+use Auth;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -32,15 +34,15 @@ class AuthServiceProvider extends ServiceProvider
 	public function boot(GateContract $gate)
 	{
 		Blade::directive('has', function($node) {
-			return "<?php if ( Auth::user()->hasPermission( $node ) ) { ?>";
+			return "<?php if ( Auth::check() && Auth::user()->hasPermission( $node ) ) { ?>";
 		});
 
 		Blade::directive('endhas', function() {
 			return "<?php } ?>";
 		});
 
-		\Auth::provider('custom', function( $provider ) {
-			return new \App\Auth\CustomUserProvider( $this->app['hash'], User::class );
+		Auth::provider('custom', function( $provider ) {
+			return new CustomUserProvider( $this->app['hash'], User::class );
 		});
 
 		foreach(['AdminPolicy', 'GeneralPolicy'] as $policy) {
