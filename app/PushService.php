@@ -1,31 +1,73 @@
 <?php
 namespace App;
 
+use App;
+use Auth;
+use Config;
+use Crypt;
+use Carbon\Carbon;
+use App\Models\User;
+use Illuminate\Session\SessionManager;
+use Illuminate\View\View;
 use Ratchet\ConnectionInterface;
 use Ratchet\Wamp\WampServerInterface;
 
 class PushService implements WampServerInterface
 {
-	protected $subscribed = array();
+	protected $subscribed = [];
+	protected $cookie_name;
 
-	/**
-	 * On client subscribe to a specified channel of communication
-	 */
+	public function __construct()
+	{
+		$this->cookie_name = Config::get('session.cookie');
+	}
+
 	public function onSubscribe(ConnectionInterface $conn, $channel)
 	{
 		$this->subscribed[ $channel->getId() ] = $channel;
+
+		$this->broadcast($conn, 'chatPublic', '<b>' . $conn->user->name . ' has joined ' . $channel . '.</b>');
 	}
 
-	/**
-	 * On client unsubscribe from a specified channel of communication
-	 */
 	public function onUnSubscribe(ConnectionInterface $conn, $channel)
 	{
-		
+		$this->broadcast($conn, 'chatPublic', '<b>' . $conn->user->name . ' has left ' . $channel . '.</b>');
 	}
 
 	public function onOpen(ConnectionInterface $conn)
 	{
+		$session = (new SessionManager(App::getInstance()))->driver();
+		$cookies = $conn->WebSocket->request->getCookies();
+
+		if ( !array_key_exists( $this->cookie_name, $cookies ) )
+		{
+			$conn->close();
+			echo "Missing cookie " . $this->cookie_name . "\n";
+			return;
+		}
+
+		$laravelCookie = urldecode( $cookies[ $this->cookie_name ] );
+		$idSession = Crypt::decrypt( $laravelCookie );
+		$session->setId( $idSession );
+		$conn->session = $session;
+
+		$conn->session->start();
+
+		$idUser = $conn->session->get( Auth::getName() );
+		if ( !isset( $idUser ) )
+		{
+			$conn->close();
+			echo "No user loggin present!\n";
+			return;
+		}
+
+		$conn->user = User::find( $idUser );
+
+		// or you can save data to the session
+		// $from->session->put('foo', 'bar');
+
+		// and at the end. save the session state to the store
+		// $from->session->save();
 	}
 
 	public function onClose(ConnectionInterface $conn)
@@ -41,15 +83,16 @@ class PushService implements WampServerInterface
 	public function onPublish(ConnectionInterface $conn, $channel, $event, array $exclude, array $eligible)
 	{
 		if ( $channel->getId() == "chatPublic" )
-			$this->broadcast( $channel->getId(), $event["msg"] );
+			$this->broadcast( $conn, $channel->getId(), $event["msg"] );
 	}
 
 	public function onError(ConnectionInterface $conn, \Exception $e)
 	{
-		broadcast( "dev", "Exception has been encountered on the Push Server: " . $e->getMessage() );
+		echo $e->getTraceAsString() . "\n";
+		// $this->broadcast( "dev", "Exception has been encountered on the Push Server: " . $e->getMessage() );
 	}
 
-	public function broadcast( $channel, $data )
+	public function broadcast( $from, $channel, $data )
 	{
 		echo "Broadcasting '" . $data . "' on channel '" . $channel . "'\n";
 
@@ -57,8 +100,7 @@ class PushService implements WampServerInterface
 			return;
 
 		$channel = $this->subscribed[ $channel ];
-		$channel->broadcast( $data );	
-		$channel->broadcast('test');
+		$channel->broadcast( view('messages.post', ['id' => 'broadcast', 'user' => $from == null ? User::first() : $from->user, 'date' => Carbon::now(), 'text' => $data])->render() );
 	}
 
 	/**
@@ -75,7 +117,7 @@ class PushService implements WampServerInterface
 		}
 		else
 		{
-			$this->broadcast( $d["channel"], $d["data"] . 'test');
+			$this->broadcast( null, $d["channel"], $d["data"] );
 		}
 	}
 }

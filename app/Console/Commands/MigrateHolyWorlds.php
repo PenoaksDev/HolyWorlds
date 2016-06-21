@@ -7,40 +7,21 @@ use App\Models\Forum\Post;
 use App\Models\User;
 use App\Models\UserAuth;
 use App\Models\UserProfile;
+use App\Models\GroupInheritance;
 use App\Models\Setting;
 use Carbon\Carbon;
 
 class MigrateHolyWorlds extends Command
 {
-	/**
-	 * The name and signature of the console command.
-	 *
-	 * @var string
-	 */
 	protected $signature = 'migrate:holyworlds';
 
-	/**
-	 * The console command description.
-	 *
-	 * @var string
-	 */
 	protected $description = 'Migrates old forum data for Holy Worlds';
 
-	/**
-	 * Create a new command instance.
-	 *
-	 * @return void
-	 */
 	public function __construct()
 	{
 		parent::__construct();
 	}
 
-	/**
-	 * Execute the console command.
-	 *
-	 * @return mixed
-	 */
 	public function handle()
 	{
 		ini_set('memory_limit','4G');
@@ -56,6 +37,7 @@ class MigrateHolyWorlds extends Command
 		User::getQuery()->delete();
 		UserAuth::getQuery()->delete();
 		UserProfile::getQuery()->delete();
+		GroupInheritance::getQuery()->delete();
 
 		$this->info("Migrating users...");
 		$query = $bh->table('users')->where('user_type', '!=', '2')->orderBy('user_id');
@@ -83,12 +65,12 @@ class MigrateHolyWorlds extends Command
 
 				$activated = false;
 				// NOTE TEMP USER OVERRIDES
-				if ( $row->user_id == '65616' )
+				if ( $row->user_id == '65616' ) // Chiori-chan
 				{
 					$activated = true;
 					$id = 'cg0092m';
 				}
-				if ( $row->user_id == '210' )
+				if ( $row->user_id == '210' || $row->user_id == '69274' ) // Aubrey and Jerimiah
 					$activated = true;
 
 				$this->info( "Row " . $offset . " of " . $max . ":: Migrating user # " . $row->user_id . " (as " . $id . ")" );
@@ -116,6 +98,11 @@ class MigrateHolyWorlds extends Command
 					'updated_at' => Carbon::createFromTimestamp( $row->user_passchg > 0 ? $row->user_passchg : $row->user_regdate ),
 					'visited_at' => Carbon::createFromTimestamp( $row->user_lastvisit )
 				]);
+
+				if ( $row->user_id == '65616' || $row->user_id == '210' || $row->user_id == '69274' )
+				{
+					$user->addGroup( 'admin' );
+				}
 
 				$profile = UserProfile::create([
 					'id' => $id,

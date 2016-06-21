@@ -50,7 +50,7 @@
 								<li><a href="{{ url('forum') }}"><span class="glyphicon glyphicon-book"></span> New &amp; Updated</a></li>
 							</ul>
 						</li>
-						<li><a href="{{ url('gallery') }}"><span class="glyphicon glyphicon-picture"></span> Gallery</a></li>
+						{{-- <li><a href="{{ url('gallery') }}"><span class="glyphicon glyphicon-picture"></span> Gallery</a></li> --}}
 						<li><a href="{{ url('pages/about') }}"><span class="glyphicon glyphicon-heart"></span> About</a></li>
 						<li><a href="{{ url('pages/contact') }}"><span class="glyphicon glyphicon-envelope"></span> Contact</a></li>
 					</ul>
@@ -61,7 +61,7 @@
 							<li><a href="{{ url('auth/register') }}"><i class="fa fa-user-plus" aria-hidden="true"></i> Register</a></li>
 						@else
 							<li class="dropdown"> <!-- {{ url('account/notifications') }} -->
-								<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" id="notification">
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" id="btnNotice">
 									<i class="fa fa-bell-o" aria-hidden="true"></i>
 									<span class="badge">{{ Auth::user()->countNotificationsNotRead() }}</span>
 								</a>
@@ -70,14 +70,14 @@
 								</div>
 							</li>
 							<li>
-								<a href="{{ url('chat') }}" id="chat">
+								<a href="{{ url('messages') }}" id="btnChat">
 									<i class="fa fa-comments-o" aria-hidden="true"></i>
 									<span class="badge">0</span>
 								</a>
 							</li>
 							<li class="dropdown">
 								<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-									@include('user.partials.avatar', ['user' => Auth::user()])
+									@include('user.partials.avatar', ['user' => Auth::user(), 'class' => 'img-circle'])
 									Welcome {{ Auth::user()->name }}
 									<span class="caret"></span>
 								</a>
@@ -127,7 +127,7 @@
 					@yield('before_content')
 					<div class="panel panel-default">
 						<div class="panel-heading">
-							<h4 class="pull-left" style="margin: 5px 0; padding: 0;"><?php if ( empty( $__env->yieldContent('pagetitle') ) ) echo $__env->yieldContent('title'); else echo $__env->yieldContent('pagetitle'); ?></h4>
+							<h3 class="pull-left" style="margin: 5px 0; padding: 0;"><?php if ( empty( $__env->yieldContent('pagetitle') ) ) echo $__env->yieldContent('title'); else echo $__env->yieldContent('pagetitle'); ?></h3>
 							@if (array_key_exists('breadcrumbs', View::getSections()))
 							<ol class="hidden-xs hidden-sm breadcrumb pull-right" style="margin: 0;">
 								<li><a href="{{ url('/') }}">Home</a></li>

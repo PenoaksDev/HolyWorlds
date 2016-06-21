@@ -7,4 +7,4 @@
 			{!! "<li>$crumb</li>" !!}
 		@endforeach
 	@endif
-@stop
+@endsection

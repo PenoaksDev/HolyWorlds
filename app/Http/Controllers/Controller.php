@@ -12,14 +12,14 @@ use Illuminate\Foundation\Auth\Access\AuthorizesResources;
 
 class Controller extends BaseController
 {
-    use AuthorizesRequests, AuthorizesResources, DispatchesJobs, ValidatesRequests;
+	use AuthorizesRequests, AuthorizesResources, DispatchesJobs, ValidatesRequests;
 
-    public function error( $code = 404, $msg = "Resource not found" )
-    {
-        $content = ['error' => $msg];
+	public function error( $code = 404, $msg = "Resource not found" )
+	{
+		$content = ['error' => $msg];
 
-        return (request()->ajax() || request()->wantsJson())
-            ? new JsonResponse($content, $code)
-            : new Response($content, $code);
-    }
+		return (request()->ajax() || request()->wantsJson())
+			? new JsonResponse($content, $code)
+			: new Response($content, $code);
+	}
 }

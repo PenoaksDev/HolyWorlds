@@ -13,7 +13,8 @@ class Kernel extends ConsoleKernel
 	 * @var array
 	 */
 	protected $commands = [
-		Commands\MigrateHolyWorlds::class
+		Commands\MigrateHolyWorlds::class,
+		Commands\PushServer::class
 	];
 
 	/**

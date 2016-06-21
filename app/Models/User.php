@@ -93,7 +93,7 @@ class User extends Authenticatable
 
 	public function permissions()
 	{
-		return $this->hasMany(Permission::class, "name");
+		return $this->hasMany(PermissionAssigned::class, "name");
 	}
 
 	public static function stats()

@@ -3,13 +3,13 @@
  */
 
 (function( $ ) {
-	var conn = new ab.Session('wss://api.holyworlds.org/pusher',
-	
+	var conn = new ab.Session('wss://dev.holyworlds.org/pusher',
+
 		// On open
 		function()
 		{
 			$.event.trigger( "push:connected" );
-			
+
 			conn.subscribe('chatPublic', function( channel, data )
 			{
 				$.event.trigger({
@@ -19,14 +19,15 @@
 				});
 			});
 		},
-		
+
 		// On close
 		function()
 		{
-			console.warn('WebSocket connection closed');
+			if ( console )
+				console.error('WebSocket connection closed');
 			$.event.trigger( "push:closed" );
 		},
-		
+
 		// Additional Params
 		{
 			'skipSubprotocolCheck': true

@@ -17,7 +17,14 @@ $r->get('/', function(){
 	]);
 });
 
-$r->get("chat", "ChatController@index");
+$r->group(["prefix" => "messages", "as" => "messages."], function ($r){
+	$r->get("/", ['as' => 'index', 'uses' => 'MessagesController@index']);
+	$r->get('{id}', ['as' => 'show', 'uses' => 'MessagesController@show']);
+
+	$r->group(["prefix" => "channel", "as" => "channel."], function ($r){
+		$r->get('{id}', ['as' => 'show', 'uses' => 'MessagesController@channelShow']);
+	});
+});
 
 // Auth
 $r->group(['prefix' => 'auth'], function ($r) {

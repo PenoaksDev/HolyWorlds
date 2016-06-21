@@ -389,6 +389,22 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* Chat */
+.msg-window {
+	height: 500px;
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+
+.msg-post {
+	margin-bottom: 10px
+}
+
+#message {
+	width: 100%;
+	height: 50px;
+}
+
+
 #chat {
 	position: absolute;
 	bottom: 0;
