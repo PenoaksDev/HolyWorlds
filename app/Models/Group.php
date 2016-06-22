@@ -37,41 +37,6 @@ class Group extends Model
 			$this->inheritance()->create(["parent" => $parent, "type" => 0]);
 	}
 
-	public function hasPermission( $node )
-	{
-		$node = strtolower( $node );
-
-		foreach( $this->permissions as $p )
-		{
-			if ( empty( $p->permission ) )
-				continue; // Ignore empty permission nodes
-
-			if ( strtolower( $p->permission ) == $node )
-				return true;
-
-			try
-			{
-				if ( preg_match( "/" . strtolower( $p->permission ) . "/", $node ) )
-					return true;
-			}
-			catch ( Exception $e )
-			{
-				// Ignore preg_match() exceptions
-			}
-		}
-
-		// Directly assigned permissions do not match, check with the Groups next
-
-		foreach ( $this->groups() as $group )
-		{
-			$result = $group->hasPermission( $node );
-			if ( $result )
-				return true;
-		}
-
-		return false;
-	}
-
 	public function hasChild( $child )
 	{
 		$child = ( $child instanceof Group ) || ( $child instanceof User ) ? $child->id : $child;
@@ -100,5 +65,10 @@ class Group extends Model
 	{
 		// What groups/users are memebers?
 		return $this->hasMany(GroupInheritance::class, "parent");
+	}
+
+	public function checkPermission( $permission )
+	{
+		return Permissions::checkPermission( $permission, $this );
 	}
 }

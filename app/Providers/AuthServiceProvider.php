@@ -6,6 +6,7 @@ use Illuminate\Contracts\Auth\Access\Gate as GateContract;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Blade;
 use App\Auth\CustomUserProvider;
+use App\Http\Middleware\Permissions;
 use App\Models\User;
 use Auth;
 
@@ -33,8 +34,8 @@ class AuthServiceProvider extends ServiceProvider
 	 */
 	public function boot(GateContract $gate)
 	{
-		Blade::directive('has', function($node) {
-			return "<?php if ( Auth::check() && Auth::user()->hasPermission( $node ) ) { ?>";
+		Blade::directive('has', function( $permission ) {
+			return "<?php if ( \App\Http\Middleware\Permissions::checkPermission( $permission ) !== false ) { ?>";
 		});
 
 		Blade::directive('endhas', function() {
@@ -45,7 +46,7 @@ class AuthServiceProvider extends ServiceProvider
 			return new CustomUserProvider( $this->app['hash'], User::class );
 		});
 
-		foreach(['AdminPolicy', 'GeneralPolicy'] as $policy) {
+		foreach(['AdminPolicy', 'GeneralPolicy', 'AdminPolicy', 'ArticlePolicy', 'CategoryPolicy', 'CommentPolicy', 'EventPolicy', 'ForumPolicy', 'ImageAlbumPolicy', 'PostPolicy', 'ThreadPolicy', 'UserProfilePolicy'] as $policy) {
 			$gate = $this->defineFromClass($gate, "App\\Policies\\{$policy}");
 		}
 

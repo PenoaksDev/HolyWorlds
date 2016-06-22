@@ -2,6 +2,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Http\Middleware\Permissions;
 use Auth;
 use DB;
 
@@ -31,7 +32,7 @@ class Setting extends Model
 	{
 		if ( is_null( $user ) )
 			$user = Auth::user();
-		if ( $this->global_perm && !$user->hasPermission( $this->global_perm ) )
+		if ( $this->global_perm && Permissions::checkPermission( $this->global_perm ) !== false )
 			return false;
 		if ( $this->type == 2 && !in_array( $value, $this->enumValues ) )
 			return false;
@@ -48,7 +49,7 @@ class Setting extends Model
 				return setDefault( $value, $user );
 		if ( is_null( $user ) )
 			$user = Auth::user();
-		if ( $this->public_perm && !$user->hasPermission( $this->public_perm ) )
+		if ( $this->public_perm && Permissions::checkPermission( $this->public_perm ) !== false )
 			return false;
 		if ( is_null( $value ) )
 		{

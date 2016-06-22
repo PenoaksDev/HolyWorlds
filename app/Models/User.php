@@ -1,11 +1,13 @@
 <?php
 namespace App\Models;
 
+use Auth;
 use App\Util;
 use Carbon\Carbon;
-use App\Models\Traits\UuidAsKey;
 use App\Models\Setting;
 use Fenos\Notifynder\Notifable;
+use App\Http\Middleware\Permissions;
+use App\Models\Traits\UuidAsKey;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
@@ -54,7 +56,7 @@ class User extends Authenticatable
 
 	public function getIsNewAttribute()
 	{
-		return $this->hasPermission(Setting::get('default_group', 'sys.user'));
+		return Permissions::checkPermission( Setting::get( 'default_group', 'sys.user' ) );
 	}
 
 	public function getSlugAttribute()
@@ -118,41 +120,6 @@ class User extends Authenticatable
 		return $stats;
 	}
 
-	public function hasPermission( $node )
-	{
-		$node = strtolower( $node );
-
-		foreach( $this->permissions as $p )
-		{
-			if ( empty( $p->permission ) )
-				continue; // Ignore empty permission nodes
-
-			if ( strtolower( $p->permission ) == $node )
-				return true;
-
-			try
-			{
-				if ( preg_match( "/" . strtolower( $p->permission ) . "/", $node ) )
-					return true;
-			}
-			catch ( Exception $e )
-			{
-			// Ignore preg_match() exceptions
-			}
-		}
-
-		// Directly assigned permissions do not match, check with the Groups next
-
-		foreach ( $this->groups() as $group )
-		{
-			$result = $group->hasPermission( $node );
-			if ( $result )
-				return true;
-		}
-
-		return false;
-	}
-
 	public function isActivated()
 	{
 		return empty( $this->activation_token );
@@ -213,5 +180,15 @@ class User extends Authenticatable
 			if ( !$user->id )
 				$user->id = strtolower( Util::rand(2, false, true) ) . Util::rand(3, true, false) . Util::rand(1, false, true);
 		});
+	}
+
+	public function checkPermission( $permission )
+	{
+		return Permissions::checkPermission( $permission, $this );
+	}
+
+	public function isAdmin()
+	{
+		return Permissions::checkPermission( 'sys.admin', $this );
 	}
 }

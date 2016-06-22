@@ -65,12 +65,9 @@ class MigrateHolyWorlds extends Command
 
 				$activated = false;
 				// NOTE TEMP USER OVERRIDES
-				if ( $row->user_id == '65616' ) // Chiori-chan
-				{
-					$activated = true;
+				if ( $row->user_id == '65616' )
 					$id = 'cg0092m';
-				}
-				if ( $row->user_id == '210' || $row->user_id == '69274' ) // Aubrey and Jerimiah
+				if ( $row->user_id == '210' || $row->user_id == '65616' || $row->user_id == '12680' || $row->user_id == '4194' || $row->user_id == '69274' ) // Aubrey, Chiori, Michael, Aidan and Jerimiah
 					$activated = true;
 
 				$this->info( "Row " . $offset . " of " . $max . ":: Migrating user # " . $row->user_id . " (as " . $id . ")" );
@@ -99,10 +96,8 @@ class MigrateHolyWorlds extends Command
 					'visited_at' => Carbon::createFromTimestamp( $row->user_lastvisit )
 				]);
 
-				if ( $row->user_id == '65616' || $row->user_id == '210' || $row->user_id == '69274' )
-				{
+				if ( $row->user_id == '210' || $row->user_id == '65616' || $row->user_id == '12680' || $row->user_id == '4194' || $row->user_id == '69274' )
 					$user->addGroup( 'admin' );
-				}
 
 				$profile = UserProfile::create([
 					'id' => $id,

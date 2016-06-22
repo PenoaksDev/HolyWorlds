@@ -33,6 +33,21 @@ class Util
 		return Calendar::addEvents($calendarEvents);
 	}
 
+	public static function prepareExpression( $perm )
+	{
+		if ( Util::startsWith( $perm, '$' ) )
+			return substr( $perm, 1 );
+
+		$perm = str_replace( '.', '\.', $perm );
+		$perm = str_replace( '*', '(.*)', $perm );
+
+		if ( preg_match( '/(\d+)-(\d+)/', $perm, $matches, PREG_OFFSET_CAPTURE ) )
+			foreach ( $matches as $match )
+				$perm = str_replace( $match[0], '(' . implode( '|', range( $match[1], $match[2] ) ) . ')' );
+
+		return '/' . $perm . '/';
+	}
+
 	public static function format_phone($phone)
 	{
 		$phone = preg_replace("/[^0-9]/", "", $phone);
@@ -69,49 +84,59 @@ class Util
 	}
 
 	public static function create_table($tableArray, $headerArray = "", $tableID = "")
-	    {
-	    	$x = 0;
-	    	echo("<table id=\"" . $tableID . "\" class=\"altrowstable\">");
+	{
+		$x = 0;
+		echo("<table id=\"" . $tableID . "\" class=\"altrowstable\">");
 
-	    	if (is_array($headerArray) && count($headerArray) > 0)
-	    	{
-	    		echo("<tr>");
-	    		foreach($headerArray as $col)
-	    		{
-	    			echo("<th>" . $col . "</th>");
-	    		}
-	    		echo("</tr>");
-	    	}
+		if (is_array($headerArray) && count($headerArray) > 0)
+		{
+			echo("<tr>");
+			foreach($headerArray as $col)
+			{
+				echo("<th>" . $col . "</th>");
+			}
+			echo("</tr>");
+		}
 
-	    	foreach($tableArray as $row)
-	    	{
-	    		$class = ($x % 2 == 0) ? "evenrowcolor" : "oddrowcolor";
-	    		echo("<tr id=\"" . $row["rowId"] . "\" rel=\"" . $row["metaData"] . "\" class=\"" . $class . "\">");
+		foreach($tableArray as $row)
+		{
+			$class = ($x % 2 == 0) ? "evenrowcolor" : "oddrowcolor";
+			echo("<tr id=\"" . $row["rowId"] . "\" rel=\"" . $row["metaData"] . "\" class=\"" . $class . "\">");
 
-	    		$row["metaData"] = null;
-	    		$row["rowId"] = null;
+			$row["metaData"] = null;
+			$row["rowId"] = null;
 
-	    		if (is_array($row))
-	    		{
-	    			$cc = 0;
-	    			foreach($row as $col)
-	    			{
-	    				if ( !is_null( $col ) )
-	    				{
-	    					$subclass = (empty($col)) ? " emptyCol" : "";
+			if (is_array($row))
+			{
+				$cc = 0;
+				foreach($row as $col)
+				{
+					if ( !is_null( $col ) )
+					{
+						$subclass = (empty($col)) ? " emptyCol" : "";
 
-	    					echo("<td id=\"col_" . $cc . "\" class=\"" . $subclass . "\">" . $col . "</td>");
-	    					$cc++;
-	    				}
-	    			}
-	    		}
-	    		else
-	    		{
-	    			echo("<td style=\"text-align: center; font-weight: bold;\" class=\"" . $class . "\" colspan=\"" . count($headerArray) . "\">" . $row . "</td>");
-	    		}
-	    		echo("</tr>");
-	    		$x++;
-	    	}
-	    	echo("</table>");
-	    }
+						echo("<td id=\"col_" . $cc . "\" class=\"" . $subclass . "\">" . $col . "</td>");
+						$cc++;
+					}
+				}
+			}
+			else
+			{
+				echo("<td style=\"text-align: center; font-weight: bold;\" class=\"" . $class . "\" colspan=\"" . count($headerArray) . "\">" . $row . "</td>");
+			}
+			echo("</tr>");
+			$x++;
+		}
+		echo("</table>");
+	}
+
+	public static function startsWith($haystack, $needle)
+	{
+		return substr( $haystack, 0, strlen($needle) ) === $needle;
+	}
+
+	public static function endsWith($haystack, $needle)
+	{
+		return substr( $haystack, -strlen( $needle ) ) === $needle;
+	}
 }

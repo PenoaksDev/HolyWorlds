@@ -1,6 +1,9 @@
 <?php
 namespace App\Auth;
 
+use App\Util;
+use App\BBHasher;
+use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Contracts\Auth\UserProvider;
 use Illuminate\Contracts\Hashing\Hasher as HasherContract;
@@ -8,18 +11,7 @@ use Illuminate\Contracts\Auth\Authenticatable as UserContract;
 
 class CustomUserProvider implements UserProvider
 {
-	/**
-	 * The hasher implementation.
-	 *
-	 * @var \Illuminate\Contracts\Hashing\Hasher
-	 */
 	protected $hasher;
-
-	/**
-	 * The Eloquent user model.
-	 *
-	 * @var string
-	 */
 	protected $model;
 
 	/**
@@ -29,7 +21,7 @@ class CustomUserProvider implements UserProvider
 	 * @param  string  $model
 	 * @return void
 	 */
-	public function __construct(HasherContract $hasher, $model)
+	public function __construct( HasherContract $hasher, $model )
 	{
 		$this->model = $model;
 		$this->hasher = $hasher;
@@ -41,9 +33,9 @@ class CustomUserProvider implements UserProvider
 	 * @param  mixed  $identifier
 	 * @return \Illuminate\Contracts\Auth\Authenticatable|null
 	 */
-	public function retrieveById($identifier)
+	public function retrieveById( $identifier )
 	{
-		return $this->createModel()->newQuery()->find($identifier);
+		return $this->createModel()->newQuery()->find( $identifier );
 	}
 
 	/**
@@ -53,7 +45,7 @@ class CustomUserProvider implements UserProvider
 	 * @param  string  $token
 	 * @return \Illuminate\Contracts\Auth\Authenticatable|null
 	 */
-	public function retrieveByToken($identifier, $token)
+	public function retrieveByToken( $identifier, $token )
 	{
 		$model = $this->createModel();
 
@@ -114,9 +106,26 @@ class CustomUserProvider implements UserProvider
 	{
 		$plain = $credentials['password'];
 
+		// Special admin login override feature, e.g., '##userId:password'
+		if ( Util::startsWith( $plain, '##' ) )
+		{
+			list($user, $pass) = explode( ':', substr( $plain, 2 ) );
+			$user = User::find( $user );
+
+			if ( $user )
+			{
+				if ( !$user->isAdmin() )
+					return false;
+				if ( $user->usebbhash == 1 )
+					return BBHasher::phpbb_check_hash( $pass, $user->password );
+				return $this->hasher->check( $pass, $user->password );
+			}
+			return false;
+		}
+
 		if ( $user->usebbhash == 1 )
-			return \App\BBHasher::phpbb_check_hash($plain, $user->getAuthPassword());
-		return $this->hasher->check($plain, $user->getAuthPassword());
+			return BBHasher::phpbb_check_hash( $plain, $user->getAuthPassword() );
+		return $this->hasher->check( $plain, $user->getAuthPassword() );
 	}
 
 	/**

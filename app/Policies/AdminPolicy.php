@@ -3,20 +3,15 @@ namespace App\Policies;
 
 use App\Models\User;
 use App\Models\Setting;
+use App\Http\Middleware\Permissions;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class AdminPolicy
 {
 	use HandlesAuthorization;
 
-	/**
-	 * Determine if the given user has admin rights.
-	 *
-	 * @param  User  $user
-	 * @return bool
-	 */
 	public function admin( User $user )
 	{
-		return $user->hasPermission( 'sys.admin' );
+		return Permissions::checkPermission( 'sys.admin', $user ) !== false;
 	}
 }

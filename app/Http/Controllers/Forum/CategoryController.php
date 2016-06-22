@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Gate;
 use App\Events\Forum\UserViewingCategory;
 use App\Events\Forum\UserViewingIndex;
 use App\Models\Forum\Category;
+use App\Http\Middleware\Permissions;
 use Auth;
 
 class CategoryController extends BaseController
@@ -22,7 +23,7 @@ class CategoryController extends BaseController
 
 		$categories = $categories->get()->filter(function ($category)
 		{
-			return empty( $category->permission ) || Auth::user() != null && Auth::user()->hasPermission( $category->permission );
+			return Permissions::checkPermission( $category->permission );
 		});
 
 		event( new UserViewingIndex );
@@ -45,7 +46,7 @@ class CategoryController extends BaseController
 			return view("errors.404");
 		}
 
-		if ( empty( $category->permission ) || Auth::user() != null && Auth::user()->hasPermission( $category->permission ) )
+		if ( Permissions::checkPermission( $category->permission ) )
 		{
 			event( new UserViewingCategory( $category ) );
 
@@ -86,9 +87,9 @@ class CategoryController extends BaseController
 
 		$category = $this->api("category.{$action}", $request->route('category'))->parameters($request->all())->patch();
 
-		Forum::alert('success', 'categories.updated', 1);
+		alert( 'success', 'categories.updated', 1 );
 
-		return redirect(Forum::route('category.show', $category));
+		return redirect( route( 'category.show', $category ) );
 	}
 
 	/**

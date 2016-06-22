@@ -83,8 +83,7 @@
 								</a>
 								<ul class="dropdown-menu">
 									<li><a href="{{ url('account/profile') }}"><i class="fa fa-tachometer" aria-hidden="true"></i> My Dashboard</a></li>
-
-									@if (Auth::user()->hasPermission("sys.admin"))
+									@if ( Auth::user()->isAdmin() )
 										<li><a href="{{ url('admin') }}"><i class="fa fa-lock" aria-hidden="true"></i> Administrator</a></li>
 									@endif
 									<li role="separator" class="divider"></li>
@@ -108,16 +107,6 @@
 							<a href="{{ url('/') }}"><img src="{{ url('images/logo.png') }}" style="height: 128px;" /></a>
 							<!-- <h1><a href="{{ url('/') }}">Holy Worlds</a></h1> -->
 							<p>Community of Christ-centered Creativity</p>
-						</div>
-					</div>
-				</div>
-
-				<div class="container" id="loadingContent" style="display: none;">
-					<div class="panel panel-default">
-						<div class="panel-body">
-							<center>
-								<img src="{{ URL::asset('images/loading_default.gif') }}" /><br />
-							</center>
 						</div>
 					</div>
 				</div>
@@ -206,9 +195,7 @@
 								$(document).scrollTop(0);
 
 								// Show loading message
-								$('#pageBody').fadeOut(100, function(){
-									$('#loadingContent').fadeIn(100);
-								});
+								$('.overlay').addClass('loading');
 								lastHref = href;
 
 								// DO AJAX
@@ -273,18 +260,9 @@
 
 									History.pushState( null, title, href );
 
-									// Defer crossfade until page body is updated and parsed.
-									var defer = $.Deferred();
-									var chain = defer.then(function(){
-										$('#pageBody').html( $('#pageBody', html).exists() ? $('#pageBody', html).html() : $(html).html() );
-										$('#pageBody').find('a:not(.noAjax):not([class^="phpdebugbar"]):not([href^="javascript"])[rel!="external"][target!="_blank"][href!="#"], .ajaxLink').click(onClickEvent);
-									});
-									defer.resolve(5);
-									chain.done(function(){
-										$('#loadingContent').fadeOut(100, function(){
-											$('#pageBody').fadeIn(100);
-										});
-									});
+									$('#pageBody').html( $('#pageBody', html).exists() ? $('#pageBody', html).html() : $(html).html() );
+									$('#pageBody').find('a:not(.noAjax):not([class^="phpdebugbar"]):not([href^="javascript"])[rel!="external"][target!="_blank"][href!="#"], .ajaxLink').click(onClickEvent);
+									$('.overlay').removeClass('loading');
 
 									if ( console )
 										console.info( "Successfully AJAX navigated to " + href );

@@ -1,11 +1,12 @@
 <?php
 namespace App\Policies;
 
-use App\Models\Category;
+use App\Http\Middleware\Permissions;
+use App\Models\Forum\Category;
 
 class CategoryPolicy
 {
-    protected $permissionPrefix = 'forum.category';
+	protected $permissionPrefix = 'forum.category';
 
 	/**
 	 * Permission: Create threads in category.
@@ -16,7 +17,7 @@ class CategoryPolicy
 	 */
 	public function createThreads($user, Category $category)
 	{
-		return true;
+		return $this->checkPermission( 'thread_create', $category->id );;
 	}
 
 	/**
@@ -44,7 +45,7 @@ class CategoryPolicy
 	 */
 	public function deleteThreads($user, Category $category)
 	{
-		return true;
+		return $this->checkPermission( 'thread_delete', $category->id );
 	}
 
 	/**
@@ -56,7 +57,7 @@ class CategoryPolicy
 	 */
 	public function enableThreads($user, Category $category)
 	{
-		return true;
+		return $this->checkPermission( 'thread_enable', $category->id );
 	}
 
 	/**
@@ -68,7 +69,7 @@ class CategoryPolicy
 	 */
 	public function moveThreadsFrom($user, Category $category)
 	{
-		return true;
+		return $this->checkPermission( 'thread_move_from', $category->id );
 	}
 
 	/**
@@ -80,7 +81,7 @@ class CategoryPolicy
 	 */
 	public function moveThreadsTo($user, Category $category)
 	{
-		return true;
+		return $this->checkPermission( 'thread_move_to', $category->id );
 	}
 
 	/**
@@ -92,7 +93,7 @@ class CategoryPolicy
 	 */
 	public function lockThreads($user, Category $category)
 	{
-		return true;
+		return $this->checkPermission( 'thread_lock', $category->id );
 	}
 
 	/**
@@ -104,7 +105,7 @@ class CategoryPolicy
 	 */
 	public function pinThreads($user, Category $category)
 	{
-		return true;
+		return $this->checkPermission( 'thread_pin', $category->id );
 	}
 
 	/**
@@ -116,7 +117,7 @@ class CategoryPolicy
 	 */
 	public function view($user, Category $category)
 	{
-		return $user->hasPermission( $this->permissionPrefix . '.view.' . $category->id );
+		return $this->checkPermission( 'view', $category->id );
 	}
 
 	/**
@@ -128,6 +129,11 @@ class CategoryPolicy
 	 */
 	public function delete($user, Category $category)
 	{
-		return true;
+		return $this->checkPermission( 'delete', $category->id );
+	}
+
+	public function checkPermission( $action, $id )
+	{
+		return Permissions::checkPermission( $this->permissionPrefix . '.' . $action . '.' . $id ) !== null;
 	}
 }

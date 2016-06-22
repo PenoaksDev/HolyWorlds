@@ -11,7 +11,7 @@
 			<div class="form-group">
 				<label for="username" class="col-sm-2 control-label">Email</label>
 				<div class="col-sm-10">
-					<input autocomplete="off" name="username" id="username" type="email" value="{{ old('name_or_email') }}" class="form-control" placeholder="E-mail or Username" required="" autofocus="">
+					<input autocomplete="off" name="username" id="username" type="email" value="{{ old('name_or_email') }}" class="form-control" placeholder="E-mail" required="" autofocus="">
 				</div>
 			</div>
 			<div class="form-group">

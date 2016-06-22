@@ -15,12 +15,12 @@
 			<h3>Chat Channels</h3>
 			<div class="list-group">
 				@foreach ( \App\Models\MsgChannel::get() as $channel )
-					@if ( empty( $channel->perm ) || Auth::user()->hasPermission( $channel->perm ) )
+					@has( $channel->perm )
 						<a href="{{ route( 'messages.channel.show', $channel->id ) }}" class="list-group-item<?php if ( $id == $channel->id ) echo ' active'; ?>">
 							<h4 class="list-group-item-heading">{{ $channel->title }}</h4>
 							<p class="list-group-item-text">...</p>
 						</a>
-					@endif
+					@endhas
 				@endforeach
 			</div>
 			<h3>Private Messages</h3>

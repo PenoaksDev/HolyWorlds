@@ -29,10 +29,9 @@ while ( $cat )
 	<div class="row">
 		<div class="col-md-12">
 			@if ($category->threadsEnabled)
-				{{-- @can ('createThreads', $category) --}}
-				@has ('org.holyworlds.forum.thread.create.' . $category->id)
+				@can ('createThreads', $category)
 				<a href="{{ route('forum.thread.create', $category) }}" class="btn btn-default">New Thread</a>
-				@endhas
+				@endcan
 			@endif
 		</div>
 	</div>
@@ -40,7 +39,7 @@ while ( $cat )
 		<div class="col-md-12">
 			@if (!$category->threadsPaginated->isEmpty())
 				@can ('manageThreads', $category)
-					<form action="{{ route('forum.bulk.thread.update') }}" method="POST" data-actions-form>
+					<form action="{{-- TODO? route('forum.bulk.thread.update') --}}" method="POST" data-actions-form>
 						{!! csrf_field() !!}
 						{!! method_field('delete') !!}
 					@endcan
@@ -134,7 +133,7 @@ while ( $cat )
 
 				@if (!$category->threadsPaginated->isEmpty())
 					@can ('manageThreads', $category)
-						@include ('category.partials.thread-actions')
+						@include ('forum.partials.thread-actions')
 						</form>
 					@endcan
 				@endif
@@ -162,7 +161,7 @@ while ( $cat )
 			@can ('markNewThreadsAsRead')
 				<hr>
 				<div class="center-align">
-					<form action="{{ route('forum.mark-new') }}" method="POST" data-confirm>
+					<form action="{{-- TODO route('forum.mark-new') --}}" method="POST" data-confirm>
 						{!! csrf_field() !!}
 						{!! method_field('patch') !!}
 						<input type="hidden" name="category_id" value="{{ $category->id }}">
@@ -178,11 +177,11 @@ while ( $cat )
 @section('after_content')
 	@can ('manageCategories')
 		<hr>
-		<form action="{{ route('forum.category.update', $category) }}" method="POST" data-actions-form>
+		<form action="{{-- TODO route('forum.category.update', $category) --}}" method="POST" data-actions-form>
 			{!! csrf_field() !!}
 			{!! method_field('patch') !!}
 
-			@include ('category.partials.actions')
+			@include ('forum.partials.actions')
 		</form>
 	@endcan
 @endsection

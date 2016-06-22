@@ -7,17 +7,17 @@ use Illuminate\Auth\Access\HandlesAuthorization;
 
 class ArticlePolicy
 {
-    use HandlesAuthorization;
+	use HandlesAuthorization;
 
-    /**
-     * Determine if the given user can add a comment on the article.
-     *
-     * @param  User  $user
-     * @param  Article  $article
-     * @return bool
-     */
-    public function addComment(User $user, Article $article)
-    {
-        return !$user->isNew;
-    }
+	/**
+	 * Determine if the given user can add a comment on the article.
+	 *
+	 * @param  User  $user
+	 * @param  Article  $article
+	 * @return bool
+	 */
+	public function addComment(User $user, Article $article)
+	{
+		return !$user->isNew;
+	}
 }
