@@ -45,7 +45,7 @@ if ( !is_null( $cat ) )
 					</div>
 				</div>
 				<div class="col s12 l6 right-align">
-					@include('partials.pagination', ['paginator' => $thread->postsPaginated])
+					@include('forum.partials.pagination', ['paginator' => $thread->postsPaginated])
 				</div>
 			</div>
 		@endcan
@@ -105,7 +105,7 @@ if ( !is_null( $cat ) )
 		{!! csrf_field() !!}
 		{!! method_field('patch') !!}
 
-		@include ('thread.partials.actions')
+		@include ('forum.thread.partials.actions')
 	</form>
 @endcan
 @stop

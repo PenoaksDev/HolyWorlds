@@ -9,6 +9,7 @@ use App\Events\Forum\UserMarkingNew;
 use App\Events\Forum\UserViewingNew;
 use App\Events\Forum\UserViewingThread;
 use App\Models\Forum\Thread;
+use App\Models\Forum\Category;
 
 class ThreadController extends BaseController
 {
@@ -23,17 +24,57 @@ class ThreadController extends BaseController
 	protected $posts;
 
 	/**
-	 * GET: Return a new/updated threads view.
+	 * GET: Return an index of new/updated threads for the current user, optionally filtered by category ID.
 	 *
-	 * @return \Illuminate\Http\Response
+	 * @param  Request  $request
+	 * @return JsonResponse|Response
 	 */
-	public function indexNew()
+	public function indexNew(Request $request)
 	{
-		$threads = $this->api('thread.index-new')->get();
+		$this->validate($request);
+
+		$threads = Thread::recent();
+
+		if ($request->has('category_id')) {
+			$threads = $threads->where('category_id', $request->input('category_id'));
+		}
+
+		$threads = $threads->get();
+
+		// If the user is logged in, filter the threads according to read status
+		if (auth()->check()) {
+			$threads = $threads->filter(function ($thread)
+			{
+				return $thread->userReadStatus;
+			});
+		}
+
+		// Filter the threads according to the user's permissions
+		$threads = $threads->filter(function ($thread)
+		{
+			return (!$thread->category->private || Gate::allows('view', $thread->category));
+		})->get();
 
 		event(new UserViewingNew($threads));
 
 		return view('forum.thread.index-new', compact('threads'));
+	}
+
+	/**
+	 * GET: return an index of threads by category ID.
+	 *
+	 * @param  Request  $request
+	 * @return JsonResponse|Response
+	 */
+	public function index(Request $request)
+	{
+		$this->validate($request, ['category_id' => ['required']]);
+
+		$threads = Thread::withRequestScopes($request)
+			->where('category_id', $request->input('category_id'))
+			->get();
+
+		return $this->response($threads);
 	}
 
 	/**
@@ -52,12 +93,12 @@ class ThreadController extends BaseController
 			$category = $this->api('category.fetch', $request->input('category_id'))->get();
 
 			if ($category) {
-				Forum::alert('success', 'categories.marked_read', 0, ['category' => $category->title]);
-				return redirect(Forum::route('category.show', $category));
+				alert('success', 'categories.marked_read', 0, ['category' => $category->title]);
+				return redirect(route('category.show', $category));
 			}
 		}
 
-		Forum::alert('success', 'threads.marked_read');
+		alert('success', 'threads.marked_read');
 		return redirect(config('forum.routing.root'));
 	}
 
@@ -90,7 +131,7 @@ class ThreadController extends BaseController
 
 		$categories = [];
 		if (Gate::allows('moveThreadsFrom', $category)) {
-			$categories = $this->api('category.index')->parameters(['where' => ['category_id' => 0]], ['where' => ['enable_threads' => 1]])->get();
+			$categories = Category::where( [ 'category_id' => 0, 'enable_threads' => 1 ] )->get();
 		}
 
 		return view('forum.thread.show', compact('categories', 'category', 'thread'));
@@ -107,9 +148,9 @@ class ThreadController extends BaseController
 		$category = $this->api('category.fetch', $request->route('category'))->get();
 
 		if (!$category->threadsEnabled) {
-			Forum::alert('warning', 'categories.threads_disabled');
+			alert('warning', 'categories.threads_disabled');
 
-			return redirect(Forum::route('category.show', $category));
+			return redirect(route('category.show', $category));
 		}
 
 		event(new UserCreatingThread($category));
@@ -128,9 +169,9 @@ class ThreadController extends BaseController
 		$category = $this->api('category.fetch', $request->route('category'))->get();
 
 		if (!$category->threadsEnabled) {
-			Forum::alert('warning', 'categories.threads_disabled');
+			alert('warning', 'categories.threads_disabled');
 
-			return redirect(Forum::route('category.show', $category));
+			return redirect(route('category.show', $category));
 		}
 
 		$thread = [
@@ -142,9 +183,9 @@ class ThreadController extends BaseController
 
 		$thread = $this->api('thread.store')->parameters($thread)->post();
 
-		Forum::alert('success', 'threads.created');
+		alert('success', 'threads.created');
 
-		return redirect(Forum::route('thread.show', $thread));
+		return redirect(route('thread.show', $thread));
 	}
 
 	/**
@@ -159,9 +200,9 @@ class ThreadController extends BaseController
 
 		$thread = $this->api("thread.{$action}", $request->route('thread'))->parameters($request->all())->patch();
 
-		Forum::alert('success', 'threads.updated', 1);
+		alert('success', 'threads.updated', 1);
 
-		return redirect(Forum::route('thread.show', $thread));
+		return redirect(route('thread.show', $thread));
 	}
 
 	/**
@@ -184,9 +225,9 @@ class ThreadController extends BaseController
 
 		$thread = $this->api('thread.delete', $request->route('thread'))->parameters($parameters)->delete();
 
-		Forum::alert('success', 'threads.deleted', 1);
+		alert('success', 'threads.deleted', 1);
 
-		return redirect($permanent ? Forum::route('category.show', $thread->category) : Forum::route('thread.show', $thread));
+		return redirect($permanent ? route('category.show', $thread->category) : route('thread.show', $thread));
 	}
 
 	/**

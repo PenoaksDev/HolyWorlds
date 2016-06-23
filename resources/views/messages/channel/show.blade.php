@@ -8,7 +8,7 @@
 		@endforeach
 	</div>
 	<form id="compose" class="form-horizontal">
-		<div class="form-group" style="margin: 0;">
+		<div class="form-group" style="margin: 0 0 5px 0;">
 			<textarea class="form-control" id="message" name="message" placeholder="Send a message"></textarea>
 		</div>
 		<div class="form-group" style="margin: 0;">
