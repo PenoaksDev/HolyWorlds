@@ -1,6 +1,6 @@
 <tr class="category {{ isset($class) ? $class : '' }}">
 	<td {{ $category->threadsEnabled ? '' : 'colspan=5'}}>
-		<a href="{{ route('forum.category.show', $category) }}" class="title">
+		<a href="{{ Helper::route('forum.category.show', $category) }}" class="title">
 			{{ $category->title }}
 		</a>
 		<br>
@@ -16,7 +16,7 @@
 	</td>
 	<td class="right-align hidden-xs hidden-sm">
 		@if ($category->newestThread)
-		<a href="{{ route('forum.thread.show', $category->newestThread) }}">
+		<a href="{{ Helper::route('forum.thread.show', $category->newestThread) }}">
 			{{ $category->newestThread->title }}<br />
 			<small>{{ $category->newestThread->authorName }}</small>
 		</a>
@@ -24,7 +24,7 @@
 	</td>
 	<td class="right-align hidden-xs hidden-sm">
 		@if ($category->latestActiveThread && $category->latestActiveThread->lastPost)
-		<a href="{{ route('forum.thread.show', $category->latestActiveThread->lastPost) }}">
+		<a href="{{ Helper::route('forum.thread.show', $category->latestActiveThread->lastPost) }}">
 			{{ $category->latestActiveThread->title }} <br />
 			<small>{{ $category->latestActiveThread->lastPost->authorName }}</small>
 		</a>

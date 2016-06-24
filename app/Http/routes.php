@@ -222,22 +222,49 @@ $r->model('comment', \Slynova\Commentable\Models\Comment::class);
 $r->model('event', \App\Models\Event::class);
 
 $r->group(["prefix" => "forum", "namespace" => "Forum", "as" => "forum."], function ($r){
-	$r->get("/", "CategoryController@index");
+	$r->get('/', ['as' => 'index', 'uses' => "CategoryController@index"]);
 
-	$r->group(['prefix' => 'category', 'as' => 'category.'], function ($r)
-	{
-		$r->get('/', ['as' => 'list', 'uses' => 'CategoryController@list']);
-		$r->get('{id}', ['as' => 'show', 'uses' => 'CategoryController@show']);
+	$r->get('new', ['as' => 'index-new', 'uses' => "CategoryController@indexNew"]);
+	$r->patch('new', ['as' => 'mark-new', 'uses' => "CategoryController@markNew"]);
+
+	// Categories
+	$r->post('category/create', ['as' => 'category.store', 'uses' => "CategoryController@store"]);
+
+	$r->group(['prefix' => '{category}-{category_slug}'], function ($r) {
+		$r->get('/', ['as' => 'category.show', 'uses' => "CategoryController@show"]);
+		$r->patch('/', ['as' => 'category.update', 'uses' => "CategoryController@update"]);
+		$r->delete('/', ['as' => 'category.delete', 'uses' => "CategoryController@destroy"]);
+
+		// Threads
+		$r->get('{thread}-{thread_slug}', ['as' => 'thread.show', 'uses' => "ThreadController@show"]);
+		$r->get('thread/create', ['as' => 'thread.create', 'uses' => "ThreadController@create"]);
+		$r->post('thread/create', ['as' => 'thread.store', 'uses' => "ThreadController@store"]);
+		$r->patch('{thread}-{thread_slug}', ['as' => 'thread.update', 'uses' => "ThreadController@update"]);
+		$r->delete('{thread}-{thread_slug}', ['as' => 'thread.delete', 'uses' => "ThreadController@destroy"]);
+
+		// Posts
+		$r->get('{thread}-{thread_slug}/post/{post}', ['as' => 'post.show', 'uses' => "PostController@show"]);
+		$r->get('{thread}-{thread_slug}/reply', ['as' => 'post.create', 'uses' => "PostController@create"]);
+		$r->post('{thread}-{thread_slug}/reply', ['as' => 'post.store', 'uses' => "PostController@store"]);
+		$r->get('{thread}-{thread_slug}/post/{post}/edit', ['as' => 'post.edit', 'uses' => "PostController@edit"]);
+		$r->patch('{thread}-{thread_slug}/{post}', ['as' => 'post.update', 'uses' => "PostController@update"]);
+		$r->delete('{thread}-{thread_slug}/{post}', ['as' => 'post.delete', 'uses' => "PostController@destroy"]);
 	});
 
-	// $r->group(['prefix' => 'api', 'namespace' => 'API', 'as' => 'api.', 'middleware' => 'forum.api.auth'], function ($r)
+	// Bulk actions
+	$r->group(['prefix' => 'bulk', 'as' => 'bulk.'], function ($r) {
+		$r->patch('thread', ['as' => 'thread.update', 'uses' => "ThreadController@bulkUpdate"]);
+		$r->delete('thread', ['as' => 'thread.delete', 'uses' => "ThreadController@bulkDestroy"]);
+		$r->patch('post', ['as' => 'post.update', 'uses' => "PostController@bulkUpdate"]);
+		$r->delete('post', ['as' => 'post.delete', 'uses' => "PostController@bulkDestroy"]);
+	});
 
 	// Categories
 	$r->group(['prefix' => 'category', 'as' => 'category.'], function ($r)
 	{
 		$r->get('/', ['as' => 'index', 'uses' => 'CategoryController@index']);
-		$r->post('/', ['as' => 'create', 'uses' => 'CategoryController@create']);
-		$r->get('{id}', ['as' => 'show', 'uses' => 'CategoryController@show']);
+		$r->post('/', ['as' => 'store', 'uses' => 'CategoryController@store']);
+		$r->get('{id}', ['as' => 'fetch', 'uses' => 'CategoryController@fetch']);
 		$r->delete('{id}', ['as' => 'delete', 'uses' => 'CategoryController@destroy']);
 		$r->patch('{id}/enable-threads', ['as' => 'enable-threads', 'uses' => 'CategoryController@enableThreads']);
 		$r->patch('{id}/disable-threads', ['as' => 'disable-threads', 'uses' => 'CategoryController@disableThreads']);

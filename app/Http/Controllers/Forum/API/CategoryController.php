@@ -8,211 +8,211 @@ use App\Models\Category;
 
 class CategoryController extends BaseController
 {
-    /**
-     * Return the model to use for this controller.
-     *
-     * @return Category
-     */
-    protected function model()
-    {
-        return new Category;
-    }
+	/**
+	 * Return the model to use for this controller.
+	 *
+	 * @return Category
+	 */
+	protected function model()
+	{
+		return new Category;
+	}
 
-    /**
-     * GET: Return an index of categories.
-     *
-     * @param  Request  $request
-     * @return JsonResponse|Response
-     */
-    public function index(Request $request)
-    {
-        $categories = $this->model()->withRequestScopes($request);
+	/**
+	 * GET: Return an index of categories.
+	 *
+	 * @param  Request  $request
+	 * @return JsonResponse|Response
+	 */
+	public function index(Request $request)
+	{
+		$categories = $this->model()->withRequestScopes($request);
 
-        $categories = $categories->get()->filter(function ($category) {
-            if ($category->private) {
-                return Gate::allows('view', $category);
-            }
+		$categories = $categories->get()->filter(function ($category) {
+			if ($category->private) {
+				return Gate::allows('view', $category);
+			}
 
-            return true;
-        });
+			return true;
+		});
 
-        return $this->response($categories);
-    }
+		return $this->response($categories);
+	}
 
-    /**
-     * GET: Return a category by ID.
-     *
-     * @param  int  $id
-     * @param  Request  $request
-     * @return JsonResponse|Response
-     */
-    public function fetch($id, Request $request)
-    {
-        $category = $this->model()->find($id);
+	/**
+	 * GET: Return a category by ID.
+	 *
+	 * @param  int  $id
+	 * @param  Request  $request
+	 * @return JsonResponse|Response
+	 */
+	public function fetch($id, Request $request)
+	{
+		$category = $this->model()->find($id);
 
-        if (is_null($category) || !$category->exists) {
-            return $this->notFoundResponse();
-        }
+		if (is_null($category) || !$category->exists) {
+			return $this->notFoundResponse();
+		}
 
-        if ($category->private) {
-            $this->authorize('view', $category);
-        }
+		if ($category->private) {
+			$this->authorize('view', $category);
+		}
 
-        return $this->response($category);
-    }
+		return $this->response($category);
+	}
 
-    /**
-     * POST: Create a new category.
-     *
-     * @param  Request  $request
-     * @return JsonResponse|Response
-     */
-    public function store(Request $request)
-    {
-        $this->authorize('createCategories');
+	/**
+	 * POST: Create a new category.
+	 *
+	 * @param  Request  $request
+	 * @return JsonResponse|Response
+	 */
+	public function store(Request $request)
+	{
+		$this->authorize('createCategories');
 
-        $this->validate($request, [
-            'title'             => ['required'],
-            'weight'            => ['required'],
-            'enable_threads'    => ['required'],
-            'private'           => ['required']
-        ]);
+		$this->validate($request, [
+			'title'			 => ['required'],
+			'weight'			=> ['required'],
+			'enable_threads'	=> ['required'],
+			'private'		   => ['required']
+		]);
 
-        $category = $this->model()->create($request->only(['category_id', 'title', 'description', 'weight', 'enable_threads', 'private']));
+		$category = $this->model()->create($request->only(['category_id', 'title', 'description', 'weight', 'enable_threads', 'private']));
 
-        return $this->response($category, 201);
-    }
+		return $this->response($category, 201);
+	}
 
-    /**
-     * DELETE: Delete a category.
-     *
-     * @param  int  $id
-     * @param  Request  $request
-     * @return JsonResponse|Response
-     */
-    public function destroy($id, Request $request)
-    {
-        $category = $this->model()->find($id);
+	/**
+	 * DELETE: Delete a category.
+	 *
+	 * @param  int  $id
+	 * @param  Request  $request
+	 * @return JsonResponse|Response
+	 */
+	public function destroy($id, Request $request)
+	{
+		$category = $this->model()->find($id);
 
-        if (!$category->threads->isEmpty() || !$category->children->isEmpty()) {
-            return $this->buildFailedValidationResponse($request, trans('forum.validation.category_is_empty'));
-        }
+		if (!$category->threads->isEmpty() || !$category->children->isEmpty()) {
+			return $this->buildFailedValidationResponse($request, trans('forum.validation.category_is_empty'));
+		}
 
-        return $this->deleteModel($category, 'delete');
-    }
+		return $this->deleteModel($category, 'delete');
+	}
 
-    /**
-     * PATCH: Move a category.
-     *
-     * @param  int  $id
-     * @param  Request  $request
-     * @return JsonResponse|Response
-     */
-    public function move($id, Request $request)
-    {
-        $this->authorize('moveCategories');
-        $this->validate($request, ['category_id' => ['required']]);
+	/**
+	 * PATCH: Move a category.
+	 *
+	 * @param  int  $id
+	 * @param  Request  $request
+	 * @return JsonResponse|Response
+	 */
+	public function move($id, Request $request)
+	{
+		$this->authorize('moveCategories');
+		$this->validate($request, ['category_id' => ['required']]);
 
-        $category = $this->model()->find($id);
+		$category = $this->model()->find($id);
 
-        return $this->updateModel($category, ['category_id' => $request->input('category_id')]);
-    }
+		return $this->updateModel($category, ['category_id' => $request->input('category_id')]);
+	}
 
-    /**
-     * PATCH: Enable threads in a category.
-     *
-     * @param  int  $id
-     * @param  Request  $request
-     * @return JsonResponse|Response
-     */
-    public function enableThreads($id, Request $request)
-    {
-        $category = $this->model()->where('enable_threads', 0)->find($id);
+	/**
+	 * PATCH: Enable threads in a category.
+	 *
+	 * @param  int  $id
+	 * @param  Request  $request
+	 * @return JsonResponse|Response
+	 */
+	public function enableThreads($id, Request $request)
+	{
+		$category = $this->model()->where('enable_threads', 0)->find($id);
 
-        return $this->updateModel($category, ['enable_threads' => 1], 'enableThreads');
-    }
+		return $this->updateModel($category, ['enable_threads' => 1], 'enableThreads');
+	}
 
-    /**
-     * PATCH: Disable threads in a category.
-     *
-     * @param  int  $id
-     * @param  Request  $request
-     * @return JsonResponse|Response
-     */
-    public function disableThreads($id, Request $request)
-    {
-        $category = $this->model()->where('enable_threads', 1)->find($id);
+	/**
+	 * PATCH: Disable threads in a category.
+	 *
+	 * @param  int  $id
+	 * @param  Request  $request
+	 * @return JsonResponse|Response
+	 */
+	public function disableThreads($id, Request $request)
+	{
+		$category = $this->model()->where('enable_threads', 1)->find($id);
 
-        if (!$category->threads->isEmpty()) {
-            return $this->buildFailedValidationResponse($request, trans('forum.validation.category_has_no_threads'));
-        }
+		if (!$category->threads->isEmpty()) {
+			return $this->buildFailedValidationResponse($request, trans('forum.validation.category_has_no_threads'));
+		}
 
-        return $this->updateModel($category, ['enable_threads' => 0], 'enableThreads');
-    }
+		return $this->updateModel($category, ['enable_threads' => 0], 'enableThreads');
+	}
 
-    /**
-     * PATCH: Make a category public.
-     *
-     * @param  int  $id
-     * @param  Request  $request
-     * @return JsonResponse|Response
-     */
-    public function makePublic($id, Request $request)
-    {
-        $this->authorize('createCategories');
+	/**
+	 * PATCH: Make a category public.
+	 *
+	 * @param  int  $id
+	 * @param  Request  $request
+	 * @return JsonResponse|Response
+	 */
+	public function makePublic($id, Request $request)
+	{
+		$this->authorize('createCategories');
 
-        $category = $this->model()->where('private', 1)->find($id);
+		$category = $this->model()->where('private', 1)->find($id);
 
-        return $this->updateModel($category, ['private' => 0]);
-    }
+		return $this->updateModel($category, ['private' => 0]);
+	}
 
-    /**
-     * PATCH: Make a category private.
-     *
-     * @param  int  $id
-     * @param  Request  $request
-     * @return JsonResponse|Response
-     */
-    public function makePrivate($id, Request $request)
-    {
-        $this->authorize('createCategories');
+	/**
+	 * PATCH: Make a category private.
+	 *
+	 * @param  int  $id
+	 * @param  Request  $request
+	 * @return JsonResponse|Response
+	 */
+	public function makePrivate($id, Request $request)
+	{
+		$this->authorize('createCategories');
 
-        $category = $this->model()->where('private', 0)->find($id);
+		$category = $this->model()->where('private', 0)->find($id);
 
-        return $this->updateModel($category, ['private' => 1]);
-    }
+		return $this->updateModel($category, ['private' => 1]);
+	}
 
-    /**
-     * PATCH: Rename a category.
-     *
-     * @param  int  $id
-     * @param  Request  $request
-     * @return JsonResponse|Response
-     */
-    public function rename($id, Request $request)
-    {
-        $this->authorize('renameCategories');
-        $this->validate($request, ['title' => ['required']]);
+	/**
+	 * PATCH: Rename a category.
+	 *
+	 * @param  int  $id
+	 * @param  Request  $request
+	 * @return JsonResponse|Response
+	 */
+	public function rename($id, Request $request)
+	{
+		$this->authorize('renameCategories');
+		$this->validate($request, ['title' => ['required']]);
 
-        $category = $this->model()->find($id);
+		$category = $this->model()->find($id);
 
-        return $this->updateModel($category, $request->only(['title', 'description']));
-    }
+		return $this->updateModel($category, $request->only(['title', 'description']));
+	}
 
-    /**
-     * PATCH: Reorder a category.
-     *
-     * @param  int  $id
-     * @param  Request  $request
-     * @return JsonResponse|Response
-     */
-    public function reorder($id, Request $request)
-    {
-        $this->authorize('moveCategories');
-        $this->validate($request, ['weight' => ['required']]);
+	/**
+	 * PATCH: Reorder a category.
+	 *
+	 * @param  int  $id
+	 * @param  Request  $request
+	 * @return JsonResponse|Response
+	 */
+	public function reorder($id, Request $request)
+	{
+		$this->authorize('moveCategories');
+		$this->validate($request, ['weight' => ['required']]);
 
-        $category = $this->model()->find($id);
+		$category = $this->model()->find($id);
 
-        return $this->updateModel($category, ['weight' => $request->input('weight')]);
-    }
+		return $this->updateModel($category, ['weight' => $request->input('weight')]);
+	}
 }

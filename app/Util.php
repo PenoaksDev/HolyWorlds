@@ -122,9 +122,9 @@ class Util
 			}
 			else
 			{
-				echo("<td style=\"text-align: center; font-weight: bold;\" class=\"" . $class . "\" colspan=\"" . count($headerArray) . "\">" . $row . "</td>");
+				echo( "<td style=\"text-align: center; font-weight: bold;\" class=\"" . $class . "\" colspan=\"" . count( $headerArray ) . "\">" . $row . "</td>" );
 			}
-			echo("</tr>");
+			echo( "</tr>" );
 			$x++;
 		}
 		echo("</table>");
@@ -138,5 +138,16 @@ class Util
 	public static function endsWith($haystack, $needle)
 	{
 		return substr( $haystack, -strlen( $needle ) ) === $needle;
+	}
+
+	/**
+	 * Convert the given string to a URL-friendly slug.
+	 *
+	 * @param  string  $string
+	 * @return string
+	 */
+	public static function slugify($string)
+	{
+		return str_slug( str_replace( '&amp;', 'and', $string ), '-' );
 	}
 }

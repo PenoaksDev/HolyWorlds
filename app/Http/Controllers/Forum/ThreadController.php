@@ -53,7 +53,7 @@ class ThreadController extends BaseController
 		$threads = $threads->filter(function ($thread)
 		{
 			return (!$thread->category->private || Gate::allows('view', $thread->category));
-		})->get();
+		});
 
 		event(new UserViewingNew($threads));
 

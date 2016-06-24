@@ -154,8 +154,6 @@ return [
 		App\Providers\AuthServiceProvider::class,
 		App\Providers\EventServiceProvider::class,
 		App\Providers\RouteServiceProvider::class,
-		// App\Providers\ForumServerProvider::class,
-		// App\Providers\ForumFrontendServiceProvider::class,
 		Krucas\Notification\NotificationServiceProvider::class,
 		Laravel\Socialite\SocialiteServiceProvider::class,
 		TeamTeaTime\Filer\FilerServiceProvider::class,
@@ -166,6 +164,12 @@ return [
 		Intervention\Image\ImageServiceProvider::class,
 		Barryvdh\Debugbar\ServiceProvider::class,
 		Fenos\Notifynder\NotifynderServiceProvider::class,
+
+		/*
+		 * Developer Providers...
+		 */
+		Way\Generators\GeneratorsServiceProvider::class,
+		Xethron\MigrationsGenerator\MigrationsGeneratorServiceProvider::class,
 	],
 
 	/*

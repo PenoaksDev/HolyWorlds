@@ -61,6 +61,28 @@ class CategoryController extends BaseController
 	}
 
 	/**
+	 * GET: Return a category by ID.
+	 *
+	 * @param  int  $id
+	 * @param  Request  $request
+	 * @return JsonResponse|Response
+	 */
+	public function fetch($id, Request $request)
+	{
+		$category = Category::find($id);
+
+		if (is_null($category) || !$category->exists) {
+			return $this->notFoundResponse();
+		}
+
+		if ($category->private) {
+			$this->authorize('view', $category);
+		}
+
+		return $this->response($category);
+	}
+
+	/**
 	 * POST: Store a new category.
 	 *
 	 * @param  Request  $request
@@ -72,7 +94,7 @@ class CategoryController extends BaseController
 
 		Forum::alert('success', 'categories.created');
 
-		return redirect(Forum::route('category.show', $category));
+		return redirect(route('category.show', $category));
 	}
 
 	/**

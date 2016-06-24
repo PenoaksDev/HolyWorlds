@@ -27,6 +27,8 @@
         "golonka/bbcodeparser": "^2.2"
     },
     "require-dev": {
+        "xethron/migrations-generator": "dev-l5",
+        "way/generators": "dev-feature/laravel-five-stable"
     },
     "autoload": {
         "classmap": [
@@ -56,5 +58,11 @@
     },
     "config": {
         "preferred-install": "dist"
+    },
+    "repositories": {
+        "repo-name": {
+            "type": "git",
+            "url": "git@github.com:jamisonvalenta/Laravel-4-Generators.git"
+        }
     }
 }
