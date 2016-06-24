@@ -26,7 +26,7 @@ return [
 	|
 	*/
 
-	'default' => env('DB_CONNECTION', 'mysql'),
+	'default' => env('DB_CONNECTION', 'sqlite'),
 
 	/*
 	|--------------------------------------------------------------------------
@@ -48,11 +48,11 @@ return [
 
 		'sqlite' => [
 			'driver' => 'sqlite',
-			'database' => env('DB_DATABASE', database_path('database.sqlite')),
+			'database' => env('DB_DATABASE', database_path('db.sqlite')),
 			'prefix' => '',
 		],
 
-        /* Old Bluehost database connection used for DB migration script */
+	        /* Old Bluehost database connection used for DB migration script */
 		'bluehost' => [
 			'driver' => 'mysql',
 			'host' => env('BH_HOST', 'localhost'),
