@@ -46,7 +46,7 @@ class Setting extends Model
 			if ( is_null( $value ) )
 				return false;
 			else
-				return setDefault( $value, $user );
+				return $this->setDefault( $value, $user );
 		if ( is_null( $user ) )
 			$user = Auth::user();
 		if ( $this->public_perm && Permissions::checkPermission( $this->public_perm ) !== false )
@@ -76,7 +76,7 @@ class Setting extends Model
 			else
 			{
 				if ( is_null( $this->def ) )
-					setDefault( $def, $user );
+					$this->setDefault( $def, $user );
 				return $def;
 			}
 		}
@@ -89,7 +89,7 @@ class Setting extends Model
 			else
 			{
 				if ( is_null( $this->def ) )
-					setDefault( $def, $user );
+					$this->setDefault( $def, $user );
 				return $def;
 			}
 		else
