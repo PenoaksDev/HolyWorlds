@@ -96,7 +96,7 @@ class Setting extends Model
 			return $custom->value;
 	}
 
-	public function type()
+	public function typeString()
 	{
 		switch ( $this->type )
 		{
