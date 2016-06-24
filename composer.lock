@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "3b0ddc6ac4b5a72587060a3ffc6f79a1",
-    "content-hash": "31136c3253f4c8e3f57b48b60d0de0cc",
+    "hash": "2caec028c12fd4463757e1b8ca71d512",
+    "content-hash": "6a71fb984cc2144de45c9d3c9cd60713",
     "packages": [
         {
             "name": "barryvdh/laravel-debugbar",
@@ -3848,6 +3848,52 @@
                 "dump"
             ],
             "time": "2016-05-24 10:03:10"
+        },
+        {
+            "name": "teamteatime/laravel-filer",
+            "version": "1.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Team-Tea-Time/laravel-filer.git",
+                "reference": "a72e391a9b5a346c1f0c7647642f8e15d5f6a011"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Team-Tea-Time/laravel-filer/zipball/a72e391a9b5a346c1f0c7647642f8e15d5f6a011",
+                "reference": "a72e391a9b5a346c1f0c7647642f8e15d5f6a011",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "TeamTeaTime\\Filer\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Riari",
+                    "email": "hello@ricko.me"
+                },
+                {
+                    "name": "NeeHi",
+                    "email": "nick.snape@hotmail.com"
+                }
+            ],
+            "description": "A simple Laravel ORM file attachment solution supporting multiple relationship types",
+            "keywords": [
+                "attachments",
+                "files",
+                "laravel",
+                "laravel-5"
+            ],
+            "time": "2016-06-02 16:49:09"
         },
         {
             "name": "vlucas/phpdotenv",

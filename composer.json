@@ -10,6 +10,7 @@
 		"msurguy/honeypot": "dev-master",
 		"laravel/socialite": "^2.0",
 		"edvinaskrucas/notification": "^5.1",
+		"teamteatime/laravel-filer": "^1.0",
 		"graham-campbell/markdown": "^6.1",
 		"rtconner/laravel-tagging": "~2.1",
 		"maddhatter/laravel-fullcalendar": "^1.2",

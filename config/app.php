@@ -154,6 +154,7 @@ return [
 		App\Providers\AuthServiceProvider::class,
 		App\Providers\EventServiceProvider::class,
 		App\Providers\RouteServiceProvider::class,
+		TeamTeaTime\Filer\FilerServiceProvider::class,
 		Krucas\Notification\NotificationServiceProvider::class,
 		Laravel\Socialite\SocialiteServiceProvider::class,
 		GrahamCampbell\Markdown\MarkdownServiceProvider::class,
