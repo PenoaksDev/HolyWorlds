@@ -3,6 +3,7 @@
 /vendor
 /node_modules
 /public/storage
+/database/db.sqlite
 
 # Ignore error log files
 error_log
