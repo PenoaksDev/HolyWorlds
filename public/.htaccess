@@ -7,11 +7,8 @@
 
 	RewriteRule ^.well-known - [L] // Ignore Let's Encrypt Domain Verification Files
 
-	RewriteCond %{HTTP_HOST} dev.holyworlds.org [NC]
-	RewriteCond %{HTTP_HOST} !^dev.holyworlds.org$ [NC]
-	RewriteRule ^(.*)$ https://dev.holyworlds.org/$1 [L,R=301]
-
 	RewriteCond %{SERVER_PORT} 80
+	RewriteCond %{HTTP_HOST} \.holyworlds\.org$ [NC]
 	RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R,L]
 
 	RewriteCond %{REQUEST_FILENAME} !-d
