@@ -121,4 +121,9 @@ class Setting extends Model
 	{
 		$this->set( null, $user );
 	}
+
+	public function __toString()
+	{
+		return $this->value();
+	}
 }
