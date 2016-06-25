@@ -56,7 +56,7 @@ class User extends Authenticatable
 
 	public function getIsNewAttribute()
 	{
-		return Permissions::checkPermission( Setting::get( 'default_group', 'sys.user' ) );
+		return Permissions::checkPermission( Setting::get( 'default_group' ) );
 	}
 
 	public function getSlugAttribute()

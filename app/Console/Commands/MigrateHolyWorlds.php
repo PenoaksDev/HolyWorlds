@@ -42,7 +42,7 @@ class MigrateHolyWorlds extends Command
 
 		$this->info("Migrating users...");
 		$query = $bh->table('users')->where('user_type', '!=', '2')->orderBy('user_id');
-		$defGroup = Setting::get('default_group', 'member');
+		$defGroup = Setting::get( 'default_group' );
 		$userMapping = [];
 		$offset = 0;
 		$max = $query->count();

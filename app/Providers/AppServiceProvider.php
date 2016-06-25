@@ -4,22 +4,14 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Foundation\AliasLoader;
 use App\Http\Middleware\Permissions;
+use App\Models\Setting;
 use App\Helper;
 use App\Util;
+use Config;
 use Log;
 
 class AppServiceProvider extends ServiceProvider
 {
-	/**
-	 * Bootstrap any application services.
-	 *
-	 * @return void
-	 */
-	public function boot()
-	{
-		//
-	}
-
 	/**
 	 * Register any application services.
 	 *

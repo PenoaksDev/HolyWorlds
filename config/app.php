@@ -164,6 +164,7 @@ return [
 		Intervention\Image\ImageServiceProvider::class,
 		Barryvdh\Debugbar\ServiceProvider::class,
 		Fenos\Notifynder\NotifynderServiceProvider::class,
+		App\Providers\FinalServiceProvider::class,
 
 		/*
 		 * Developer Providers...

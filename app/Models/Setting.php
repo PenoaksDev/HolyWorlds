@@ -3,12 +3,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Http\Middleware\Permissions;
+use Config;
 use Auth;
 use DB;
 use Log;
 
 class Setting extends Model
 {
+	private static $cachedSettings;
+
 	protected $fillable = ['key', 'global_perm', 'public_perm', 'global_only', 'type', 'enum', 'value'];
 	protected $primaryKey = 'key';
 	public $timestamps = false;
@@ -16,31 +19,44 @@ class Setting extends Model
 
 	public static function boot()
 	{
-		Setting::creating( function ( $setting )
-		{
+		self::$cachedSettings = Config::get('holyworlds.settings');
+
+		Setting::creating( function ( $setting ) {
 			if ( empty( $setting->type ) )
 				$setting->type = gettype( $setting ) == 'boolean' ? 1 : 0;
+
+			if ( !array_key_exists( $setting->key, Setting::$cachedSettings ) )
+				abort( 500, 'Key does not exist in the settings facade' );
 		} );
 	}
 
-	public static function get($key, $def = null, $user = null)
+	public static function get( $key )
 	{
 		$setting = static::findOrNew( $key );
 		$setting->key = $key; // Why is the key not set?
-		$setting->value( $def, $user );
 		return $setting;
 	}
 
-	public function setDefault( $def, $user = null )
+	public static function getValue( $key, $user = null )
 	{
-		if ( is_null( $user ) )
-			$user = Auth::user();
+		$setting = static::findOrNew( $key );
+		$setting->key = $key; // Why is the key not set?
+		return $setting->value( $user );
+	}
+
+	public function setEnumAttribute( $enum )
+	{
+		$this->type = 2;
+		$this->attributes['enum'] = implode( '|', $enum );
+	}
+
+	public function setDefAttribute( $value )
+	{
 		if ( $this->global_perm && Permissions::checkPermission( $this->global_perm ) !== false )
-			return false;
+			return;
 		if ( $this->type == 2 && !in_array( $value, $this->enumValues ) )
-			return false;
-		$this->def = $def;
-		return $this->save();
+			return;
+		$this->attributes['def'] = $value;
 	}
 
 	public function set( $value, $user = null )

@@ -157,7 +157,7 @@ class Thread extends BaseModel
 	 */
 	public function getOldAttribute()
 	{
-		$age = Setting::findOrNew( 'forum_trash_threshold' )->value( '7 days' );
+		$age = Setting::get( 'forum_trash_threshold' );
 		return (!$age || $this->updated_at->timestamp < (time() - strtotime($age, 0)));
 	}
 

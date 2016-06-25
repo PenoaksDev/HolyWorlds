@@ -180,8 +180,8 @@ class AuthController extends Controller
 			'password' => bcrypt($request->input('password'))
 		]);
 
-		// Given them the default role
-		$user->roles()->attach(Setting::get('default_role', 100));
+		// Given them the default group
+		$user->addGroup(Setting::get('default_group'));
 
 		// Give the user a profile
 		UserProfile::create(['id' => $user->id]);

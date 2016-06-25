@@ -60,7 +60,7 @@ class Util
 			return $phone;
 	}
 
-	public static function clean($Arr, $AllowedKeys)
+	public static function filter($Arr, $AllowedKeys)
 	{
 		return array_intersect_key($Arr, array_flip($AllowedKeys));
 	}
