@@ -5,14 +5,14 @@ use Illuminate\Database\Eloquent\Model;
 use App\Http\Middleware\Permissions;
 use Auth;
 use DB;
+use Log;
 
 class Setting extends Model
 {
-	protected $primaryKey = 'key';
-
-	public $timestamps = false;
-
 	protected $fillable = ['key', 'global_perm', 'public_perm', 'global_only', 'type', 'enum', 'value'];
+	protected $primaryKey = 'key';
+	public $timestamps = false;
+	public $incrementing = false;
 
 	public static function boot()
 	{
@@ -25,7 +25,10 @@ class Setting extends Model
 
 	public static function get($key, $def = null, $user = null)
 	{
-		return static::findOrNew( $key )->value( $def, $user );
+		$setting = static::findOrNew( $key );
+		$setting->key = $key; // Why is the key not set?
+		$setting->value( $def, $user );
+		return $setting;
 	}
 
 	public function setDefault( $def, $user = null )

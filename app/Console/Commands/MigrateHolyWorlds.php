@@ -2,6 +2,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use App\Models\Forum\Category;
 use App\Models\Forum\Thread;
 use App\Models\Forum\Post;
 use App\Models\User;
@@ -41,7 +42,7 @@ class MigrateHolyWorlds extends Command
 
 		$this->info("Migrating users...");
 		$query = $bh->table('users')->where('user_type', '!=', '2')->orderBy('user_id');
-		$defGroup = Setting::findOrNew('default_group')->value('member');
+		$defGroup = Setting::get('default_group', 'member');
 		$userMapping = [];
 		$offset = 0;
 		$max = $query->count();
@@ -120,6 +121,44 @@ class MigrateHolyWorlds extends Command
 				$profile->save();
 
 				$userMapping[$row->user_id] = $user->id;
+			}
+
+			unset( $chunk );
+		}
+
+		/*
+		 * Migrate phpBB categories
+		 */
+		$this->info("Transcading categories table...");
+		Category::getQuery()->delete();
+
+		$this->info("Migrating categories table...");
+		$query = $bh->table('holyworldsforum_forums');
+		$offset = 0;
+		$max = $query->count();
+		$this->info( "Found " . $max . " categories to migrate, grabbing in chunks of " . $chunks . " rows." );
+		while( $offset < $max )
+		{
+			$this->info( "Querying for chunk " . ( round( $offset / $chunks ) + 1 ) . " of " . ( round( $max / $chunks ) + 1 ) );
+			$chunk = $query->offset( $offset )->limit( $chunks )->get();
+
+			foreach ( $chunk as $row )
+			{
+				$offset++;
+				$this->info( "Row " . $offset . " of " . $max . ":: Migrating category # " . $row->forum_id );
+
+				Category::create([
+					'id' => $row->forum_id,
+					'category_id' => $row->parent_id,
+					'title' => $row->forum_name,
+					'description' => $row->forum_desc,
+					'weight' => 0,
+					'enable_threads' => 1,
+					'permission' => '',
+					'created_at' => Carbon::createFromTimestamp( $row->forum_last_post_time ),
+					'updated_at' => Carbon::createFromTimestamp( $row->forum_last_post_time )
+					// forum_status -> 1 = locked
+				])->save();
 			}
 
 			unset( $chunk );

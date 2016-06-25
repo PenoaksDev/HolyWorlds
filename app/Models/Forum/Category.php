@@ -27,7 +27,7 @@ class Category extends BaseModel
 	 *
 	 * @var array
 	 */
-	protected $fillable = ['category_id', 'title', 'description', 'weight', 'enable_threads', 'private'];
+	protected $fillable = ['id', 'category_id', 'title', 'description', 'weight', 'enable_threads', 'permission', 'created_at', 'updated_at'];
 
 	/**
 	 * Create a new category model instance.

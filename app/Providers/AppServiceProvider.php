@@ -6,6 +6,7 @@ use Illuminate\Foundation\AliasLoader;
 use App\Http\Middleware\Permissions;
 use App\Helper;
 use App\Util;
+use Log;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -40,5 +41,6 @@ class AppServiceProvider extends ServiceProvider
 		$loader->alias('Permissions', Permissions::class);
 		$loader->alias('Helper', Helper::class);
 		$loader->alias('Util', Util::class);
+		$loader->alias('Log', Log::class);
 	}
 }

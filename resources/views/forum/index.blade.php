@@ -1,5 +1,4 @@
 @extends ('forum.master')
-
 @section ('title', 'Forum Index')
 
 @section ('content')
