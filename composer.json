@@ -1,17 +1,48 @@
 {
-    "name": "penoaks/framework-project",
-    "description": "Provides a basic project example for Penoaks Framework",
-    "type": "project",
-    "require": {
-        "penoaks/framework": "dev-bleeding",
-        "penoaks/framework-laravel-compat": "*"
-    },
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Penoaks Publishing Co.",
-            "email": "development@penoaks.com"
-        }
+  "name": "penoaks/framework-project",
+  "description": "Provides a basic project example for Penoaks Framework",
+  "keywords": [
+    "framework",
+    "penoaks"
+  ],
+  "license": "MIT",
+  "type": "project",
+  "require": {
+    "php": ">=5.5.9",
+    "penoaks/framework": "dev-bleeding",
+    "penoaks/framework-laravel-compat": "^5"
+  },
+  "autoload": {
+    "psr-4": {
+      "\\": "src/"
+    }
+  },
+  "autoload-dev": {
+  },
+  "authors": [
+    {
+      "name": "Penoaks Publishing Co.",
+      "email": "development@penoaks.com"
+    }
+  ],
+  "minimum-stability": "dev",
+  "scripts": {
+    "post-root-package-install": [
+      "php -r \"copy('.env.example', '.env');\""
     ],
-    "minimum-stability": "dev"
+    "post-create-project-cmd": [
+      "php fw key:generate"
+    ],
+    "post-install-cmd": [
+      "Penoaks\\ComposerScripts::postInstall",
+      "php fw optimize"
+    ],
+    "post-update-cmd": [
+      "Penoaks\\ComposerScripts::postUpdate",
+      "php fw optimize"
+    ]
+  },
+  "config": {
+    "preferred-install": "dist"
+  }
 }

@@ -794,11 +794,11 @@
             },
             "type": "composer-plugin",
             "extra": {
-                "class": "Foundation\\Installer\\Plugin"
+                "class": "Penoaks\\Installer\\Plugin"
             },
             "autoload": {
                 "psr-4": {
-                    "Foundation\\Installer\\": "src/"
+                    "Penoaks\\Installer\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",

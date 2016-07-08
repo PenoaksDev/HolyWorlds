@@ -62,10 +62,10 @@ EOF;
 			eval( $cls );
 		}
 	}
-	else if ( class_exists( "Foundation\\Support\\" . $className ) ) // Check if we can alias the class to our Support classes
-		if ( class_alias( "Foundation\\Support\\" . $className, $class ) )
+	else if ( class_exists( "Penoaks\\Support\\" . $className ) ) // Check if we can alias the class to our Support classes
+		if ( class_alias( "Penoaks\\Support\\" . $className, $class ) )
 			if ( class_exists( 'Log' ) )
-				Log::debug( "Set class alias [" . $class . "] to [Foundation\\Support\\" . $className . "]" );
+				Log::debug( "Set class alias [" . $class . "] to [Penoaks\\Support\\" . $className . "]" );
 } );
 
 function developerWarning( $class = null )
@@ -73,13 +73,13 @@ function developerWarning( $class = null )
 	if ( Env::get( 'env' ) == 'production' )
 		throw new RuntimeException( "Lazy class loading is prohibited in production environments." );
 	else if ( class_exists( 'Log' ) )
-		Log::warning( "Class " . $class . " is being lazy loaded at file " . \Foundation\Support\Func::lastHop() );
+		Log::warning( "Class " . $class . " is being lazy loaded at file " . \Penoaks\Support\Func::lastHop() );
 }
 
 /**
  * @param $params
  * @param $paths
- * @return \Foundation\Framework
+ * @return \Penoaks\Framework
  */
 function initFramework( $params, $paths )
 {
@@ -107,7 +107,7 @@ function initFramework( $params, $paths )
 	$loader = require $paths['vendor'] . '/autoload.php';
 
 	/* Initialize a new instance of the Framework Constructor */
-	$fw = new \Foundation\Framework( $loader, $params, $paths );
+	$fw = new \Penoaks\Framework( $loader, $params, $paths );
 
 	/* Return newly started framework */
 

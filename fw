@@ -1,0 +1,16 @@
+#!/usr/bin/env php
+<?php
+
+/**
+ * Provides the Penoaks Framework console binary
+ */
+
+require( "Loader.php" );
+
+$fw = initFramework( ['kernel' => \Penoaks\KernelImpl::class], __DIR__ );
+
+$kernel = $fw->kernel->handle( $input = new \Symfony\Component\Console\Input\ArgvInput, new \Symfony\Component\Console\Output\ConsoleOutput );
+
+$kernel->terminate( $input, $status );
+
+exit( $status );
