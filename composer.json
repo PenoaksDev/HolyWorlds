@@ -1,0 +1,17 @@
+{
+    "name": "penoaks/framework-project",
+    "description": "Provides a basic project example for Penoaks Framework",
+    "type": "project",
+    "require": {
+        "penoaks/framework": "dev-bleeding",
+        "penoaks/framework-laravel-compat": "*"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Penoaks Publishing Co.",
+            "email": "development@penoaks.com"
+        }
+    ],
+    "minimum-stability": "dev"
+}
