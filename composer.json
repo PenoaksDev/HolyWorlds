@@ -1,20 +1,30 @@
 {
-  "name": "penoaks/framework-project",
-  "description": "Provides a basic project example for Penoaks Framework",
-  "keywords": [
-    "framework",
-    "penoaks"
-  ],
+  "name": "holyworlds/holyworlds",
+  "description": "Holy Worlds Project",
   "license": "MIT",
   "type": "project",
   "require": {
     "php": ">=5.5.9",
     "penoaks/framework": "dev-bleeding",
-    "penoaks/framework-laravel-compat": "^5"
+    "penoaks/framework-laravel-compat": "~5.2",
+    "rtconner/laravel-tagging": "~2.0",
+    "TeamTeaTime/Laravel-Filer": "^1.0",
+    "graham-campbell/markdown": "^6.1",
+    "maddhatter/laravel-fullcalendar": "^1.2",
+    "slynova/laravel-commentable": "^2.0",
+    "intervention/image": "^2.3",
+    "barryvdh/laravel-debugbar": "^2.2",
+    "intervention/imagecache": "^2.3",
+    "fenos/notifynder": "^3.2",
+    "guzzlehttp/guzzle": "~5.3|~6.0",
+    "cboden/ratchet": "0.3.*",
+    "react/zmq": "0.2.*|0.3.*",
+    "ramsey/uuid": "^3.4",
+    "ramsey/uuid-doctrine": "^1.2"
   },
   "autoload": {
     "psr-4": {
-      "\\": "src/"
+      "Shared\\": "src/"
     }
   },
   "autoload-dev": {
@@ -25,7 +35,6 @@
       "email": "development@penoaks.com"
     }
   ],
-  "minimum-stability": "dev",
   "scripts": {
     "post-root-package-install": [
       "php -r \"copy('.env.example', '.env');\""
@@ -34,15 +43,19 @@
       "php fw key:generate"
     ],
     "post-install-cmd": [
-      "Penoaks\\ComposerScripts::postInstall",
+      "Penoaks\\Framework\\ComposerScripts::postInstall",
       "php fw optimize"
     ],
     "post-update-cmd": [
-      "Penoaks\\ComposerScripts::postUpdate",
+      "Penoaks\\Framework\\ComposerScripts::postUpdate",
       "php fw optimize"
     ]
   },
   "config": {
     "preferred-install": "dist"
+  },
+  "minimum-stability": "dev",
+  "require-dev": {
+    "way/generators": "^3.0"
   }
 }

@@ -1,0 +1,31 @@
+<?php
+namespace Shared\Policies;
+
+use Shared\Models\Article;
+use Shared\Models\User;
+use Penoaks\Auth\Access\HandlesAuthorization;
+
+/**
+ * The MIT License (MIT)
+ * Copyright 2016 Penoaks Publishing Co. <development@penoaks.org>
+ *
+ * This Source Code is subject to the terms of the MIT License.
+ * If a copy of the license was not distributed with this file,
+ * You can obtain one at https://opensource.org/licenses/MIT.
+ */
+class ArticlePolicy
+{
+	use HandlesAuthorization;
+
+	/**
+	 * Determine if the given user can add a comment on the article.
+	 *
+	 * @param  User $user
+	 * @param  Article $article
+	 * @return bool
+	 */
+	public function addComment( User $user, Article $article )
+	{
+		return !$user->isNew;
+	}
+}

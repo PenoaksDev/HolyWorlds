@@ -5,7 +5,7 @@
  * Provides the Penoaks Framework console binary
  */
 
-require( "Loader.php" );
+require( __DIR__ . "/framework/Loader.php" );
 
 $fw = initFramework( ['kernel' => \Penoaks\KernelImpl::class], __DIR__ );
 

@@ -1,0 +1,37 @@
+<?php
+namespace Shared\Models\Traits;
+
+use Shared\Models\User;
+
+/**
+ * The MIT License (MIT)
+ * Copyright 2016 Penoaks Publishing Co. <development@penoaks.org>
+ *
+ * This Source Code is subject to the terms of the MIT License.
+ * If a copy of the license was not distributed with this file,
+ * You can obtain one at https://opensource.org/licenses/MIT.
+ */
+trait HasOwner
+{
+	/**
+	 * Relationship: user
+	 *
+	 * @return \Foundation\Database\Eloquent\Relations\BelongsTo
+	 */
+	public function user()
+	{
+		return $this->belongsTo( User::class );
+	}
+
+	/**
+	 * Scope: by user
+	 *
+	 * @param  \Foundation\Database\Query\Builder $query
+	 * @param  User $user
+	 * @return \Foundation\Database\Query\Builder
+	 */
+	public function scopeByUser( $query, User $user )
+	{
+		return $query->where( 'id', $user->id );
+	}
+}

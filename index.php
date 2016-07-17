@@ -5,13 +5,13 @@
  * If you cloned our repository or forced Composer to install it some place else, be sure to set that location here.
  */
 
-use Foundation\Support\Facades\Request;
+use Penoaks\Http\Request;
 
-require( "Loader.php" );
+require( __DIR__ . "/framework/Loader.php" );
 
 $params = [
-	'kernel' => \Project\Kernel::class,
-	'exceptionHandler' => 'Exceptions\Handler'
+	'kernel' => \Shared\Kernel::class,
+	'exceptions' => \Penoaks\Framework\Exceptions\Handler::class
 ];
 
 /*

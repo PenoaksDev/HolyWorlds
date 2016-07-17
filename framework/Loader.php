@@ -1,7 +1,7 @@
 <?php
 
-use Foundation\Framework\Env;
-use Foundation\Support\Facades\Log;
+use Penoaks\Framework\Env;
+use Penoaks\Support\Facades\Log;
 
 /*
  * The MIT License (MIT)
@@ -34,12 +34,13 @@ set_exception_handler( function ( Throwable $e )
 
 /*
  * Creates class aliases for missing classes, intended for loose prototyping.
- * TODO Log developer warnings when these are used
+ * TODO Logging developer warnings when these are used
  * TODO Implement a strict mode for production environments.
  */
 spl_autoload_register( function ( $class )
 {
-	$className = end( explode( '\\', $class ) );
+	$namespace = explode( '\\', $class );
+	$className = array_pop( $namespace );
 	if ( class_exists( $className ) ) // Check if we can alias the class to a root class
 	{
 		developerWarning( $className );
@@ -51,20 +52,18 @@ spl_autoload_register( function ( $class )
 		}
 		else if ( !$reflection->isFinal() )
 		{
-			// class_alias() is not allowed to alias nonuser-defined PHP classes, so instead we artificially extend them.
-			$namespace = explode( '\\', $class );
-			array_pop( $namespace );
-			$namespace = implode( '\\', $namespace );
-			$cls = <<<EOF
-namespace $namespace;
-class $className extends \\$className {}
-EOF;
-			eval( $cls );
+			// class_alias() is not allowed to alias non-user defined PHP classes, so instead we artificially extend them.
+			$ns = implode( '\\', $namespace );
+			eval( "namespace $ns; class $className extends \\$className {}" );
+		}
+		else
+		{
+			die( "Class [" . $class . "] was found but we were unable to alias or extend because it's non-user defined and final." );
 		}
 	}
 	else if ( class_exists( "Penoaks\\Support\\" . $className ) ) // Check if we can alias the class to our Support classes
 		if ( class_alias( "Penoaks\\Support\\" . $className, $class ) )
-			if ( class_exists( 'Log' ) )
+			if ( class_exists( 'Logging' ) )
 				Log::debug( "Set class alias [" . $class . "] to [Penoaks\\Support\\" . $className . "]" );
 } );
 
@@ -72,7 +71,7 @@ function developerWarning( $class = null )
 {
 	if ( Env::get( 'env' ) == 'production' )
 		throw new RuntimeException( "Lazy class loading is prohibited in production environments." );
-	else if ( class_exists( 'Log' ) )
+	else if ( class_exists( 'Logging' ) )
 		Log::warning( "Class " . $class . " is being lazy loaded at file " . \Penoaks\Support\Func::lastHop() );
 }
 
@@ -99,7 +98,7 @@ function initFramework( $params, $paths )
 		$paths[$key] = rtrim( $val, '\/' );
 
 	/* Add additional missing paths */
-	foreach ( ['src', 'config', 'vendor', 'cache', 'vendor'] as $key )
+	foreach ( ['src', 'config', 'vendor', 'cache', 'vendor', 'storage'] as $key )
 		if ( !array_key_exists( $key, $paths ) )
 			$paths[$key] = $paths['base'] . '/' . $key;
 
