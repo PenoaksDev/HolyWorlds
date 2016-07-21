@@ -1,0 +1,45 @@
+{
+  "name": "PenoaksDev/HolyWorlds",
+  "description": "HolyWorlds.org",
+  "license": "MIT",
+  "type": "project",
+  "require": {
+    "php": ">=5.5.9",
+    "penoaks/framework": "bleeding-dev",
+    "guzzlehttp/guzzle": "^6.2",
+    "rtconner/laravel-tagging": "~2.0",
+    "TeamTeaTime/Laravel-Filer": "^1.0",
+    "graham-campbell/markdown": "^6.1",
+    "maddhatter/laravel-fullcalendar": "^1.2",
+    "slynova/laravel-commentable": "^2.0",
+    "intervention/image": "^2.3",
+    "barryvdh/laravel-debugbar": "^2.2",
+    "intervention/imagecache": "^2.3",
+    "fenos/notifynder": "^3.2",
+    "cboden/ratchet": "0.3.*",
+    "react/zmq": "0.2.*|0.3.*",
+    "ramsey/uuid": "^3.4",
+    "ramsey/uuid-doctrine": "^1.2",
+    "vlucas/phpdotenv": "^2.3",
+    "symfony/psr-http-message-bridge": "^0.2.0",
+    "zendframework/zend-diactoros": "^1.3",
+    "edvinaskrucas/notification": "^5.1"
+  },
+  "require-dev": {
+    "fzaninotto/faker": "~1.4"
+  },
+  "autoload": {
+    "psr-4": {
+      "HolyWorlds\\": "src/HolyWorlds/"
+    }
+  },
+  "autoload-dev": {
+    "classmap": [
+      "database/"
+    ]
+  },
+  "config": {
+    "preferred-install": "dist"
+  },
+  "minimum-stability": "dev"
+}
