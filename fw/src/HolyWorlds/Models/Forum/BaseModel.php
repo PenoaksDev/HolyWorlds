@@ -1,7 +1,6 @@
-<?php
-namespace HolyWorlds\Models\Forum;
+<?php namespace HolyWorlds\Models\Forum;
 
-use Illuminate\Database\Eloquent\Model;
+use Milky\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 
 abstract class BaseModel extends Model

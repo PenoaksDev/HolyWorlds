@@ -1,7 +1,6 @@
-<?php
-namespace HolyWorlds\Models;
+<?php namespace HolyWorlds\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Milky\Database\Eloquent\Model;
 use Penoaks\Support\Facades\Auth;
 use Penoaks\Support\Facades\Config;
 use Penoaks\Support\Facades\DB;

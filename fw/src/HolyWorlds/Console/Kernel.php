@@ -1,5 +1,4 @@
-<?php
-namespace HolyWorlds\Console;
+<?php namespace HolyWorlds\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Laravel\Lumen\Console\Kernel as ConsoleKernel;

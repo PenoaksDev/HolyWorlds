@@ -1,8 +1,7 @@
-<?php
-namespace HolyWorlds\Models;
+<?php namespace HolyWorlds\Models;
 
 use HolyWorlds\Models\Traits\HasOwner;
-use Illuminate\Database\Eloquent\Model;
+use Milky\Database\Eloquent\Model;
 use Laravel\Socialite\Contracts\User as SocialiteUser;
 
 class UserAuth extends Model

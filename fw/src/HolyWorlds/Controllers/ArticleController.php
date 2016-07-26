@@ -1,5 +1,4 @@
-<?php
-namespace
+<?php namespace
 App\Http\Controllers;
 
 use Models\Article;

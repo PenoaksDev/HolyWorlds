@@ -1,5 +1,4 @@
-<?php
-namespace HolyWorlds\Commands;
+<?php namespace HolyWorlds\Commands;
 
 use Penoaks\Console\Command;
 use Ratchet\Http\HttpServer;

@@ -1,13 +1,13 @@
-<?php
-namespace HolyWorlds\Auth;
+<?php namespace HolyWorlds\Auth;
 
 use Holyworlds\Models\User;
 use Holyworlds\Support\BBHasher;
 use Holyworlds\Support\Util;
-use Illuminate\Contracts\Auth\Authenticatable as UserContract;
-use Illuminate\Contracts\Auth\UserProvider;
-use Illuminate\Contracts\Hashing\Hasher as HasherContract;
-use Illuminate\Support\Str;
+use Milky\Auth\Authenticatable;
+use Milky\Auth\UserProvider;
+use Milky\Database\Eloquent\Model;
+use Milky\Hashing\BcryptHasher as Hasher;
+use Milky\Helpers\Str;
 
 class CustomUserProvider implements UserProvider
 {
@@ -17,11 +17,11 @@ class CustomUserProvider implements UserProvider
 	/**
 	 * Create a new database user provider.
 	 *
-	 * @param  \Illuminate\Contracts\Hashing\Hasher $hasher
+	 * @param  Hasher $hasher
 	 * @param  string $model
 	 * @return void
 	 */
-	public function __construct( HasherContract $hasher, $model )
+	public function __construct( Hasher $hasher, $model )
 	{
 		$this->model = $model;
 		$this->hasher = $hasher;
@@ -31,7 +31,7 @@ class CustomUserProvider implements UserProvider
 	 * Retrieve a user by their unique identifier.
 	 *
 	 * @param  mixed $identifier
-	 * @return \Illuminate\Contracts\Auth\Authenticatable|null
+	 * @return Authenticatable|null
 	 */
 	public function retrieveById( $identifier )
 	{
@@ -43,7 +43,7 @@ class CustomUserProvider implements UserProvider
 	 *
 	 * @param  mixed $identifier
 	 * @param  string $token
-	 * @return \Illuminate\Contracts\Auth\Authenticatable|null
+	 * @return Authenticatable|null
 	 */
 	public function retrieveByToken( $identifier, $token )
 	{
@@ -55,11 +55,11 @@ class CustomUserProvider implements UserProvider
 	/**
 	 * Update the "remember me" token for the given user in storage.
 	 *
-	 * @param  \Illuminate\Contracts\Auth\Authenticatable $user
+	 * @param  Authenticatable $user
 	 * @param  string $token
 	 * @return void
 	 */
-	public function updateRememberToken( UserContract $user, $token )
+	public function updateRememberToken( Authenticatable $user, $token )
 	{
 		$user->setRememberToken( $token );
 
@@ -70,14 +70,12 @@ class CustomUserProvider implements UserProvider
 	 * Retrieve a user by the given credentials.
 	 *
 	 * @param  array $credentials
-	 * @return \Illuminate\Contracts\Auth\Authenticatable|null
+	 * @return Authenticatable|null
 	 */
 	public function retrieveByCredentials( array $credentials )
 	{
 		if ( empty( $credentials ) )
-		{
-			return;
-		}
+			return null;
 
 		// First we will add each credential element to the query as a where clause.
 		// Then we can execute the query and, if we found a user, return it in a
@@ -98,11 +96,11 @@ class CustomUserProvider implements UserProvider
 	/**
 	 * Validate a user against the given credentials.
 	 *
-	 * @param  \Illuminate\Contracts\Auth\Authenticatable $user
+	 * @param  Authenticatable $user
 	 * @param  array $credentials
 	 * @return bool
 	 */
-	public function validateCredentials( UserContract $user, array $credentials )
+	public function validateCredentials( Authenticatable $user, array $credentials )
 	{
 		$plain = $credentials['password'];
 
@@ -134,7 +132,7 @@ class CustomUserProvider implements UserProvider
 	/**
 	 * Create a new instance of the model.
 	 *
-	 * @return \Illuminate\Database\Eloquent\Model
+	 * @return Model
 	 */
 	public function createModel()
 	{
@@ -146,7 +144,7 @@ class CustomUserProvider implements UserProvider
 	/**
 	 * Gets the hasher implementation.
 	 *
-	 * @return \Illuminate\Contracts\Hashing\Hasher
+	 * @return Hasher
 	 */
 	public function getHasher()
 	{
@@ -156,10 +154,10 @@ class CustomUserProvider implements UserProvider
 	/**
 	 * Sets the hasher implementation.
 	 *
-	 * @param  \Illuminate\Contracts\Hashing\Hasher $hasher
+	 * @param  Hasher $hasher
 	 * @return $this
 	 */
-	public function setHasher( HasherContract $hasher )
+	public function setHasher( Hasher $hasher )
 	{
 		$this->hasher = $hasher;
 

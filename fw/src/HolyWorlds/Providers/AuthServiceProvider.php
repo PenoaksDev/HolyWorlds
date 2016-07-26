@@ -1,12 +1,11 @@
-<?php
-namespace HolyWorlds\Providers;
+<?php namespace HolyWorlds\Providers;
 
 use HolyWorlds\Auth\CustomUserProvider;
 use HolyWorlds\Models\User;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Blade;
-use Illuminate\Contracts\Auth\Access\Gate as GateContract;
-use Penoaks\Providers\AuthServiceProvider as ServiceProvider;
+use Milky\Auth\Access\Gate;
+use Milky\Facades\Auth;
+use Milky\Framework;
+use Milky\Providers\AuthServiceProvider as ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -27,11 +26,12 @@ class AuthServiceProvider extends ServiceProvider
 	/**
 	 * Register any application authentication / authorization services.
 	 *
-	 * @param  \Illuminate\Contracts\Auth\Access\Gate $gate
+	 * @param  Gate $gate
 	 * @return void
 	 */
-	public function boot( GateContract $gate )
+	public function boot( Gate $gate )
 	{
+		/*
 		Blade::directive( 'has', function ( $permission )
 		{
 			return "<?php if ( \\Shared\\Http\\Middleware\\Permissions::checkPermission( $permission ) !== false ) { ?>";
@@ -41,26 +41,29 @@ class AuthServiceProvider extends ServiceProvider
 		{
 			return "<?php } ?>";
 		} );
+		*/
 
-		Auth::provider( 'custom', function ( $provider )
+		Auth::provider( 'custom', function ()
 		{
-			return new CustomUserProvider( $this->bindings['hash'], User::class );
+			return new CustomUserProvider( Framework::get( 'hash' ), User::class );
 		} );
 
-		foreach ( [
-			          'AdminPolicy',
-			          'GeneralPolicy',
-			          'AdminPolicy',
-			          'ArticlePolicy',
-			          'CategoryPolicy',
-			          'CommentPolicy',
-			          'EventPolicy',
-			          'ForumPolicy',
-			          'ImageAlbumPolicy',
-			          'PostPolicy',
-			          'ThreadPolicy',
-			          'UserProfilePolicy'
-		          ] as $policy )
+		$policies = [
+			'AdminPolicy',
+			'GeneralPolicy',
+			'AdminPolicy',
+			'ArticlePolicy',
+			'CategoryPolicy',
+			'CommentPolicy',
+			'EventPolicy',
+			'ForumPolicy',
+			'ImageAlbumPolicy',
+			'PostPolicy',
+			'ThreadPolicy',
+			'UserProfilePolicy'
+		];
+
+		foreach ( $policies as $policy )
 		{
 			$gate = $this->defineFromClass( $gate, "HolyWorlds\\Policies\\{$policy}" );
 		}
@@ -71,17 +74,15 @@ class AuthServiceProvider extends ServiceProvider
 	/**
 	 * Define policy methods in the given gate using the given policy class.
 	 *
-	 * @param  GateContract $gate
+	 * @param  Gate $gate
 	 * @param  string $className
-	 * @return GateContract
+	 * @return Gate
 	 */
-	private function defineFromClass( GateContract $gate, $className )
+	private function defineFromClass( Gate $gate, $className )
 	{
 		$class = "\\{$className}";
 		foreach ( get_class_methods( new $class ) as $method )
-		{
 			$gate->define( $method, "{$className}@{$method}" );
-		}
 
 		return $gate;
 	}

@@ -8,6 +8,7 @@ use HolyWorlds\Models\ImageAlbum;
 use HolyWorlds\Models\Session;
 use HolyWorlds\Models\User;
 use Milky\Http\Routing\Router;
+use Milky\Facades\View;
 use Slynova\Commentable\Models\Comment;
 
 function loadRoutes( Router $r )
@@ -16,7 +17,7 @@ function loadRoutes( Router $r )
 	{
 		$r->get( '/', function ()
 		{
-			return view( 'index', [
+			return View::render( 'index', [
 				'newUsers' => User::activated()->orderBy( 'created_at', 'desc' )->limit( 5 )->get(),
 				'onlineUsers' => Session::authenticated()->groupBy( 'user_id' )->recent()->limit( 10 )->get(),
 				'newThreads' => Thread::with( ['author', 'posts'] )->orderBy( 'created_at', 'desc' )->limit( 5 )->get(),

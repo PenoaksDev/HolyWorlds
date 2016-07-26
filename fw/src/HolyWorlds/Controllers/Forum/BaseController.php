@@ -1,5 +1,4 @@
-<?php
-namespace HolyWorlds\Http\Controllers\Forum;
+<?php namespace HolyWorlds\Http\Controllers\Forum;
 
 use Illuminate\Auth\Access\AuthorizesRequests;
 use Penoaks\Validation\ValidatesRequests;

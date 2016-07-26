@@ -1,5 +1,4 @@
-<?php
-namespace HolyWorlds\Http\Controllers\Forum;
+<?php namespace HolyWorlds\Http\Controllers\Forum;
 
 use Penoaks\Http\Request;
 use Penoaks\Support\Facades\Gate;

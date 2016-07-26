@@ -1,5 +1,4 @@
-<?php
-namespace HolyWorlds\Policies;
+<?php namespace HolyWorlds\Policies;
 
 /**
  * The MIT License (MIT)

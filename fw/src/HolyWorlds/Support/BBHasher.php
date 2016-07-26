@@ -1,5 +1,4 @@
-<?php
-namespace HolyWorlds\Support;
+<?php namespace HolyWorlds\Support;
 
 class BBHasher
 {

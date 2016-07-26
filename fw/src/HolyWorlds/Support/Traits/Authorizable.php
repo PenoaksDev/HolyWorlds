@@ -1,5 +1,4 @@
-<?php
-namespace HolyWorlds\Support\Traits;
+<?php namespace HolyWorlds\Support\Traits;
 
 use Illuminate\Contracts\Auth\Access\Gate;
 

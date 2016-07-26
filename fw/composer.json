@@ -7,7 +7,6 @@
     "php": ">=5.5.9",
     "penoaks/framework": "bleeding-dev",
     "guzzlehttp/guzzle": "^6.2",
-    "rtconner/laravel-tagging": "~2.0",
     "TeamTeaTime/Laravel-Filer": "^1.0",
     "graham-campbell/markdown": "^6.1",
     "maddhatter/laravel-fullcalendar": "^1.2",

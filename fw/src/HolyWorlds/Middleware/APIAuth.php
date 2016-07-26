@@ -1,5 +1,4 @@
-<?php
-namespace HolyWorlds\Middleware;
+<?php namespace HolyWorlds\Middleware;
 
 use Closure;
 use Penoaks\Http\Request;

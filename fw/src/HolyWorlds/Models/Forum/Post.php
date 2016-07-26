@@ -1,7 +1,6 @@
-<?php
-namespace HolyWorlds\Models\Forum;
+<?php namespace HolyWorlds\Models\Forum;
 
-use Illuminate\Database\Eloquent\SoftDeletes;
+use Milky\Database\Eloquent\SoftDeletes;
 use HolyWorlds\Support\Traits\HasAuthor;
 use HolyWorlds\Support\Traits\CachesData;
 

@@ -1,8 +1,8 @@
-<?php
-namespace HolyWorlds\Models\Forum;
+<?php namespace HolyWorlds\Models\Forum;
 
-use Illuminate\Support\Facades\Gate;
 use HolyWorlds\Support\Traits\CachesData;
+use Milky\Database\Eloquent\Relations\BelongsTo;
+use Milky\Database\Eloquent\Relations\HasMany;
 
 class Category extends BaseModel
 {
@@ -53,7 +53,7 @@ class Category extends BaseModel
 	/**
 	 * Relationship: Parent category.
 	 *
-	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+	 * @return BelongsTo
 	 */
 	public function parent()
 	{
@@ -63,7 +63,7 @@ class Category extends BaseModel
 	/**
 	 * Relationship: Child categories.
 	 *
-	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
+	 * @return HasMany
 	 */
 	public function children()
 	{
@@ -73,7 +73,7 @@ class Category extends BaseModel
 	/**
 	 * Relationship: Threads.
 	 *
-	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
+	 * @return HasMany
 	 */
 	public function threads()
 	{
@@ -86,7 +86,7 @@ class Category extends BaseModel
 	/**
 	 * Attribute: Child categories.
 	 *
-	 * @return \Illuminate\Database\Eloquent\Collection
+	 * @return Collection
 	 */
 	public function getChildrenAttribute()
 	{
@@ -108,7 +108,7 @@ class Category extends BaseModel
 	/**
 	 * Attribute: Paginated threads.
 	 *
-	 * @return \Illuminate\Pagination\LengthAwarePaginator
+	 * @return LengthAwarePaginator
 	 */
 	public function getThreadsPaginatedAttribute()
 	{

@@ -1,5 +1,4 @@
-<?php
-namespace HolyWorlds\Policies;
+<?php namespace HolyWorlds\Policies;
 
 use HolyWorlds\Models\Event;
 use HolyWorlds\Models\User;

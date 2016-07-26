@@ -1,5 +1,4 @@
-<?php
-namespace HolyWorlds\Models\Forum\Observers;
+<?php namespace HolyWorlds\Models\Forum\Observers;
 
 class PostObserver
 {

@@ -1,10 +1,13 @@
-<?php
-namespace HolyWorlds\Models\Forum;
+<?php namespace HolyWorlds\Models\Forum;
 
-use Illuminate\Database\Eloquent\SoftDeletes;
+use Milky\Database\Eloquent\Relations\BelongsTo;
+use Milky\Database\Eloquent\Relations\BelongsToMany;
+use Milky\Database\Eloquent\Relations\HasMany;
+use Milky\Database\Eloquent\SoftDeletes;
 use HolyWorlds\Support\Traits\HasAuthor;
 use HolyWorlds\Models\Setting;
 use HolyWorlds\Models\User;
+use Milky\Database\Query\Builder;
 
 class Thread extends BaseModel
 {
@@ -73,7 +76,7 @@ class Thread extends BaseModel
 	/**
 	 * Relationship: Category.
 	 *
-	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+	 * @return BelongsTo
 	 */
 	public function category()
 	{
@@ -83,7 +86,7 @@ class Thread extends BaseModel
 	/**
 	 * Relationship: Readers.
 	 *
-	 * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+	 * @return BelongsToMany
 	 */
 	public function readers()
 	{
@@ -93,7 +96,7 @@ class Thread extends BaseModel
 	/**
 	 * Relationship: Posts.
 	 *
-	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
+	 * @return HasMany
 	 */
 	public function posts()
 	{
@@ -106,8 +109,8 @@ class Thread extends BaseModel
 	/**
 	 * Scope: Recent threads.
 	 *
-	 * @param  \Illuminate\Database\Query\Builder $query
-	 * @return \Illuminate\Database\Query\Builder
+	 * @param  Builder $query
+	 * @return Builder
 	 */
 	public function scopeRecent( $query )
 	{
@@ -121,7 +124,7 @@ class Thread extends BaseModel
 	/**
 	 * Attribute: Paginated posts.
 	 *
-	 * @return \Illuminate\Pagination\LengthAwarePaginator
+	 * @return LengthAwarePaginator
 	 */
 	public function getPostsPaginatedAttribute()
 	{
@@ -161,7 +164,7 @@ class Thread extends BaseModel
 	/**
 	 * Attribute: Creation time of the last post in the thread.
 	 *
-	 * @return \Carbon\Carbon
+	 * @return Carbon
 	 */
 	public function getLastPostTimeAttribute()
 	{

@@ -1,5 +1,4 @@
-<?php
-namespace HolyWorlds\Commands;
+<?php namespace HolyWorlds\Commands;
 
 use Carbon\Carbon;
 use Penoaks\Console\Command;

@@ -1,5 +1,4 @@
-<?php
-namespace HolyWorlds\Http\Controllers\Admin;
+<?php namespace HolyWorlds\Http\Controllers\Admin;
 
 use Penoaks\Http\Request;
 use Notification;

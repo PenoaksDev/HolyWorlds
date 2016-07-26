@@ -1,5 +1,4 @@
-<?php
-namespace HolyWorlds\Support;
+<?php namespace HolyWorlds\Support;
 
 use Penoaks\Http\UploadedFile;
 use Image as InterventionImage;

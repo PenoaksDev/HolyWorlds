@@ -1,11 +1,10 @@
-<?php
-namespace HolyWorlds\Models;
+<?php namespace HolyWorlds\Models;
 
 use Carbon\Carbon;
-use Conner\Tagging\Taggable;
 use HolyWorlds\Support\Helper;
 use HolyWorlds\Support\Traits\HasOwner;
-use Illuminate\Database\Eloquent\Model;
+use HolyWorlds\Tagging\Taggable;
+use Milky\Database\Eloquent\Model;
 use Slynova\Commentable\Traits\Commentable;
 
 class Article extends Model

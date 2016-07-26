@@ -1,5 +1,4 @@
-<?php
-namespace HolyWorlds\Http\Controllers;
+<?php namespace HolyWorlds\Http\Controllers;
 
 use Auth;
 use Penoaks\Http\Request;
@@ -102,7 +101,7 @@ class CommentController extends Controller
      *
      * @param  string  $name
      * @param  int  $id
-     * @return \Illuminate\Database\Eloquent\Model
+     * @return \Milky\Database\Eloquent\Model
      */
     private function getModel($name, $id)
     {

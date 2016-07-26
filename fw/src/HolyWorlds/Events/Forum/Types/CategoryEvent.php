@@ -1,5 +1,4 @@
-<?php
-namespace HolyWorlds\Events\Forum\Types;
+<?php namespace HolyWorlds\Events\Forum\Types;
 
 use Models\Forum\Category;
 

@@ -80,21 +80,18 @@ $fw->terminate();
 
 $fw = fw( realpath( __DIR__ . '/../' ) );
 
-// $fw->providers->register( new \HolyWorlds\Providers\AppServiceProvider() );
+$fw->setExceptionHandler( new \HolyWorlds\Exceptions\Handler() );
 
 $fw->boot();
 
 $factory = $fw->newHttpFactory();
 
+$factory->setRootControllerNamespace( 'HolyWorlds\Controllers' );
+
 $r = $factory->router();
 
 require_once __DIR__ . '/src/routes.php';
 loadRoutes( $r );
-
-$r->get( '/', function ()
-{
-	return "Hello World!";
-} );
 
 $response = $factory->routeRequest();
 

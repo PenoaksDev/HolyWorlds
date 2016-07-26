@@ -1,5 +1,4 @@
-<?php
-namespace HolyWorlds\Policies;
+<?php namespace HolyWorlds\Policies;
 
 use Illuminate\Auth\Access\HandlesAuthorization;
 use HolyWorlds\Models\ImageAlbum;

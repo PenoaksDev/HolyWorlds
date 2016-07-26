@@ -1,5 +1,4 @@
-<?php
-namespace HolyWorlds\Models;
+<?php namespace HolyWorlds\Models;
 
 use Fenos\Notifynder\Notifable;
 use HolyWorlds\Support\Traits\UuidAsKey;
@@ -8,7 +7,7 @@ use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
-use Illuminate\Database\Eloquent\Model;
+use Milky\Database\Eloquent\Model;
 use HolyWorlds\Support\Traits\Authorizable;
 use Slynova\Commentable\Models\Comment;
 

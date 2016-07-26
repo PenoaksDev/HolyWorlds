@@ -1,5 +1,4 @@
-<?php
-namespace HolyWorlds\Support;
+<?php namespace HolyWorlds\Support;
 
 use Penoaks\Routing\Router;
 use Models\Category;

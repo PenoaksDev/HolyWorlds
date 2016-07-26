@@ -1,7 +1,6 @@
-<?php
-namespace HolyWorlds\Models;
+<?php namespace HolyWorlds\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Milky\Database\Eloquent\Model;
 
 class PermissionAssigned extends Model
 {

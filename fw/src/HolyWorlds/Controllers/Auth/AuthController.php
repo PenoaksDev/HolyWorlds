@@ -1,5 +1,4 @@
-<?php
-namespace HolyWorlds\Http\Controllers\Auth;
+<?php namespace HolyWorlds\Http\Controllers\Auth;
 
 use Auth;
 use Http\Controllers\Controller;

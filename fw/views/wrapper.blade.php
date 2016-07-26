@@ -71,7 +71,7 @@
 					<li class="dropdown"> <!-- {{ url('account/notifications') }} -->
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" id="btnNotice">
 							<i class="fa fa-bell-o" aria-hidden="true"></i>
-							<span class="badge">{{ Auth::user()->countNotificationsNotRead() }}</span>
+							<span class="badge">{{ Auth::user() != null ? Auth::user()->countNotificationsNotRead() : "" }}</span>
 						</a>
 						<div class="dropdown-menu">
 							<center><p style="color: #fff;">No Notifications</p></center>
@@ -93,7 +93,7 @@
 							<li>
 								<a href="{{ url('account/profile') }}"><i class="fa fa-tachometer" aria-hidden="true"></i> My Dashboard</a>
 							</li>
-							@if ( Auth::user()->isAdmin() )
+							@if ( Auth::user() != null && Auth::user()->isAdmin() )
 								<li>
 									<a href="{{ url('admin') }}"><i class="fa fa-lock" aria-hidden="true"></i> Administrator</a>
 								</li>
@@ -133,7 +133,7 @@
 					<h3 class="pull-left" style="margin: 5px 0; padding: 0;"><?php if ( empty( $__env->yieldContent( 'pagetitle' ) ) )
 							echo $__env->yieldContent( 'title' );
 						else echo $__env->yieldContent( 'pagetitle' ); ?></h3>
-					@if (array_key_exists('breadcrumbs', View::getSections()))
+					@if (false && array_key_exists('breadcrumbs', View::getSections()))
 						<ol class="hidden-xs hidden-sm breadcrumb pull-right" style="margin: 0;">
 							<li><a href="{{ url('/') }}">Home</a></li>
 							@section('breadcrumbs')
@@ -143,7 +143,7 @@
 					<div class="clearfix"></div>
 				</div>
 				<div class="panel-body">
-					{!! Notification::showAll() !!}
+					{-- Notification::showAll() --}
 					@if (isset($errors) && count($errors) > 0)
 						<div class="alert error">
 							<ul>

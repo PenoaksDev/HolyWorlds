@@ -1,7 +1,6 @@
-<?php
-namespace HolyWorlds\Events\Forum;
+<?php namespace HolyWorlds\Events\Forum;
 
-use Illuminate\Database\Eloquent\Collection;
+use Milky\Database\Eloquent\Collection;
 
 class UserViewingNew
 {

@@ -1,5 +1,4 @@
-<?php
-namespace HolyWorlds\Listeners;
+<?php namespace HolyWorlds\Listeners;
 
 use HolyWorlds\Events\Forum\UserViewingThread;
 use Penoaks\Contracts\Auth\Guard;

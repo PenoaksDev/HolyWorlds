@@ -1,5 +1,4 @@
-<?php
-namespace HolyWorlds\Events\Forum;
+<?php namespace HolyWorlds\Events\Forum;
 
 class UserViewingIndex
 {

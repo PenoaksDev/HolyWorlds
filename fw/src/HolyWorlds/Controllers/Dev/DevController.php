@@ -1,5 +1,4 @@
-<?php
-namespace HolyWorlds\Http\Controllers\Dev;
+<?php namespace HolyWorlds\Http\Controllers\Dev;
 
 use React\ZMQ\Context;
 

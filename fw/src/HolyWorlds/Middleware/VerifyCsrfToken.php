@@ -1,5 +1,4 @@
-<?php
-namespace HolyWorlds\Middleware;
+<?php namespace HolyWorlds\Middleware;
 
 use Penoaks\Http\Middleware\VerifyCsrfToken as BaseVerifier;
 

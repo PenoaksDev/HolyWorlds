@@ -1,5 +1,4 @@
-<?php
-namespace HolyWorlds\Http\Controllers\Forum\API;
+<?php namespace HolyWorlds\Http\Controllers\Forum\API;
 
 use Illuminate\Auth\Access\AuthorizesRequests;
 use Penoaks\Validation\ValidatesRequests;
@@ -41,7 +40,7 @@ abstract class BaseController extends Controller
 	/**
 	 * Return the model to use for this controller.
 	 *
-	 * @return \Illuminate\Database\Eloquent\Model
+	 * @return \Milky\Database\Eloquent\Model
 	 */
 	abstract protected function model();
 

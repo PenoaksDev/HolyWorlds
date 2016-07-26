@@ -1,5 +1,4 @@
-<?php
-namespace HolyWorlds\Policies;
+<?php namespace HolyWorlds\Policies;
 
 use HolyWorlds\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;

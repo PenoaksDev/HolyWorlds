@@ -1,5 +1,4 @@
-<?php
-namespace HolyWorlds\Policies\Forum;
+<?php namespace HolyWorlds\Policies\Forum;
 
 use Penoaks\Support\Facades\Gate;
 use HolyWorlds\Models\Forum\Thread;

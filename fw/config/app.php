@@ -107,5 +107,8 @@ return [
 	 */
 	'providers' => [
 		\HolyWorlds\Providers\AppServiceProvider::class,
+		\HolyWorlds\Providers\AuthServiceProvider::class,
+		\Milky\Providers\DatabaseServiceProvider::class,
+		\HolyWorlds\Providers\FinalServiceProvider::class,
 	],
 ];

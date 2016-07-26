@@ -14,7 +14,7 @@ return [
 	*/
 
 	'paths' => [
-		realpath( $fw->buildPath( 'views', 'src' ) ),
+		realpath( $fw->buildPath( '__views' ) ),
 	],
 
 	/*
@@ -28,6 +28,6 @@ return [
 	|
 	*/
 
-	'compiled' => realpath( $fw->buildPath( 'views', 'storage' ) ),
+	'compiled' => realpath( $fw->buildPath( '__storage', 'views' ) ),
 
 ];

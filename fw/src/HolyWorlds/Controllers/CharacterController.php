@@ -1,5 +1,4 @@
-<?php
-namespace HolyWorlds\Http\Controllers;
+<?php namespace HolyWorlds\Http\Controllers;
 
 use Auth;
 use Models\Character;

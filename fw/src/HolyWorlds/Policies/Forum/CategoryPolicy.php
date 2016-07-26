@@ -1,5 +1,4 @@
-<?php
-namespace HolyWorlds\Policies\Forum;
+<?php namespace HolyWorlds\Policies\Forum;
 
 use HolyWorlds\Models\Forum\Category;
 

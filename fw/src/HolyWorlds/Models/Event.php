@@ -1,9 +1,8 @@
-<?php
-namespace HolyWorlds\Models;
+<?php namespace HolyWorlds\Models;
 
 use Carbon\Carbon;
 use Conner\Tagging\Taggable;
-use Illuminate\Database\Eloquent\Model;
+use Milky\Database\Eloquent\Model;
 use HolyWorlds\Models\Traits\HasOwner;
 use Slynova\Commentable\Traits\Commentable;
 

@@ -1,5 +1,4 @@
-<?php
-namespace HolyWorlds\Events\Forum;
+<?php namespace HolyWorlds\Events\Forum;
 
 use Events\Forum\Types\CategoryEvent;
 

@@ -1,10 +1,9 @@
-<?php
-namespace HolyWorlds\Providers;
+<?php namespace HolyWorlds\Providers;
 
 use HolyWorlds\Models\Setting;
 use HolyWorlds\Support\Util;
-use Illuminate\Support\ServiceProvider;
-use Penoaks\Facades\Config;
+use Milky\Facades\Config;
+use Milky\Providers\ServiceProvider;
 
 /**
  * The MIT License (MIT)

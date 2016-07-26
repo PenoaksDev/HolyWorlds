@@ -1,5 +1,4 @@
-<?php
-namespace HolyWorlds\Middleware;
+<?php namespace HolyWorlds\Middleware;
 
 use Penoaks\Cookie\Middleware\EncryptCookies as BaseEncrypter;
 

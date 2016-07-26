@@ -1,5 +1,4 @@
-<?php
-namespace HolyWorlds\Http\Controllers\Admin\Forum;
+<?php namespace HolyWorlds\Http\Controllers\Admin\Forum;
 
 use Http\Controllers\Admin\Controller;
 use Models\Forum\Category;

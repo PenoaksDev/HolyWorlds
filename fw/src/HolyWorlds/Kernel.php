@@ -1,5 +1,4 @@
-<?php
-namespace Shared;
+<?php namespace Shared;
 
 /**
  * The MIT License (MIT)

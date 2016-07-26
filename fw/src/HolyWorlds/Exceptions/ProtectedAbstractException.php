@@ -1,5 +1,4 @@
-<?php
-namespace HolyWorlds\Exceptions;
+<?php namespace HolyWorlds\Exceptions;
 
 use Exception;
 

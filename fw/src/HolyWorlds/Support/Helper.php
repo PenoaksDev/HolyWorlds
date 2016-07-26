@@ -1,5 +1,4 @@
-<?php
-namespace HolyWorlds\Support;
+<?php namespace HolyWorlds\Support;
 
 use Models\Article;
 use Models\Forum\Category;

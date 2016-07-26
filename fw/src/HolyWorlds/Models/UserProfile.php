@@ -1,8 +1,7 @@
-<?php
-namespace HolyWorlds\Models;
+<?php namespace HolyWorlds\Models;
 
 use HolyWorlds\Support\Traits\HasOwner;
-use Illuminate\Database\Eloquent\Model;
+use Milky\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 use Slynova\Commentable\Traits\Commentable;
 use TeamTeaTime\Filer\HasAttachments;
