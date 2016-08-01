@@ -61,7 +61,7 @@
 				</li>
 			</ul>
 			<ul style="margin-right: 15px;" class="nav navbar-nav navbar-right">
-				@if (Auth::guest())
+				@if ( Acct::isGuest() )
 					<li><p class="navbar-text">Welcome Guest</p></li>
 					<li><a href="{{ url('auth/login') }}"><i class="fa fa-sign-in" aria-hidden="true"></i> Sign In</a>
 					</li>
@@ -71,7 +71,7 @@
 					<li class="dropdown"> <!-- {{ url('account/notifications') }} -->
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" id="btnNotice">
 							<i class="fa fa-bell-o" aria-hidden="true"></i>
-							<span class="badge">{{ Auth::user() != null ? Auth::user()->countNotificationsNotRead() : "" }}</span>
+							<span class="badge">{{ Acct::acct()->countNotificationsNotRead() }}</span>
 						</a>
 						<div class="dropdown-menu">
 							<center><p style="color: #fff;">No Notifications</p></center>
@@ -85,15 +85,15 @@
 					</li>
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-							@include('user.partials.avatar', ['user' => Auth::user(), 'class' => 'img-circle'])
-							Welcome {{ Auth::user()->name }}
+							@include('user.partials.avatar', ['user' => Acct::acct(), 'class' => 'img-circle'])
+							Welcome {{ Acct::getDisplayName() }}
 							<span class="caret"></span>
 						</a>
 						<ul class="dropdown-menu">
 							<li>
 								<a href="{{ url('account/profile') }}"><i class="fa fa-tachometer" aria-hidden="true"></i> My Dashboard</a>
 							</li>
-							@if ( Auth::user() != null && Auth::user()->isAdmin() )
+							@if ( Acct::isAdmin() )
 								<li>
 									<a href="{{ url('admin') }}"><i class="fa fa-lock" aria-hidden="true"></i> Administrator</a>
 								</li>

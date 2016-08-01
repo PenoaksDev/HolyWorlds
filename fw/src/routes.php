@@ -6,7 +6,7 @@ use HolyWorlds\Models\Forum\Post;
 use HolyWorlds\Models\Forum\Thread;
 use HolyWorlds\Models\ImageAlbum;
 use HolyWorlds\Models\Session;
-use HolyWorlds\Models\User;
+use Milky\Account\Models\User;
 use Milky\Http\Routing\Router;
 use Milky\Facades\View;
 use Slynova\Commentable\Models\Comment;

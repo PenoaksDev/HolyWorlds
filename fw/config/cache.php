@@ -44,7 +44,7 @@ return [
 
 		'file' => [
 			'driver' => 'file',
-			'path' => $fw->buildPath( null, 'cache' ),
+			'path' => $fw->buildPath( '__cache' ),
 		],
 
 		'memcached' => [

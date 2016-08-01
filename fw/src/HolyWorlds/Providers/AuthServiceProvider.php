@@ -1,37 +1,24 @@
 <?php namespace HolyWorlds\Providers;
 
-use HolyWorlds\Auth\CustomUserProvider;
-use HolyWorlds\Models\User;
+use HolyWorlds\Account\CustomAuth;
+use HolyWorlds\Policies\AdminPolicy;
+use HolyWorlds\Policies\ForumPolicy;
+use Milky\Account\AccountManager;
+use Milky\Account\Permissions\PermissionManager;
 use Milky\Auth\Access\Gate;
-use Milky\Facades\Auth;
-use Milky\Framework;
-use Milky\Providers\AuthServiceProvider as ServiceProvider;
+use Milky\Facades\Blade;
+use Milky\Providers\ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
 {
-	/**
-	 * The policy mappings for the application.
-	 *
-	 * @var array
-	 */
-	protected $policies = [
-		\HolyWorlds\Models\Article::class => \HolyWorlds\Policies\ArticlePolicy::class,
-		\HolyWorlds\Models\Character::class => \HolyWorlds\Policies\CharacterPolicy::class,
-		\HolyWorlds\Models\Event::class => \HolyWorlds\Policies\EventPolicy::class,
-		\HolyWorlds\Models\ImageAlbum::class => \HolyWorlds\Policies\ImageAlbumPolicy::class,
-		\HolyWorlds\Models\UserProfile::class => \HolyWorlds\Policies\UserProfilePolicy::class,
-		\Slynova\Commentable\Models\Comment::class => \HolyWorlds\Policies\CommentPolicy::class,
-	];
-
 	/**
 	 * Register any application authentication / authorization services.
 	 *
 	 * @param  Gate $gate
 	 * @return void
 	 */
-	public function boot( Gate $gate )
+	public function boot()
 	{
-		/*
 		Blade::directive( 'has', function ( $permission )
 		{
 			return "<?php if ( \\Shared\\Http\\Middleware\\Permissions::checkPermission( $permission ) !== false ) { ?>";
@@ -41,17 +28,15 @@ class AuthServiceProvider extends ServiceProvider
 		{
 			return "<?php } ?>";
 		} );
-		*/
 
-		Auth::provider( 'custom', function ()
-		{
-			return new CustomUserProvider( Framework::get( 'hash' ), User::class );
-		} );
+		new AccountManager( new CustomAuth() );
+
+		PermissionManager::policy( new AdminPolicy() );
+		PermissionManager::policy( new ForumPolicy() );
 
 		$policies = [
 			'AdminPolicy',
 			'GeneralPolicy',
-			'AdminPolicy',
 			'ArticlePolicy',
 			'CategoryPolicy',
 			'CommentPolicy',
@@ -63,27 +48,13 @@ class AuthServiceProvider extends ServiceProvider
 			'UserProfilePolicy'
 		];
 
-		foreach ( $policies as $policy )
-		{
-			$gate = $this->defineFromClass( $gate, "HolyWorlds\\Policies\\{$policy}" );
-		}
-
-		$this->registerPolicies( $gate );
-	}
-
-	/**
-	 * Define policy methods in the given gate using the given policy class.
-	 *
-	 * @param  Gate $gate
-	 * @param  string $className
-	 * @return Gate
-	 */
-	private function defineFromClass( Gate $gate, $className )
-	{
-		$class = "\\{$className}";
-		foreach ( get_class_methods( new $class ) as $method )
-			$gate->define( $method, "{$className}@{$method}" );
-
-		return $gate;
+		$policies = [
+			\HolyWorlds\Models\Article::class => \HolyWorlds\Policies\ArticlePolicy::class,
+			\HolyWorlds\Models\Character::class => \HolyWorlds\Policies\CharacterPolicy::class,
+			\HolyWorlds\Models\Event::class => \HolyWorlds\Policies\EventPolicy::class,
+			\HolyWorlds\Models\ImageAlbum::class => \HolyWorlds\Policies\ImageAlbumPolicy::class,
+			\HolyWorlds\Models\UserProfile::class => \HolyWorlds\Policies\UserProfilePolicy::class,
+			\Slynova\Commentable\Models\Comment::class => \HolyWorlds\Policies\CommentPolicy::class,
+		];
 	}
 }

@@ -84,7 +84,7 @@ $fw->setExceptionHandler( new \HolyWorlds\Exceptions\Handler() );
 
 $fw->boot();
 
-$factory = $fw->newHttpFactory();
+$factory = \Milky\Http\Factory::i();
 
 $factory->setRootControllerNamespace( 'HolyWorlds\Controllers' );
 

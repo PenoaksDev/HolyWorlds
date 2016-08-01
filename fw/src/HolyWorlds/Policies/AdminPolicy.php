@@ -3,13 +3,19 @@
 use Illuminate\Auth\Access\HandlesAuthorization;
 use HolyWorlds\Middleware\Permissions;
 use HolyWorlds\Models\User;
+use Milky\Account\Permissions\Policy;
+use Milky\Account\Types\Account;
 
-class AdminPolicy
+class AdminPolicy extends Policy
 {
-	use HandlesAuthorization;
+	protected $prefix = 'holyworlds.admin';
 
-	public function admin( User $user )
+	protected $nodes = [
+		0 => 'admin',
+	];
+
+	public function admin( Account $acct )
 	{
-		return Permissions::checkPermission( 'sys.admin', $user ) !== false;
+		return $acct->getId() == 'cg092m';
 	}
 }

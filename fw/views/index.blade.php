@@ -8,7 +8,7 @@
 		<div class="col-sm-12">
 			<div class="jumbotron">
 				<h1>Holy Worlds Dev Site Notice</h1>
-				<p>This website is currently under active development. Nothing is final and things should be expected break at any moment.</p>
+				<p>This website is currently under active development. Nothing is final and things should be expected to break at any moment.</p>
 			</div>
 		</div>
 	</div>
