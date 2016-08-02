@@ -1,7 +1,7 @@
 <?php namespace HolyWorlds\Tagging;
 
 use HolyWorlds\Tagging\Model\Tagged;
-use Illuminate\Database\Eloquent\Collection;
+use Milky\Database\Eloquent\Collection;
 
 /**
  * Copyright (C) 2014 Robert Conner
@@ -189,7 +189,7 @@ trait Taggable
 
 		$tagNames = static::$taggingUtility->makeTagArray( $tagNames );
 
-		$normalizer = config( 'tagging.normalizer' );
+		$normalizer =Config::get( 'tagging.normalizer' );
 		$normalizer = $normalizer ?: [static::$taggingUtility, 'slug'];
 		$className = $query->getModel()->getMorphClass();
 
@@ -219,7 +219,7 @@ trait Taggable
 
 		$tagNames = static::$taggingUtility->makeTagArray( $tagNames );
 
-		$normalizer = config( 'tagging.normalizer' );
+		$normalizer =Config::get( 'tagging.normalizer' );
 		$normalizer = $normalizer ?: [static::$taggingUtility, 'slug'];
 
 		$tagNames = array_map( $normalizer, $tagNames );
@@ -241,7 +241,7 @@ trait Taggable
 	{
 		$tagName = trim( $tagName );
 
-		$normalizer = config( 'tagging.normalizer' );
+		$normalizer =Config::get( 'tagging.normalizer' );
 		$normalizer = $normalizer ?: [static::$taggingUtility, 'slug'];
 
 		$tagSlug = call_user_func( $normalizer, $tagName );
@@ -252,7 +252,7 @@ trait Taggable
 			return;
 		}
 
-		$displayer = config( 'tagging.displayer' );
+		$displayer =Config::get( 'tagging.displayer' );
 		$displayer = empty( $displayer ) ? '\Illuminate\Support\Str::title' : $displayer;
 
 		$tagged = new Tagged( [
@@ -277,7 +277,7 @@ trait Taggable
 	{
 		$tagName = trim( $tagName );
 
-		$normalizer = config( 'tagging.normalizer' );
+		$normalizer =Config::get( 'tagging.normalizer' );
 		$normalizer = $normalizer ?: [static::$taggingUtility, 'slug'];
 
 		$tagSlug = call_user_func( $normalizer, $tagName );
@@ -310,7 +310,7 @@ trait Taggable
 	 */
 	public static function untagOnDelete()
 	{
-		return isset( static::$untagOnDelete ) ? static::$untagOnDelete : config( 'tagging.untag_on_delete' );
+		return isset( static::$untagOnDelete ) ? static::$untagOnDelete : Config::get( 'tagging.untag_on_delete' );
 	}
 
 	/**
@@ -318,7 +318,7 @@ trait Taggable
 	 */
 	public static function shouldDeleteUnused()
 	{
-		return config( 'tagging.delete_unused_tags' );
+		return Config::get( 'tagging.delete_unused_tags' );
 	}
 
 	/**

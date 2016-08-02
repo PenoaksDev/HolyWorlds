@@ -1,14 +1,15 @@
 <?php namespace HolyWorlds\Models;
 
+use Codesleeve\Stapler\ORM\EloquentTrait;
+use Codesleeve\Stapler\ORM\StaplerableInterface;
+use HolyWorlds\Support\Traits\Commentable;
 use HolyWorlds\Support\Traits\HasOwner;
 use Milky\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Cache;
-use Slynova\Commentable\Traits\Commentable;
-use TeamTeaTime\Filer\HasAttachments;
+use Milky\Facades\Cache;
 
-class UserProfile extends Model
+class UserProfile extends Model implements StaplerableInterface
 {
-	use Commentable, HasAttachments, HasOwner;
+	use Commentable, HasOwner, EloquentTrait;
 
 	protected $fillable = [
 		'id',

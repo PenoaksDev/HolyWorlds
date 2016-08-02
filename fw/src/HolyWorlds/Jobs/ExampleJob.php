@@ -1,6 +1,4 @@
-<?php
-
-namespace HolyWorlds\Jobs;
+<?php namespace HolyWorlds\Jobs;
 
 class ExampleJob extends Job
 {

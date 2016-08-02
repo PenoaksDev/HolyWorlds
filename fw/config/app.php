@@ -108,6 +108,7 @@ return [
 	'providers' => [
 		\HolyWorlds\Providers\AppServiceProvider::class,
 		\HolyWorlds\Providers\AuthServiceProvider::class,
+		\HolyWorlds\Providers\StaplerServiceProvider::class,
 		\HolyWorlds\Providers\FinalServiceProvider::class,
 	],
 ];

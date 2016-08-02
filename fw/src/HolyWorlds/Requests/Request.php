@@ -1,6 +1,4 @@
-<?php
-
-namespace HolyWorlds\Http\Requests;
+<?php namespace HolyWorlds\Http\Requests;
 
 use Penoaks\Http\FormRequest;
 

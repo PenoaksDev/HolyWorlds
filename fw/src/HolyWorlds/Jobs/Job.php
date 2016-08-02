@@ -1,6 +1,4 @@
-<?php
-
-namespace HolyWorlds\Jobs;
+<?php namespace HolyWorlds\Jobs;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;

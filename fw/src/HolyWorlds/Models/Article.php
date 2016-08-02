@@ -2,10 +2,10 @@
 
 use Carbon\Carbon;
 use HolyWorlds\Support\Helper;
+use HolyWorlds\Support\Traits\Commentable;
 use HolyWorlds\Support\Traits\HasOwner;
 use HolyWorlds\Tagging\Taggable;
 use Milky\Database\Eloquent\Model;
-use Slynova\Commentable\Traits\Commentable;
 
 class Article extends Model
 {

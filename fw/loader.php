@@ -78,13 +78,13 @@ $fw->addRouteMiddleware( 'auth', [
 $fw->terminate();
 */
 
-$fw = fw( realpath( __DIR__ . '/../' ) );
+\Milky\Exceptions\Handler::extend( \HolyWorlds\Exceptions\Handler::class );
 
-$fw->setExceptionHandler( new \HolyWorlds\Exceptions\Handler() );
+$fw = fw( realpath( __DIR__ . '/../' ) );
 
 $fw->boot();
 
-$factory = \Milky\Http\Factory::i();
+$factory = \Milky\Http\HttpFactory::i();
 
 $factory->setRootControllerNamespace( 'HolyWorlds\Controllers' );
 

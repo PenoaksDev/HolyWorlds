@@ -19,7 +19,8 @@
     "symfony/psr-http-message-bridge": "^0.2.0",
     "zendframework/zend-diactoros": "^1.3",
     "edvinaskrucas/notification": "^5.1",
-    "filp/whoops": "^2.1"
+    "filp/whoops": "^2.1",
+    "codesleeve/stapler": "dev-master"
   },
   "require-dev": {
     "fzaninotto/faker": "~1.4"

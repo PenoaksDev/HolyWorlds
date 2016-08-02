@@ -1,26 +1,24 @@
-<?php
+<?php namespace HolyWorlds\Http\Controllers\Auth;
 
-namespace HolyWorlds\Http\Controllers\Auth;
-
-use Http\Controllers\Controller;
-use Illuminate\Auth\ResetsPasswords;
+use HolyWorlds\Controllers\Controller;
+use Milky\Auth\ResetsPasswords;
 
 class PasswordController extends Controller
 {
-    use ResetsPasswords;
+	use ResetsPasswords;
 
-    /**
-     * @var string
-     */
-    protected $redirectPath = '/';
+	/**
+	 * @var string
+	 */
+	protected $redirectPath = '/';
 
-    /**
-     * Create a new password controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('guest');
-    }
+	/**
+	 * Create a new password controller instance.
+	 *
+	 * @return void
+	 */
+	public function __construct()
+	{
+		$this->middleware( 'guest' );
+	}
 }
