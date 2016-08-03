@@ -1,9 +1,10 @@
-<?php namespace HolyWorlds\Http\Controllers\Forum\API;
+<?php namespace HolyWorlds\Controllers\Forum\API;
 
-use Penoaks\Http\JsonResponse;
-use Penoaks\Http\Request;
-use Penoaks\Support\Facades\Gate;
-use Models\Category;
+use HolyWorlds\Controllers\BaseController;
+use HolyWorlds\Models\Forum\Category;
+use Milky\Http\JsonResponse;
+use Milky\Http\Request;
+use Milky\Http\Response;
 
 class CategoryController extends BaseController
 {

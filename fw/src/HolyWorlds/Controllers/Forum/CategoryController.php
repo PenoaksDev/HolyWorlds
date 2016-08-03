@@ -4,8 +4,10 @@ use HolyWorlds\Controllers\BaseController;
 use HolyWorlds\Middleware\Permissions;
 use HolyWorlds\Models\Forum\Category;
 use HolyWorlds\Support\Forum;
+use Milky\Account\Permissions\PermissionManager;
 use Milky\Facades\Config;
 use Milky\Facades\Hooks;
+use Milky\Facades\View;
 use Milky\Http\JsonResponse;
 use Milky\Http\RedirectResponse;
 use Milky\Http\Request;
@@ -30,7 +32,7 @@ class CategoryController extends BaseController
 
 		Hooks::trigger( 'app.user.viewing.index' );
 
-		return view( 'forum.index', compact( 'categories' ) );
+		return View::render( 'forum.index', compact( 'categories' ) );
 	}
 
 	/**
@@ -44,17 +46,17 @@ class CategoryController extends BaseController
 		$category = Category::find( $id );
 
 		if ( is_null( $category ) || !$category->exists )
-			return view( "errors.404" );
+			return View::render( "errors.404" );
 
 		if ( Permissions::checkPermission( $category->permission ) )
 		{
 			Hooks::trigger( 'app.user.viewing.category', compact( 'category' ) );
 
 			$categories = [];
-			if ( Gate::allows( 'moveCategories' ) )
+			if ( PermissionManager::i()->has( 'forum.moveCategories' ) )
 				$categories = Category::where( "category_id", 0 )->get();
 
-			return view( 'forum.category.show', compact( 'categories', 'category', 'threads' ) );
+			return View::render( 'forum.category.show', compact( 'categories', 'category', 'threads' ) );
 		}
 
 		return $this->error( 403, "You do not have permission to view this thread." ); // TODO Redirect to forum index and display message.

@@ -1,7 +1,7 @@
 <?php namespace HolyWorlds\Support\Traits;
 
-use Illuminate\Support\Facades\Cache;
-use Penoaks\Facades\Config;
+use Milky\Facades\Cache;
+use Milky\Facades\Config;
 use ReflectionClass;
 
 trait CachesData

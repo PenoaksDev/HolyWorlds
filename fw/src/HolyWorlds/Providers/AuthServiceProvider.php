@@ -21,12 +21,14 @@ class AuthServiceProvider extends ServiceProvider
 	{
 		Blade::directive( 'has', function ( $permission )
 		{
-			return "<?php if ( \\Shared\\Http\\Middleware\\Permissions::checkPermission( $permission ) !== false ) { ?>";
+			return "<?php if( true ): ?>";
+			// return "<?php if ( \\Shared\\Http\\Middleware\\Permissions::checkPermission( $permission ) !== false ) { >";
 		} );
 
 		Blade::directive( 'endhas', function ()
 		{
-			return "<?php } ?>";
+			return "<?php endif; ?> ";
+			// return "<?php } >";
 		} );
 
 		new AccountManager( new CustomAuth() );

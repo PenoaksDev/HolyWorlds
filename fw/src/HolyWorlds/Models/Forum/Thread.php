@@ -1,15 +1,19 @@
 <?php namespace HolyWorlds\Models\Forum;
 
+use Carbon\Carbon;
 use Milky\Database\Eloquent\Relations\BelongsTo;
 use Milky\Database\Eloquent\Relations\BelongsToMany;
 use Milky\Database\Eloquent\Relations\HasMany;
+use Milky\Database\Eloquent\RoutableModel;
 use Milky\Database\Eloquent\SoftDeletes;
 use HolyWorlds\Support\Traits\HasAuthor;
 use HolyWorlds\Models\Setting;
 use HolyWorlds\Models\User;
 use Milky\Database\Query\Builder;
+use Milky\Helpers\Str;
+use Milky\Pagination\LengthAwarePaginator;
 
-class Thread extends BaseModel
+class Thread extends BaseModel implements RoutableModel
 {
 	use SoftDeletes, HasAuthor;
 
@@ -210,9 +214,7 @@ class Thread extends BaseModel
 		if ( !$this->old && auth()->check() )
 		{
 			if ( is_null( $this->reader ) )
-			{
 				return self::STATUS_UNREAD;
-			}
 
 			return ( $this->updatedSince( $this->reader ) ) ? self::STATUS_UPDATED : false;
 		}
@@ -224,22 +226,28 @@ class Thread extends BaseModel
 	 * Helper: Mark this thread as read for the given user ID.
 	 *
 	 * @param  int $userID
-	 * @return void
+	 * @return $this
 	 */
 	public function markAsRead( $userID )
 	{
 		if ( !$this->old )
 		{
 			if ( is_null( $this->reader ) )
-			{
 				$this->readers()->attach( $userID );
-			}
 			elseif ( $this->updatedSince( $this->reader ) )
-			{
 				$this->reader->touch();
-			}
 		}
 
 		return $this;
+	}
+
+	public function appendRoute( $route, &$parameters, &$appendedUrl )
+	{
+		return [
+			'category' => $this->category->id,
+			'category_slug' => Str::slugify( $this->category->title ),
+			'thread' => $this->id,
+			'thread_slug' => Str::slugify( $this->title )
+		];
 	}
 }

@@ -6,8 +6,10 @@ use HolyWorlds\Support\Traits\Commentable;
 use HolyWorlds\Support\Traits\HasOwner;
 use HolyWorlds\Tagging\Taggable;
 use Milky\Database\Eloquent\Model;
+use Milky\Database\Eloquent\RoutableModel;
+use Milky\Helpers\Str;
 
-class Article extends Model
+class Article extends Model implements RoutableModel
 {
 	use Commentable, HasOwner, Taggable;
 
@@ -33,5 +35,13 @@ class Article extends Model
 	public function revisions()
 	{
 		return $this->hasMany( ArticleRevision::class );
+	}
+
+	public function appendRoute( $route, &$parameters, &$appendedUrl )
+	{
+		return [
+			'article' => $this->id,
+			'title' => ( empty( $this->slug ) ? Str::slugify( $this->title ) : $this->slug )
+		];
 	}
 }

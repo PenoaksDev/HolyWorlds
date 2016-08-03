@@ -1,10 +1,16 @@
 <?php namespace HolyWorlds\Models\Forum;
 
-use Milky\Database\Eloquent\SoftDeletes;
-use HolyWorlds\Support\Traits\HasAuthor;
 use HolyWorlds\Support\Traits\CachesData;
+use HolyWorlds\Support\Traits\HasAuthor;
+use Milky\Database\Eloquent\Relations\BelongsTo;
+use Milky\Database\Eloquent\Relations\HasMany;
+use Milky\Database\Eloquent\RoutableModel;
+use Milky\Database\Eloquent\SoftDeletes;
+use Milky\Facades\Config;
+use Milky\Facades\URL;
+use Milky\Helpers\Str;
 
-class Post extends BaseModel
+class Post extends BaseModel implements RoutableModel
 {
 	use SoftDeletes, CachesData, HasAuthor;
 
@@ -53,7 +59,7 @@ class Post extends BaseModel
 	/**
 	 * Relationship: Thread.
 	 *
-	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+	 * @return BelongsTo
 	 */
 	public function thread()
 	{
@@ -63,7 +69,7 @@ class Post extends BaseModel
 	/**
 	 * Relationship: Parent post.
 	 *
-	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+	 * @return BelongsTo
 	 */
 	public function parent()
 	{
@@ -73,7 +79,7 @@ class Post extends BaseModel
 	/**
 	 * Relationship: Child posts.
 	 *
-	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
+	 * @return HasMany
 	 */
 	public function children()
 	{
@@ -82,7 +88,7 @@ class Post extends BaseModel
 
 	public function getContentAttribute()
 	{
-		return str_replace( "{SMILIES_PATH}", \URL::asset( 'images/smiles' ), $this->attributes['content'] );
+		return str_replace( "{SMILIES_PATH}", URL::asset( 'images/smiles' ), $this->attributes['content'] );
 	}
 
 	/**
@@ -107,12 +113,28 @@ class Post extends BaseModel
 		return $this->remember( 'sequenceNumber', function () use ( $self )
 		{
 			foreach ( $self->thread->posts as $index => $post )
-			{
 				if ( $post->id == $self->id )
-				{
 					return $index + 1;
-				}
-			}
 		} );
+	}
+
+	public function appendRoute( $route, &$parameters, &$appendedUrl )
+	{
+		if ( $route == 'forum.thread.show' )
+		{
+			// The requested route is for a thread; we need to specify the page number and append a hash for the post
+			$parameters['page'] = ceil( $this->sequenceNumber / $this->getPerPage() );
+			$appendedUrl = "#post-{$this->sequenceNumber}";
+		}
+		else
+			// Other post routes require the post parameter
+			$parameters['post'] = $this->id;
+
+		return [
+			'category' => $this->thread->category->id,
+			'category_slug' => Str::slugify( $this->thread->category->title ),
+			'thread' => $this->thread->id,
+			'thread_slug' => Str::slugify( $this->thread->title )
+		];
 	}
 }

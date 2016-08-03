@@ -3,7 +3,7 @@ $breadcrumbs = [];
 $cat = $category;
 do
 {
-	array_unshift($breadcrumbs, "<a href=\"" . Helper::route('forum.category.show', $cat) . "\">" . $cat->title . "</a>");
+	array_unshift($breadcrumbs, "<a href=\"" . URL::routeModel('forum.category.show', $cat) . "\">" . $cat->title . "</a>");
 	$cat = $cat->parent;
 }
 while ( $cat )
@@ -30,7 +30,7 @@ while ( $cat )
 		<div class="col-md-12">
 			@if ($category->threadsEnabled)
 				@can ('createThreads', $category)
-				<a href="{{ Helper::route('forum.thread.create', $category) }}" class="btn btn-default">New Thread</a>
+				<a href="{{ URL::routeModel('forum.thread.create', $category) }}" class="btn btn-default">New Thread</a>
 				@endcan
 			@endif
 		</div>
@@ -39,7 +39,7 @@ while ( $cat )
 		<div class="col-md-12">
 			@if (!$category->threadsPaginated->isEmpty())
 				@can ('manageThreads', $category)
-					<form action="{{ Helper::route('forum.bulk.thread.update') }}" method="POST" data-actions-form>
+					<form action="{{ URL::routeModel('forum.bulk.thread.update') }}" method="POST" data-actions-form>
 						{!! csrf_field() !!}
 						{!! method_field('delete') !!}
 					@endcan
@@ -76,7 +76,7 @@ while ( $cat )
 													<span class="label label-danger">Deleted</span>
 												@endif
 											</span>
-											<a href="{{ Helper::route('forum.thread.show', $thread) }}">
+											<a href="{{ URL::routeModel('forum.thread.show', $thread) }}">
 												<strong>{{ $thread->title }}</strong>
 											</a>
 											<br>
@@ -105,7 +105,7 @@ while ( $cat )
 													<br>
 													<span class="grey-text">({{ $thread->lastPost->posted }})</span>
 													<br>
-													<a href="{{ Helper::route('forum.thread.show', $thread->lastPost) }}">View Post</a>
+													<a href="{{ URL::routeModel('forum.thread.show', $thread->lastPost) }}">View Post</a>
 												@endif
 											</td>
 										@endif
@@ -122,7 +122,7 @@ while ( $cat )
 									<td>No threads found</td>
 									<td class="right-align" colspan="3">
 										@can ('createThreads', $category)
-											<a href="{{ Helper::route('forum.thread.create', $category) }}">Be the first to post!</a>
+											<a href="{{ URL::routeModel('forum.thread.create', $category) }}">Be the first to post!</a>
 										@endcan
 									</td>
 								</tr>
@@ -144,7 +144,7 @@ while ( $cat )
 			<div class="col-md-12">
 				@if ($category->threadsEnabled)
 					@has ('org.holyworlds.forum.thread.create.' . $category->id)
-						<a href="{{ Helper::route('forum.thread.create', $category) }}" class="btn btn-default">New Thread</a>
+						<a href="{{ URL::routeModel('forum.thread.create', $category) }}" class="btn btn-default">New Thread</a>
 					@endhas
 				@endif
 			</div>
@@ -161,7 +161,7 @@ while ( $cat )
 			@can ('markNewThreadsAsRead')
 				<hr>
 				<div class="center-align">
-					<form action="{{ Helper::route('forum.mark-new') }}" method="POST" data-confirm>
+					<form action="{{ URL::routeModel('forum.mark-new') }}" method="POST" data-confirm>
 						{!! csrf_field() !!}
 						{!! method_field('patch') !!}
 						<input type="hidden" name="category_id" value="{{ $category->id }}">
@@ -177,7 +177,7 @@ while ( $cat )
 @section('after_content')
 	@can ('manageCategories')
 		<hr>
-		<form action="{{ Helper::route('forum.category.update', $category) }}" method="POST" data-actions-form>
+		<form action="{{ URL::routeModel('forum.category.update', $category) }}" method="POST" data-actions-form>
 			{!! csrf_field() !!}
 			{!! method_field('patch') !!}
 

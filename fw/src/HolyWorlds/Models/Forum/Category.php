@@ -1,10 +1,15 @@
 <?php namespace HolyWorlds\Models\Forum;
 
 use HolyWorlds\Support\Traits\CachesData;
+use Milky\Account\Permissions\PermissionManager;
 use Milky\Database\Eloquent\Relations\BelongsTo;
 use Milky\Database\Eloquent\Relations\HasMany;
+use Milky\Database\Eloquent\RoutableModel;
+use Milky\Facades\Config;
+use Milky\Helpers\Str;
+use Milky\Pagination\LengthAwarePaginator;
 
-class Category extends BaseModel
+class Category extends BaseModel implements RoutableModel
 {
 	use CachesData;
 
@@ -47,7 +52,8 @@ class Category extends BaseModel
 	public function __construct( array $attributes = [] )
 	{
 		parent::__construct( $attributes );
-		$this->perPage = config( 'forum.preferences.pagination.categories' );
+
+		$this->perPage = Config::get( 'forum.preferences.pagination.categories' );
 	}
 
 	/**
@@ -77,7 +83,7 @@ class Category extends BaseModel
 	 */
 	public function threads()
 	{
-		$withTrashed = Gate::allows( 'viewTrashedThreads' );
+		$withTrashed = PermissionManager::i()->has( 'forum.viewTrashedThreads' );
 		$query = $this->hasMany( Thread::class );
 
 		return $withTrashed ? $query->withTrashed() : $query;
@@ -113,7 +119,7 @@ class Category extends BaseModel
 	public function getThreadsPaginatedAttribute()
 	{
 		// TODO ->orderBy('pinned', 'desc')
-		return $this->threads()->orderBy( 'updated_at', 'desc' )->paginate( config( 'forum.preferences.pagination.threads' ) );
+		return $this->threads()->orderBy( 'updated_at', 'desc' )->paginate( Config::get( 'forum.preferences.pagination.threads' ) );
 	}
 
 	/**
@@ -200,5 +206,19 @@ class Category extends BaseModel
 
 			return $depth;
 		} );
+	}
+
+	/**
+	 * @param $parameters
+	 * @param $appendedUrl
+	 *
+	 * @return array
+	 */
+	public function appendRoute( $route, &$parameters, &$appendedUrl )
+	{
+		return [
+			'category' => $this->id,
+			'category_slug' => Str::slugify( $this->title )
+		];
 	}
 }

@@ -6,10 +6,10 @@ use HolyWorlds\Models\Forum\Post;
 use HolyWorlds\Models\Forum\Thread;
 use HolyWorlds\Models\ImageAlbum;
 use HolyWorlds\Models\Session;
+use HolyWorlds\Support\Models\Comment;
 use Milky\Account\Models\User;
-use Milky\Http\Routing\Router;
 use Milky\Facades\View;
-use Slynova\Commentable\Models\Comment;
+use Milky\Http\Routing\Router;
 
 function loadRoutes( Router $r )
 {
@@ -195,7 +195,6 @@ function loadRoutes( Router $r )
 		$r->model( 'article', Article::class );
 		$r->model( 'character', Character::class );
 		$r->model( 'comment', Comment::class );
-		$r->model( 'event', Event::class );
 
 		$r->group( ["prefix" => "forum", "namespace" => "Forum", "as" => "forum."], function ( Router $r )
 		{
@@ -209,9 +208,18 @@ function loadRoutes( Router $r )
 
 			$r->group( ['prefix' => '{category}-{category_slug}'], function ( Router $r )
 			{
-				$r->get( '/', ['as' => 'category.show', 'uses' => "CategoryController@show"] );
-				$r->patch( '/', ['as' => 'category.update', 'uses' => "CategoryController@update"] );
-				$r->delete( '/', ['as' => 'category.delete', 'uses' => "CategoryController@destroy"] );
+				$r->get( '/', [
+					'as' => 'category.show',
+					'uses' => "CategoryController@show"
+				] );
+				$r->patch( '/', [
+					'as' => 'category.update',
+					'uses' => "CategoryController@update"
+				] );
+				$r->delete( '/', [
+					'as' => 'category.delete',
+					'uses' => "CategoryController@destroy"
+				] );
 
 				// Threads
 				$r->get( '{thread}-{thread_slug}', ['as' => 'thread.show', 'uses' => "ThreadController@show"] );

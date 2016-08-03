@@ -1,9 +1,10 @@
-<?php namespace HolyWorlds\Http\Controllers\Forum;
+<?php namespace HolyWorlds\Controllers\Forum;
 
-use Penoaks\Http\Request;
-use Events\Forum\UserCreatingPost;
-use Events\Forum\UserEditingPost;
-use Events\Forum\UserViewingPost;
+use HolyWorlds\Controllers\BaseController;
+use HolyWorlds\Support\Forum;
+use Milky\Http\RedirectResponse;
+use Milky\Http\Request;
+use Milky\Http\Response;
 
 class PostController extends BaseController
 {
@@ -11,7 +12,7 @@ class PostController extends BaseController
 	 * GET: Return a post view.
 	 *
 	 * @param  Request  $request
-	 * @return \Illuminate\Http\Response
+	 * @return Response
 	 */
 	public function show(Request $request)
 	{
@@ -29,7 +30,7 @@ class PostController extends BaseController
 	 * GET: Return a 'create post' (thread reply) view.
 	 *
 	 * @param  Request  $request
-	 * @return \Illuminate\Http\Response
+	 * @return Response
 	 */
 	public function create(Request $request)
 	{
@@ -51,7 +52,7 @@ class PostController extends BaseController
 	 * POST: Create a post.
 	 *
 	 * @param  Request  $request
-	 * @return \Illuminate\Http\RedirectResponse
+	 * @return RedirectResponse
 	 */
 	public function store(Request $request)
 	{
@@ -82,7 +83,7 @@ class PostController extends BaseController
 	 * GET: Return an 'edit post' view.
 	 *
 	 * @param  Request  $request
-	 * @return \Illuminate\Http\Response
+	 * @return Response
 	 */
 	public function edit(Request $request)
 	{
@@ -106,7 +107,7 @@ class PostController extends BaseController
 	 * PATCH: Update an existing post.
 	 *
 	 * @param  Request  $request
-	 * @return \Illuminate\Http\RedirectResponse
+	 * @return RedirectResponse
 	 */
 	public function update(Request $request)
 	{
@@ -125,7 +126,7 @@ class PostController extends BaseController
 	 * DELETE: Delete a post.
 	 *
 	 * @param  Request  $request
-	 * @return \Illuminate\Http\RedirectResponse
+	 * @return RedirectResponse
 	 */
 	public function destroy(Request $request)
 	{
@@ -148,7 +149,7 @@ class PostController extends BaseController
 	 * DELETE: Delete posts in bulk.
 	 *
 	 * @param  Request  $request
-	 * @return \Illuminate\Http\RedirectResponse
+	 * @return RedirectResponse
 	 */
 	public function bulkDestroy(Request $request)
 	{
@@ -169,7 +170,7 @@ class PostController extends BaseController
 	 * PATCH: Update posts in bulk.
 	 *
 	 * @param  Request  $request
-	 * @return \Illuminate\Http\RedirectResponse
+	 * @return RedirectResponse
 	 */
 	public function bulkUpdate(Request $request)
 	{

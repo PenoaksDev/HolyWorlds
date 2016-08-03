@@ -1,7 +1,8 @@
 <?php namespace HolyWorlds\Models\Forum;
 
+use Milky\Database\Eloquent\Builder;
 use Milky\Database\Eloquent\Model;
-use Illuminate\Http\Request;
+use Milky\Http\Request;
 
 abstract class BaseModel extends Model
 {
@@ -23,16 +24,14 @@ abstract class BaseModel extends Model
 	/**
 	 * Scope: Conditionally apply where() to the query based on the current request.
 	 *
-	 * @param  \Illuminate\Database\Query\Builder $query
+	 * @param  Builder $query
 	 * @param  Request $request
 	 * @return Model
 	 */
 	public function scopeRequestWhere( $query, Request $request )
 	{
 		if ( $request->has( 'where' ) )
-		{
 			$query->where( $request->input( 'where' ) );
-		}
 
 		return $query;
 	}
@@ -40,16 +39,14 @@ abstract class BaseModel extends Model
 	/**
 	 * Scope: Conditionally apply with() to the query based on the current request.
 	 *
-	 * @param  \Illuminate\Database\Query\Builder $query
+	 * @param  Builder $query
 	 * @param  Request $request
 	 * @return Model
 	 */
 	public function scopeRequestWith( $query, Request $request )
 	{
 		if ( $request->has( 'with' ) )
-		{
 			$query->with( $request->input( 'with' ) );
-		}
 
 		return $query;
 	}
@@ -57,16 +54,14 @@ abstract class BaseModel extends Model
 	/**
 	 * Scope: Conditionally apply append() to the query based on the current request.
 	 *
-	 * @param  \Illuminate\Database\Query\Builder $query
+	 * @param  Builder $query
 	 * @param  Request $request
 	 * @return Model
 	 */
 	public function scopeRequestAppend( $query, Request $request )
 	{
 		if ( $request->has( 'append' ) )
-		{
 			$query->append( $request->input( 'append' ) );
-		}
 
 		return $query;
 	}
@@ -74,7 +69,7 @@ abstract class BaseModel extends Model
 	/**
 	 * Scope: Coditionally apply orderBy() to the query based on the current request.
 	 *
-	 * @param  \Illuminate\Database\Query\Builder $query
+	 * @param  Builder $query
 	 * @param  Request $request
 	 * @return Model
 	 */

@@ -1,13 +1,16 @@
 <?php namespace HolyWorlds\Models;
 
+use Codesleeve\Stapler\Attachment;
+use Codesleeve\Stapler\ORM\EloquentTrait;
+use Codesleeve\Stapler\ORM\StaplerableInterface;
+use HolyWorlds\Support\Traits\Commentable;
+use HolyWorlds\Support\Traits\HasOwner;
 use Milky\Database\Eloquent\Model;
-use HolyWorlds\Models\Traits\HasOwner;
-use Slynova\Commentable\Traits\Commentable;
-use TeamTeaTime\Filer\HasAttachments;
+use Milky\Database\Eloquent\Relations\BelongsTo;
 
-class Character extends Model
+class Character extends Model implements StaplerableInterface
 {
-	use Commentable, HasAttachments, HasOwner;
+	use Commentable, HasOwner, EloquentTrait;
 
 	/**
 	 * The attributes that are mass assignable.
@@ -28,7 +31,7 @@ class Character extends Model
 	 *
 	 * @return void
 	 */
-	protected static function boot()
+	public static function boot()
 	{
 		parent::boot();
 
@@ -48,7 +51,7 @@ class Character extends Model
 	/**
 	 * Relationship: class
 	 *
-	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+	 * @return BelongsTo
 	 */
 	public function gameClass()
 	{
@@ -58,7 +61,7 @@ class Character extends Model
 	/**
 	 * Attribute: portrait.
 	 *
-	 * @return \TeamTeaTime\Filer\Attachment
+	 * @return Attachment
 	 */
 	public function getPortraitAttribute()
 	{

@@ -1,6 +1,8 @@
 <?php namespace HolyWorlds\Models;
 
+use Milky\Database\Eloquent\Builder;
 use Milky\Database\Eloquent\Model;
+use Milky\Database\Eloquent\Relations\BelongsTo;
 
 class Session extends Model
 {
@@ -33,7 +35,7 @@ class Session extends Model
 	/**
 	 * Relationship: user
 	 *
-	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+	 * @return BelongsTo
 	 */
 	public function user()
 	{
@@ -43,8 +45,8 @@ class Session extends Model
 	/**
 	 * Scope: authenticated
 	 *
-	 * @param  \Illuminate\Database\Query\Builder $query
-	 * @return \Illuminate\Database\Query\Builder
+	 * @param  Builder $query
+	 * @return Builder
 	 */
 	public function scopeAuthenticated( $query )
 	{
@@ -54,9 +56,9 @@ class Session extends Model
 	/**
 	 * Scope: recent
 	 *
-	 * @param  \Illuminate\Database\Query\Builder $query
+	 * @param  Builder $query
 	 * @param  int $minutes
-	 * @return \Illuminate\Database\Query\Builder
+	 * @return Builder
 	 */
 	public function scopeRecent( $query, $minutes = 5 )
 	{

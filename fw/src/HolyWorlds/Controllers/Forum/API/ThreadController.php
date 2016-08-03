@@ -1,4 +1,4 @@
-<?php namespace HolyWorlds\Http\Controllers\Forum\API;
+<?php namespace HolyWorlds\Controllers\Forum\API;
 
 use Penoaks\Http\JsonResponse;
 use Penoaks\Http\Request;
