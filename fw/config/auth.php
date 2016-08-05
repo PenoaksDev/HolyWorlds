@@ -71,9 +71,9 @@ return [
 			'table' => 'users',
 		],
 		'eloquent' => [
-			'uses' => 'eloquent',
-			'usrModel' => \HolyWorlds\Models\User::class,
-			'grpModel' => \HolyWorlds\Models\Group::class,
+			'uses' => 'holyworlds.auth',
+			'usrModel' => \Milky\Account\Models\User::class,
+			'grpModel' => \Milky\Account\Models\Group::class,
 		],
 	],
 

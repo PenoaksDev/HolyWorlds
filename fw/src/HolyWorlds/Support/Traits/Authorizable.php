@@ -1,7 +1,5 @@
 <?php namespace HolyWorlds\Support\Traits;
 
-use Illuminate\Contracts\Auth\Access\Gate;
-
 /**
  * The MIT License (MIT)
  * Copyright 2016 Penoaks Publishing Co. <development@penoaks.org>
@@ -21,7 +19,8 @@ trait Authorizable
 	 */
 	public function can( $ability, $arguments = [] )
 	{
-		return app( Gate::class )->forUser( $this )->check( $ability, $arguments );
+		return true;
+		// return app( Gate::class )->forUser( $this )->check( $ability, $arguments );
 	}
 
 	/**
@@ -33,7 +32,8 @@ trait Authorizable
 	 */
 	public function cant( $ability, $arguments = [] )
 	{
-		return !$this->can( $ability, $arguments );
+		return false;
+		// return !$this->can( $ability, $arguments );
 	}
 
 	/**
@@ -45,6 +45,7 @@ trait Authorizable
 	 */
 	public function cannot( $ability, $arguments = [] )
 	{
-		return $this->cant( $ability, $arguments );
+		return false;
+		// return $this->cant( $ability, $arguments );
 	}
 }

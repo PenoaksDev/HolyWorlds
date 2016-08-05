@@ -5,26 +5,26 @@
 
 @section('content')
 <div class="row">
-	<div class="col s12 {{ session('pending_user_auth') ? 'm12 l8' : 'm6 l4' }} offset-l2">
+	<div class="col s12 {{ Session::get('pending_user_auth') ? 'm12 l8' : 'm6 l4' }} offset-l2">
 		<form role="form" method="POST" action="{{ url('auth/register') }}">
-			{!! csrf_field() !!}
+			{!! Session::csrfField() !!}
 
-			@if (session('pending_user_auth'))
+			@if ( Session::get('pending_user_auth') )
 				<div class="alert success">
-					Almost done! Just finish registration below, or if you want to associate your {{ session('pending_user_auth_provider') }} account with an existing TRN one, <a href="{{ url('auth/login') }}">log in</a> first.
+					Almost done! Just finish registration below, or if you want to associate your {{ Session::get('pending_user_auth_provider') }} account with an existing TRN one, <a href="{{ url('auth/login') }}">log in</a> first.
 				</div>
 			@endif
 
 			<div class="row">
 				<div class="input-field col s12">
-					<input id="name" name="name" type="text" value="{{ (is_null(old('name')) && session('pending_user_auth')) ? session('pending_user_auth')->nickname : old('name') }}">
+					<input id="name" name="name" type="text" value="{{ (is_null( Request::old('name') ) && Session::get('pending_user_auth')) ? Session::get('pending_user_auth')->nickname : Request::old('name') }}">
 					<label for="name">Name</label>
 					<span class="grey-text">This is the name displayed throughout the site (family name can be set through your profile after registering). Spaces are allowed.</span>
 				</div>
 			</div>
 			<div class="row">
 				<div class="input-field col s12">
-					<input id="email" name="email" type="email" value="{{ (is_null(old('email')) && session('pending_user_auth')) ? session('pending_user_auth')->email : old('email') }}" class="validate">
+					<input id="email" name="email" type="email" value="{{ ( is_null( Request::old('email') ) && Session::get('pending_user_auth')) ? Session::get('pending_user_auth')->email : Request::old('email') }}" class="validate">
 					<label for="email" data-error="Please enter a valid email address">Email address</label>
 				</div>
 			</div>
@@ -50,13 +50,13 @@
 			</div>
 		</form>
 	</div>
-	@if (!session('pending_user_auth'))
+	@if (! Session::get('pending_user_auth'))
 		<div class="col s12 m6 l4">
 				<p><strong>Alternatively, sign up via...</strong></p>
 
 				<hr>
 
-				@foreach (config('auth.login_providers') as $key => $provider)
+				@foreach ( Config::get('auth.login_providers') as $key => $provider )
 					<p><a href="{{ url("auth/{$key}") }}" class="waves-effect waves-light btn-large block brand-{{ $key }}">{{ $provider }} :D</a></p>
 				@endforeach
 		</div>

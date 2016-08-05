@@ -6,6 +6,7 @@ use Milky\Account\Middleware\RedirectIfAuthenticated;
 use Milky\Account\Models\User;
 use Milky\Account\Traits\AuthenticatesUsers;
 use Milky\Account\Traits\ThrottlesLogins;
+use Milky\Account\Types\Account;
 use Milky\Facades\Acct;
 use Milky\Facades\Config;
 use Milky\Facades\Log;
@@ -19,7 +20,7 @@ use Milky\Http\Response;
 
 class AuthController extends BaseController
 {
-	use AuthenticatesUsers;//, ThrottlesLogins;
+	use AuthenticatesUsers, ThrottlesLogins;
 
 	/**
 	 * Create a new authentication controller instance.
@@ -119,23 +120,20 @@ class AuthController extends BaseController
 	 * Send the response after the user was authenticated.
 	 *
 	 * @param  Request $request
-	 * @param  User $user
+	 * @param  Account $user
 	 * @return Response
 	 */
-	protected function authenticated( Request $request, User $user )
+	protected function authenticated( Request $request, Account $user )
 	{
 		if ( !$user->isActivated() )
 		{
 			Acct::logout();
-			Notification::warning( "Your account is not activated. :(" );
 
 			// TODO Give the option to redispatch the activation e-mail
-			return back();
+			return Redirect::back()->withErrors( 'warning', "Your account is not activated. :(" );
 		}
 
-		Notification::success( "Welcome, {$user->name}!" );
-
-		return Redirect::intended( '/' );
+		return Redirect::intended( '/' )->withErrors( 'success', "Welcome, {$user->getDisplayName()}!" );
 	}
 
 	/**
@@ -146,11 +144,7 @@ class AuthController extends BaseController
 	public function getLogout()
 	{
 		if ( !empty( URL::previous() ) && !str_contains( URL::previous(), 'auth/' ) )
-		{
 			$this->redirectAfterLogout = URL::previous();
-		}
-
-		Notification::success( "You are now logged out." );
 
 		return $this->logout();
 	}
@@ -164,7 +158,7 @@ class AuthController extends BaseController
 	{
 		Session::keep( ['pending_user_auth', 'pending_user_auth_provider'] );
 
-		return view( 'auth.register' );
+		return View::render( 'auth.register' );
 	}
 
 	/**

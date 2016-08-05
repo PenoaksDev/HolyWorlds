@@ -31,8 +31,6 @@ class AuthServiceProvider extends ServiceProvider
 			// return "<?php } >";
 		} );
 
-		new AccountManager( new CustomAuth() );
-
 		PermissionManager::policy( new AdminPolicy() );
 		PermissionManager::policy( new ForumPolicy() );
 

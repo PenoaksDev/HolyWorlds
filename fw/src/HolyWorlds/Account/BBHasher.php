@@ -1,4 +1,4 @@
-<?php namespace HolyWorlds\Support;
+<?php namespace HolyWorlds\Account;
 
 class BBHasher
 {
@@ -48,9 +48,7 @@ class BBHasher
 	{
 		$itoa64 = './0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
 		if ( strlen( $hash ) == 34 )
-		{
 			return ( self::_hash_crypt_private( $password, $hash, $itoa64 ) === $hash ) ? true : false;
-		}
 
 		return ( md5( $password ) === $hash ) ? true : false;
 	}

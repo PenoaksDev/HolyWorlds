@@ -1,8 +1,6 @@
 <?php namespace HolyWorlds\Support;
 
-use Calendar;
-use Penoaks\Http\UploadedFile;
-use Penoaks\Support\Collection;
+use Milky\Database\Eloquent\Collection;
 
 class Util
 {

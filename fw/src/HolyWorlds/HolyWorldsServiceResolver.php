@@ -1,5 +1,9 @@
 <?php namespace HolyWorlds;
 
+use HolyWorlds\Account\CustomAuth;
+use HolyWorlds\Models\Group;
+use HolyWorlds\Models\User;
+use Milky\Account\Middleware\RedirectIfAuthenticated;
 use Milky\Binding\Resolvers\ServiceResolver;
 
 /**
@@ -13,10 +17,11 @@ use Milky\Binding\Resolvers\ServiceResolver;
 class HolyWorldsServiceResolver extends ServiceResolver
 {
 	protected $middlewareGuestInstance;
+	protected $auth;
 
 	public function __construct()
 	{
-
+		$this->auth = new CustomAuth( User::class, Group::class );
 	}
 
 	public function middlewareGuest()

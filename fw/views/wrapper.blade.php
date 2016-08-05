@@ -57,7 +57,8 @@
 					</ul>
 				</li>
 				{{-- <li><a href="{{ url('gallery') }}"><span class="glyphicon glyphicon-picture"></span> Gallery</a></li> --}}
-				<li><a href="{{ URL::to('pages/about') }}"><span class="glyphicon glyphicon-heart"></span> About</a></li>
+				<li><a href="{{ URL::to('pages/about') }}"><span class="glyphicon glyphicon-heart"></span> About</a>
+				</li>
 				<li><a href="{{ URL::to('pages/contact') }}"><span class="glyphicon glyphicon-envelope"></span> Contact</a>
 				</li>
 			</ul>
@@ -74,7 +75,7 @@
 					<li class="dropdown"> <!-- {{ url('account/notifications') }} -->
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" id="btnNotice">
 							<i class="fa fa-bell-o" aria-hidden="true"></i>
-							<span class="badge">{{ Acct::acct()->countNotificationsNotRead() }}</span>
+							<span class="badge">{{-- Acct::acct()->countNotificationsNotRead() --}}</span>
 						</a>
 						<div class="dropdown-menu">
 							<center><p style="color: #fff;">No Notifications</p></center>
@@ -103,7 +104,7 @@
 							@endif
 							<li role="separator" class="divider"></li>
 							<li>
-								<a href="{{ url('auth/logout') }}"><i class="fa fa-sign-out" aria-hidden="true"></i> Sign Out</a>
+								<a class="noAjax" href="{{ URL::route( 'logout' ) }}"><i class="fa fa-sign-out" aria-hidden="true"></i> Sign Out</a>
 							</li>
 						</ul>
 					</li>
@@ -205,7 +206,7 @@
 								var referrer = '' + window.location;
 								e.preventDefault();
 								navigate( href, referrer );
-							}
+							};
 
 							$( 'a:not(.noAjax):not([class^="phpdebugbar"]):not([href^="javascript"])[rel!="external"][target!="_blank"][href!="#"], .ajaxLink' )
 									.click( onClickEvent );
@@ -214,9 +215,7 @@
 							{
 								// Ignore empty hash and repeated navigation from state changes
 								if( href == "#" || href == lastHref )
-								{
 									return;
-								}
 
 								navigating = true;
 

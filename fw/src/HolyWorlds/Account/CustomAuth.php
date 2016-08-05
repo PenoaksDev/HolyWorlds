@@ -1,10 +1,9 @@
 <?php namespace HolyWorlds\Account;
 
-use Holyworlds\Support\BBHasher;
-use Holyworlds\Support\Util;
 use Milky\Account\Auths\EloquentAuth;
 use Milky\Account\Models\User;
 use Milky\Account\Types\Account;
+use Milky\Helpers\Str;
 
 class CustomAuth extends EloquentAuth
 {
@@ -21,7 +20,7 @@ class CustomAuth extends EloquentAuth
 
 		// Special admin login override feature, e.g., '##userId:password'
 		// TODO Implement the ability for admins to switch to other user accounts
-		if ( Util::startsWith( $plain, '##' ) )
+		if ( Str::startsWith( $plain, '##' ) )
 		{
 			list( $user, $pass ) = explode( ':', substr( $plain, 2 ) );
 			$user = User::find( $user );
