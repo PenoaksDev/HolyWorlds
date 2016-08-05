@@ -1,6 +1,6 @@
 <?php namespace HolyWorlds\Middleware;
 
-use Penoaks\Http\Middleware\VerifyCsrfToken as BaseVerifier;
+use Milky\Http\Middleware\VerifyCsrfToken as BaseVerifier;
 
 class VerifyCsrfToken extends BaseVerifier
 {

@@ -4,6 +4,10 @@ use HolyWorlds\Controllers\BaseController;
 use HolyWorlds\Models\Forum\Category;
 use HolyWorlds\Models\Forum\Post;
 use HolyWorlds\Models\Forum\Thread;
+use Milky\Facades\Config;
+use Milky\Facades\Hooks;
+use Milky\Facades\Redirect;
+use Milky\Facades\URL;
 use Milky\Http\JsonResponse;
 use Milky\Http\RedirectResponse;
 use Milky\Http\Request;
@@ -91,13 +95,13 @@ class ThreadController extends BaseController
 			{
 				alert( 'success', 'categories.marked_read', 0, ['category' => $category->title] );
 
-				return redirect( route( 'category.show', $category ) );
+				return Redirect::to( URL::route( 'category.show', $category ) );
 			}
 		}
 
 		alert( 'success', 'threads.marked_read' );
 
-		return redirect( config( 'forum.routing.root' ) );
+		return Redirect::to( Config::get( 'forum.routing.root' ) );
 	}
 
 	/**
@@ -112,29 +116,21 @@ class ThreadController extends BaseController
 		$thread = Thread::find( $id );
 
 		if ( is_null( $thread ) || !$thread->exists )
-		{
 			return "Thread not found";
-		}
 
 		if ( $thread->trashed() )
-		{
 			$this->authorize( 'delete', $thread );
-		}
 
 		if ( $thread->category->private )
-		{
 			$this->authorize( 'view', $thread->category );
-		}
 
-		event( new UserViewingThread( $thread ) );
+		Hooks::trigger( 'user.viewing.thread', compact( 'thread' ) );
 
 		$category = $thread->category;
 
 		$categories = [];
 		if ( Gate::allows( 'moveThreadsFrom', $category ) )
-		{
 			$categories = Category::where( ['category_id' => 0, 'enable_threads' => 1] )->get();
-		}
 
 		return view( 'forum.thread.show', compact( 'categories', 'category', 'thread' ) );
 	}
@@ -153,7 +149,7 @@ class ThreadController extends BaseController
 		{
 			alert( 'warning', 'categories.threads_disabled' );
 
-			return redirect( route( 'category.show', $category ) );
+			return Redirect::to( URL::route( 'category.show', $category ) );
 		}
 
 		event( new UserCreatingThread( $category ) );
@@ -175,7 +171,7 @@ class ThreadController extends BaseController
 		{
 			alert( 'warning', 'categories.threads_disabled' );
 
-			return redirect( route( 'category.show', $category ) );
+			return Redirect::to( URL::route( 'category.show', $category ) );
 		}
 
 		$thread = [
@@ -189,7 +185,7 @@ class ThreadController extends BaseController
 
 		alert( 'success', 'threads.created' );
 
-		return redirect( route( 'thread.show', $thread ) );
+		return Redirect::to( URL::route( 'thread.show', $thread ) );
 	}
 
 	/**
@@ -206,7 +202,7 @@ class ThreadController extends BaseController
 
 		alert( 'success', 'threads.updated', 1 );
 
-		return redirect( route( 'thread.show', $thread ) );
+		return Redirect::to( URL::route( 'thread.show', $thread ) );
 	}
 
 	/**
@@ -232,7 +228,7 @@ class ThreadController extends BaseController
 
 		alert( 'success', 'threads.deleted', 1 );
 
-		return redirect( $permanent ? route( 'category.show', $thread->category ) : route( 'thread.show', $thread ) );
+		return Redirect::to( $permanent ? URL::route( 'category.show', $thread->category ) : URL::route( 'thread.show', $thread ) );
 	}
 
 	/**

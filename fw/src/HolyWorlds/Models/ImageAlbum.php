@@ -1,14 +1,16 @@
 <?php namespace HolyWorlds\Models;
 
-use Conner\Tagging\Taggable;
+use Codesleeve\Stapler\ORM\EloquentTrait;
+use Codesleeve\Stapler\ORM\StaplerableInterface;
+use HolyWorlds\Support\Traits\Commentable;
+use HolyWorlds\Support\Traits\HasOwner;
+use HolyWorlds\Tagging\Taggable;
 use Milky\Database\Eloquent\Model;
-use HolyWorlds\Models\Traits\HasOwner;
-use Slynova\Commentable\Traits\Commentable;
-use TeamTeaTime\Filer\HasAttachments;
+use Milky\Facades\URL;
 
-class ImageAlbum extends Model
+class ImageAlbum extends Model implements StaplerableInterface
 {
-	use Commentable, HasAttachments, HasOwner, Taggable;
+	use Commentable, HasOwner, Taggable, EloquentTrait;
 
 	/**
 	 * The attributes that are mass assignable.
@@ -63,7 +65,7 @@ class ImageAlbum extends Model
 	 */
 	public function getCoverUrlAttribute()
 	{
-		return route( 'imagecache', [
+		return URL::route( 'imagecache', [
 			'template' => 'large',
 			'filename' => $this->attachments->first()->item->getRelativePath()
 		] );
@@ -76,6 +78,6 @@ class ImageAlbum extends Model
 	 */
 	public function getUrlAttribute()
 	{
-		return route( 'image-album.show', ['id' => $this->id, 'name' => str_slug( $this->title )] );
+		return URL::route( 'image-album.show', ['id' => $this->id, 'name' => str_slug( $this->title )] );
 	}
 }

@@ -38,32 +38,32 @@ function loadRoutes( Router $r )
 		} );
 
 		// Auth
-		$r->group( ['prefix' => 'auth'], function ( Router $r )
+		$r->group( ['prefix' => 'acct'], function ( Router $r )
 		{
 			// Registration
-			$r->get( 'register', 'Auth\AuthController@getRegister' );
-			$r->post( 'register', 'Auth\AuthController@postRegister' );
+			$r->get( 'register', ['as' => 'register', 'uses' => 'Acct\AuthController@getRegister'] );
+			$r->post( 'register', 'Acct\AuthController@postRegister' );
 
 			// Activation
 			$r->get( 'activate/{token}', [
 				'as' => 'auth.get.activation',
-				'uses' => 'Auth\AuthController@getActivation'
+				'uses' => 'Acct\AuthController@getActivation'
 			] );
-			$r->post( 'activate', ['as' => 'auth.post.activation', 'uses' => 'Auth\AuthController@postActivation'] );
+			$r->post( 'activate', ['as' => 'auth.post.activation', 'uses' => 'Acct\AuthController@postActivation'] );
 
 			// Login
-			$r->get( 'login', 'Auth\AuthController@getLogin' );
-			$r->post( 'login', 'Auth\AuthController@postLogin' );
-			$r->get( 'logout', 'Auth\AuthController@getLogout' );
+			$r->get( 'login', ['as' => 'login', 'uses' => 'Acct\AuthController@getLogin'] );
+			$r->post( 'login', 'Acct\AuthController@postLogin' );
+			$r->get( 'logout', ['as' => 'logout', 'uses' => 'Acct\AuthController@getLogout'] );
 
 			// Password reset
-			$r->get( 'password/reset/{token?}', 'Auth\PasswordController@showResetForm' );
-			$r->post( 'password/email', 'Auth\PasswordController@sendResetLinkEmail' );
-			$r->post( 'password/reset', 'Auth\PasswordController@reset' );
+			$r->get( 'password/reset/{token?}', 'Acct\PasswordController@showResetForm' );
+			$r->post( 'password/email', 'Acct\PasswordController@sendResetLinkEmail' );
+			$r->post( 'password/reset', 'Acct\PasswordController@reset' );
 
 			// Socialite
-			$r->get( '{provider}', 'Auth\AuthController@redirectToProvider' );
-			$r->get( '{provider}/callback', 'Auth\AuthController@handleProviderCallback' );
+			$r->get( '{provider}', 'Acct\AuthController@redirectToProvider' );
+			$r->get( '{provider}/callback', 'Acct\AuthController@handleProviderCallback' );
 		} );
 
 		// Account
@@ -193,7 +193,6 @@ function loadRoutes( Router $r )
 		// Model binding
 		$r->model( 'album', ImageAlbum::class );
 		$r->model( 'article', Article::class );
-		$r->model( 'character', Character::class );
 		$r->model( 'comment', Comment::class );
 
 		$r->group( ["prefix" => "forum", "namespace" => "Forum", "as" => "forum."], function ( Router $r )

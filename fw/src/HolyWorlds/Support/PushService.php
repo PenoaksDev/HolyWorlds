@@ -32,7 +32,7 @@ class PushService implements WampServerInterface
 
 	public function onOpen( ConnectionInterface $conn )
 	{
-		$session = ( new SessionManager() )->driver();
+		$session = SessionManager::i()->driver();
 		$cookies = $conn->WebSocket->request->getCookies();
 
 		if ( !array_key_exists( $this->cookie_name, $cookies ) )

@@ -1,7 +1,10 @@
 <?php namespace HolyWorlds\Middleware;
 
 use Closure;
-use Penoaks\Http\Request;
+use Milky\Facades\Acct;
+use Milky\Facades\Config;
+use Milky\Facades\Response;
+use Milky\Http\Request;
 
 class APIAuth
 {
@@ -14,8 +17,8 @@ class APIAuth
 	 */
 	public function handle( Request $request, Closure $next )
 	{
-		$tokenHeader = 'Token token="' . config( 'forum.api.token' ) . '"';
-		if ( auth()->check() || $request->header( 'Authorization' ) == $tokenHeader )
+		$tokenHeader = 'Token token="' . Config::get( 'forum.api.token' ) . '"';
+		if ( Acct::check() || $request->header( 'Authorization' ) == $tokenHeader )
 		{
 			// User is authenticated or a valid API token was provided; continue the request
 			return $next( $request );
@@ -25,13 +28,11 @@ class APIAuth
 			// No authentication/authorization
 
 			if ( $request->ajax() )
-			{
 				// For AJAX requests, just return the appropriate response
-				return response()->json( ['error' => "User must be authenticated to access this resource."], 401 );
-			}
+				return Response::json( ['error' => "User must be authenticated to access this resource."], 401 );
 
 			// For all other request types, attempt HTTP basic authentication
-			return auth()->onceBasic() ?: $next( $request );
+			return Acct::onceBasic() ?: $next( $request );
 		}
 	}
 }

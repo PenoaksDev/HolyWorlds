@@ -4,6 +4,7 @@ use Milky\Auth\Access\AuthorizesRequests;
 use Milky\Auth\Access\AuthorizesResources;
 use Milky\Bus\DispatchesJobs;
 use Milky\Database\Eloquent\Collection;
+use Milky\Facades\Redirect;
 use Milky\Http\RedirectResponse;
 use Milky\Http\Request;
 use Milky\Http\Routing\Controller;
@@ -41,7 +42,7 @@ class BaseController extends Controller
 		else
 			alert( 'warning', 'general.invalid_selection' );
 
-		return redirect()->back();
+		return Redirect::back();
 	}
 
 	/**

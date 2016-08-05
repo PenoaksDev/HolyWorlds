@@ -9,11 +9,11 @@
 			echo ' - ' . $__env->yieldContent( 'title' ); ?></title>
 
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" integrity="sha384-MI32KR77SgI9QAPUs+6R7leEOwtop70UsjEtFEezfKnMjXWx15NENsZpfDgq8m8S" crossorigin="anonymous" />
-	<link rel="stylesheet" src="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600%7CArvo:700" integrity="sha384-47bvWTKZJpcIOn6FWukdVDglecWZ3LNjx9VO5WMFgg0806mbCW1iPoV2XCgTJGpm" crossorigin="anonymous" />
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600%7CArvo:700" integrity="sha384-47bvWTKZJpcIOn6FWukdVDglecWZ3LNjx9VO5WMFgg0806mbCW1iPoV2XCgTJGpm" crossorigin="anonymous" />
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
 	<link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/dark-hive/jquery-ui.css" integrity="sha384-3NnLWQRgj7gnx73m9m1/w3QauUEzv26OgowZBfureQ7rFPeBeKl0X7DiytyrlfOK" crossorigin="anonymous">
-	<link href="{{ URL::asset('css/style.css') }}" rel="stylesheet" />
+	<link href="/css/style.css{{-- URL::asset('css/style.css') --}}" rel="stylesheet" />
 
 	<script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
 
@@ -44,6 +44,7 @@
 		</div>
 		<div id="navbar" class="navbar-collapse collapse">
 			<ul class="nav navbar-nav">
+				<li><a href="{{ url('/') }}"><span class="glyphicon glyphicon-home"></span> Home</a></li>
 				<li class="dropdown">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-book"></span> Forum
 						<span class="caret"></span></a>
@@ -56,16 +57,18 @@
 					</ul>
 				</li>
 				{{-- <li><a href="{{ url('gallery') }}"><span class="glyphicon glyphicon-picture"></span> Gallery</a></li> --}}
-				<li><a href="{{ url('pages/about') }}"><span class="glyphicon glyphicon-heart"></span> About</a></li>
-				<li><a href="{{ url('pages/contact') }}"><span class="glyphicon glyphicon-envelope"></span> Contact</a>
+				<li><a href="{{ URL::to('pages/about') }}"><span class="glyphicon glyphicon-heart"></span> About</a></li>
+				<li><a href="{{ URL::to('pages/contact') }}"><span class="glyphicon glyphicon-envelope"></span> Contact</a>
 				</li>
 			</ul>
 			<ul style="margin-right: 15px;" class="nav navbar-nav navbar-right">
 				@if ( Acct::isGuest() )
 					<li><p class="navbar-text">Welcome Guest</p></li>
-					<li><a href="{{ url('auth/login') }}"><i class="fa fa-sign-in" aria-hidden="true"></i> Sign In</a>
+					<li>
+						<a href="{{ URL::route( 'login' ) }}"><i class="fa fa-sign-in" aria-hidden="true"></i> Sign In</a>
 					</li>
-					<li><a href="{{ url('auth/register') }}"><i class="fa fa-user-plus" aria-hidden="true"></i> Register</a>
+					<li>
+						<a href="{{ URL::route( 'register' ) }}"><i class="fa fa-user-plus" aria-hidden="true"></i> Register</a>
 					</li>
 				@else
 					<li class="dropdown"> <!-- {{ url('account/notifications') }} -->
@@ -143,15 +146,11 @@
 					<div class="clearfix"></div>
 				</div>
 				<div class="panel-body">
-					{-- Notification::showAll() --}
+					{{-- Notification::showAll() --}}
 					@if (isset($errors) && count($errors) > 0)
-						<div class="alert error">
-							<ul>
-								@foreach ($errors->all() as $error)
-									<li>{{ $error }}</li>
-								@endforeach
-							</ul>
-						</div>
+						@foreach ($errors->all() as $error)
+							<p class="alert alert-danger">{{ $error }}</p>
+						@endforeach
 					@endif
 					@yield('content')
 				</div>

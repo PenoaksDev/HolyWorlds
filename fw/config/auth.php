@@ -15,6 +15,7 @@ return [
 
 	'defaults' => [
 		'guard' => 'web',
+		'auth' => 'users',
 		'passwords' => 'users',
 	],
 
@@ -31,19 +32,19 @@ return [
 	| users are actually retrieved out of your database or other storage
 	| mechanisms used by this application to persist your user's data.
 	|
-	| Supported: "session", "token"
+	| Supported built-ins: "session", "token"
 	|
 	*/
 
 	'guards' => [
 		'web' => [
-			'driver' => 'session',
-			'provider' => 'users',
+			'uses' => 'session',
+			'auth' => 'eloquent',
 		],
 
 		'api' => [
-			'driver' => 'token',
-			'provider' => 'users',
+			'uses' => 'token',
+			'auth' => 'eloquent',
 		],
 	],
 
@@ -60,13 +61,19 @@ return [
 	| sources which represent each model / table. These sources may then
 	| be assigned to any extra authentication guards you have defined.
 	|
-	| Supported: "database", "eloquent"
+	| Supported built-ins: "database", "eloquent"
 	|
 	*/
 
-	'providers' => [
+	'auths' => [
 		'users' => [
-			'driver' => 'custom'
+			'uses' => 'database',
+			'table' => 'users',
+		],
+		'eloquent' => [
+			'uses' => 'eloquent',
+			'usrModel' => \HolyWorlds\Models\User::class,
+			'grpModel' => \HolyWorlds\Models\Group::class,
 		],
 	],
 
@@ -91,7 +98,7 @@ return [
 
 	'passwords' => [
 		'users' => [
-			'provider' => 'users',
+			'auth' => 'users',
 			'email' => 'auth.emails.password',
 			'table' => 'password_resets',
 			'expire' => 60,

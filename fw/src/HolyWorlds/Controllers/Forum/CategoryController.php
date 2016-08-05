@@ -3,10 +3,11 @@
 use HolyWorlds\Controllers\BaseController;
 use HolyWorlds\Middleware\Permissions;
 use HolyWorlds\Models\Forum\Category;
-use HolyWorlds\Support\Forum;
 use Milky\Account\Permissions\PermissionManager;
 use Milky\Facades\Config;
 use Milky\Facades\Hooks;
+use Milky\Facades\Redirect;
+use Milky\Facades\URL;
 use Milky\Facades\View;
 use Milky\Http\JsonResponse;
 use Milky\Http\RedirectResponse;
@@ -92,9 +93,9 @@ class CategoryController extends BaseController
 	{
 		$category = $this->api( 'category.store' )->parameters( $request->all() )->post();
 
-		Forum::alert( 'success', 'categories.created' );
+		// alert( 'success', 'categories.created' );
 
-		return redirect( route( 'category.show', $category ) );
+		return Redirect::to( URL::route( 'category.show', $category ) );
 	}
 
 	/**
@@ -109,9 +110,9 @@ class CategoryController extends BaseController
 
 		$category = $this->api( "category.{$action}", $request->route( 'category' ) )->parameters( $request->all() )->patch();
 
-		alert( 'success', 'categories.updated', 1 );
+		// alert( 'success', 'categories.updated', 1 );
 
-		return redirect( route( 'category.show', $category ) );
+		return Redirect::to( URL::route( 'category.show', $category ) );
 	}
 
 	/**
@@ -124,8 +125,8 @@ class CategoryController extends BaseController
 	{
 		$this->api( 'category.delete', $request->route( 'category' ) )->parameters( $request->all() )->delete();
 
-		Forum::alert( 'success', 'categories.deleted', 1 );
+		// alert( 'success', 'categories.deleted', 1 );
 
-		return redirect( Config::get( 'forum.routing.root' ) );
+		return Redirect::to( Config::get( 'forum.routing.root' ) );
 	}
 }

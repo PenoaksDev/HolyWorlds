@@ -1,5 +1,7 @@
 <?php namespace HolyWorlds\Providers;
 
+use HolyWorlds\HolyWorldsServiceResolver;
+use Milky\Binding\UniversalBuilder;
 use Milky\Providers\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -11,6 +13,8 @@ class AppServiceProvider extends ServiceProvider
 	 */
 	public function register()
 	{
+		UniversalBuilder::registerResolver( new HolyWorldsServiceResolver() );
+
 		$this->registerAliases();
 	}
 

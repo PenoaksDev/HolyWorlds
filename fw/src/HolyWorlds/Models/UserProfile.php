@@ -6,6 +6,8 @@ use HolyWorlds\Support\Traits\Commentable;
 use HolyWorlds\Support\Traits\HasOwner;
 use Milky\Database\Eloquent\Model;
 use Milky\Facades\Cache;
+use Milky\Facades\Config;
+use Milky\Facades\URL;
 
 class UserProfile extends Model implements StaplerableInterface
 {
@@ -43,12 +45,12 @@ class UserProfile extends Model implements StaplerableInterface
 
 	public function getAvatarUrlAttribute()
 	{
-		return ( is_null( $this->avatar ) ) ? config( 'user.default_avatar_path' ) : $this->avatar->getUrl();
+		return ( is_null( $this->avatar ) ) ? Config::get( 'user.default_avatar_path' ) : $this->avatar->getUrl();
 	}
 
 	public function getUrlAttribute()
 	{
-		return $this->user == null ? null : route( 'user.profile', [
+		return $this->user == null ? null : URL::route( 'user.profile', [
 			'id' => $this->user->id,
 			'name' => str_slug( $this->user->name )
 		] );

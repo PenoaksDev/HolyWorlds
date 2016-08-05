@@ -95,5 +95,6 @@ loadRoutes( $r );
 
 $response = $factory->routeRequest();
 
-
 $response->send();
+
+$factory->terminate( $factory->request(), $response );

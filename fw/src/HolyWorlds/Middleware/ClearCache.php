@@ -1,15 +1,15 @@
 <?php namespace HolyWorlds\Middleware;
 
 use Closure;
-use Penoaks\Http\Middleware\BaseMiddleware;
+use Milky\Framework;
 
-class ClearCache extends BaseMiddleware
+class ClearCache
 {
 	public function handle( $request, Closure $next )
 	{
-		if ( !$this->fw->environment( 'production' ) )
+		if ( !Framework::fw()->environment( 'production' ) )
 		{
-			$cachedViewsDirectory = $this->fw->buildPath( 'storage' ) . '/framework/views/';
+			$cachedViewsDirectory = Framework::fw()->buildPath( '__storage', 'views' );
 			$files = glob( $cachedViewsDirectory . '*' );
 			foreach ( $files as $file )
 				if ( is_file( $file ) )
