@@ -1,7 +1,9 @@
 <?php namespace HolyWorlds\Controllers\Acct;
 
 use HolyWorlds\Controllers\BaseController;
+use HolyWorlds\Models\Setting;
 use HolyWorlds\Models\UserAuth;
+use HolyWorlds\Models\UserProfile;
 use Milky\Account\Middleware\RedirectIfAuthenticated;
 use Milky\Account\Models\User;
 use Milky\Account\Traits\AuthenticatesUsers;
@@ -9,14 +11,14 @@ use Milky\Account\Traits\ThrottlesLogins;
 use Milky\Account\Types\Account;
 use Milky\Facades\Acct;
 use Milky\Facades\Config;
-use Milky\Facades\Log;
+use Milky\Facades\Mail;
 use Milky\Facades\Redirect;
 use Milky\Facades\Session;
 use Milky\Facades\URL;
 use Milky\Facades\View;
 use Milky\Http\RedirectResponse;
 use Milky\Http\Request;
-use Milky\Http\Response;
+use Symfony\Component\HttpFoundation\Response;
 
 class AuthController extends BaseController
 {
@@ -85,17 +87,15 @@ class AuthController extends BaseController
 			else
 			{
 				UserAuth::createFromSocialite( Acct::acct(), $provider, $socialiteUser );
-				Notification::success( "Your {$provider} account is now connected and you can log in with it from now on." );
 
-				return Redirect::to( 'account/settings' );
+				return Redirect::to( 'account/settings' )->withMessages( ['success' => "Your {$provider} account is now connected and you can log in with it from now on."] );
 			}
 		}
 		else
 		{
 			Acct::login( $auth->user );
-			Notification::success( "Welcome back, {$auth->user->name}!" );
 
-			return Redirect::to( '/' );
+			return Redirect::to( '/' )->withMessages( ['success' => "Welcome back, {$auth->user->name}!"] );
 		}
 	}
 
@@ -130,10 +130,10 @@ class AuthController extends BaseController
 			Acct::logout();
 
 			// TODO Give the option to redispatch the activation e-mail
-			return Redirect::back()->withErrors( 'warning', "Your account is not activated. :(" );
+			return Redirect::back()->withMessages( ['warning' => "Your account is not activated. :("] );
 		}
 
-		return Redirect::intended( '/' )->withErrors( 'success', "Welcome, {$user->getDisplayName()}!" );
+		return Redirect::intended( '/' )->withMessages( ['success' => "Welcome back, {$user->getDisplayName()}!"] );
 	}
 
 	/**
@@ -198,7 +198,7 @@ class AuthController extends BaseController
 			$m->to( $user->email, $user->name )->subject( 'Holy Worlds account activation' );
 		} );
 
-		Notification::success( "Thanks for registering, {$user->name}! An account activation link has been sent to {$user->email}." );
+		$msg = "Thanks for registering, {$user->name}! An account activation link has been sent to {$user->email}.";
 
 		// If there's a pending user auth, create it
 		if ( Session::has( 'pending_user_auth' ) )
@@ -206,10 +206,10 @@ class AuthController extends BaseController
 			$socialiteUser = Session::pull( 'pending_user_auth' );
 			$provider = Session::pull( 'pending_user_auth_provider' );
 			$auth = UserAcct::createFromSocialite( $user, $provider, $socialiteUser );
-			Notification::success( "Your account has been linked to {$provider}." );
+			$msg = "Your account has been linked to {$provider}.";
 		}
 
-		return redirect( '/' );
+		return Redirect::to( '/' )->withMessages( ['success' => $msg] );
 	}
 
 	/**
@@ -223,11 +223,7 @@ class AuthController extends BaseController
 		$user = User::forToken( $request->route( 'token' ) )->first();
 
 		if ( is_null( $user ) )
-		{
-			Notification::info( "Invalid token. Maybe the link you followed is old?" );
-
-			return redirect( '/' );
-		}
+			return Redirect::to( '/' )->withMessages( ['info' => "Invalid token. Maybe the link you followed is old?"] );
 
 		return View::make( 'auth.activation', compact( 'user' ) );
 	}
@@ -243,17 +239,12 @@ class AuthController extends BaseController
 		$user = User::forToken( $request->input( 'token' ) )->first();
 
 		if ( is_null( $user ) )
-		{
-			Notification::info( "Invalid token. Maybe the link you followed is old?" );
-
-			return redirect( '/' );
-		}
+			return Redirect::to( '/' )->withMessages( ['info' => "Invalid token. Maybe the link you followed is old?"] );
 
 		$user->activate();
 
-		Notification::success( "Account {$user->name}/{$user->email} successfully activated. You are now logged in. :D" );
 		Acct::login( $user );
 
-		return redirect( '/' );
+		return Redirect::to( '/' )->withMessages( ['success' => "Account {$user->name}/{$user->email} successfully activated. You are now logged in. :D"] );
 	}
 }

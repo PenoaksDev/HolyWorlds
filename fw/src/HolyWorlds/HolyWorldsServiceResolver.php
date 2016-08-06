@@ -4,7 +4,7 @@ use HolyWorlds\Account\CustomAuth;
 use HolyWorlds\Models\Group;
 use HolyWorlds\Models\User;
 use Milky\Account\Middleware\RedirectIfAuthenticated;
-use Milky\Binding\Resolvers\ServiceResolver;
+use Milky\Binding\ServiceResolver;
 
 /**
  * The MIT License (MIT)

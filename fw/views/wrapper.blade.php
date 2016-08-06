@@ -147,7 +147,12 @@
 					<div class="clearfix"></div>
 				</div>
 				<div class="panel-body">
-					{{-- Notification::showAll() --}}
+					@if (isset($messages) && count($messages) > 0)
+						@foreach ($messages->all( '<p class="alert alert-:key">:message</p>' ) as $msg)
+							{!! $msg !!}
+						@endforeach
+					@endif
+
 					@if (isset($errors) && count($errors) > 0)
 						@foreach ($errors->all() as $error)
 							<p class="alert alert-danger">{{ $error }}</p>

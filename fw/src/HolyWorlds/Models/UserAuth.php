@@ -1,6 +1,7 @@
 <?php namespace HolyWorlds\Models;
 
 use HolyWorlds\Support\Traits\HasOwner;
+use Milky\Account\Types\Account;
 use Milky\Database\Eloquent\Model;
 
 class UserAuth extends Model
@@ -14,7 +15,7 @@ class UserAuth extends Model
 		return $query->where('provider', $key);
 	}
 
-	public static function createFromSocialite(User $user, $provider, SocialiteUser $socialiteUser)
+	public static function createFromSocialite(Account $user, $provider, SocialiteUser $socialiteUser)
 	{
 		return static::create([
 			'user_id' => $user->id,

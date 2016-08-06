@@ -4,14 +4,20 @@
 @section('pagetitle', 'Welcome!')
 
 @section('content')
+	@if ( !\Milky\Framework::environment( 'production' ) )
 	<div class="row">
 		<div class="col-sm-12">
-			<div class="jumbotron">
-				<h1>Holy Worlds Dev Site Notice</h1>
-				<p>This website is currently under active development. Nothing is final and things should be expected to break at any moment.</p>
+			<div class="alert alert-danger" role="alert">
+				<h1 style="margin: 0;"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Development Site Notice</h1>
+				<p>
+					This website is currently under active development. Nothing is final and things should be expected to break at any moment.
+					Changes are deployed to production every Monday at 2am, with the exception of manual deployments when patching of critical bugs is required.
+					If your interested in contributing to our codebase or would like to file a bug report, please see our GitHub repository at <a target="_blank" href="https://github.com/PenoaksDev/HolyWorlds">https://github.com/PenoaksDev/HolyWorlds</a>
+				</p>
 			</div>
 		</div>
 	</div>
+	@endif
 	<div class="row">
 		<div class="col-md-4">
 			<h4>Newest Users</h4>
@@ -42,15 +48,13 @@
 				</ul>
 			@endif
 		</div>
-		<div class="col-md-8">
+		{{-- <div class="col-md-8">
 			@foreach ($articles as $article)
 				@include('article.partials.list')
 			@endforeach
 			@include('forum.partials.pagination', ['paginator' => $articles])
-		</div>
-	</div>
-	<div class="row">
-		<div class="col-sm-12">
+		</div> --}}
+		<div class="col-md-4">
 			<h4>Latest forum threads</h4>
 			<ul class="collection">
 				@foreach ($newThreads as $thread)
@@ -67,7 +71,8 @@
 					</li>
 				@endforeach
 			</ul>
-			<hr>
+		</div>
+		<div class="col-md-4">
 			<h4>Latest forum replies</h4>
 			<ul class="collection">
 				@foreach ($newPosts as $post)
