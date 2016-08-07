@@ -10,7 +10,7 @@
   "require": {
     "php": ">=5.5.9",
     "penoaks/milky-framework": "dev-bleeding",
-    "codesleeve/stapler": "1.0.*",
+    "codesleeve/stapler": "1.2.*",
     "vlucas/phpdotenv": "^2.3",
     "filp/whoops": "^2.1"
   },
