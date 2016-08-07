@@ -1,5 +1,14 @@
 /fw/vendor
 /fw/storage
-.env
 /.idea
+/dev
 
+# Ignore error log files
+error_log
+
+# Ignore dangerous stuff
+.env
+
+#Ignore Vim swap files
+.swp
+.swo
