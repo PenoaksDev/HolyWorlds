@@ -12,7 +12,7 @@
 	RewriteCond %{REQUEST_FILENAME} !-d
 	RewriteRule ^(.*)/$ /$1 [L,R=301]
 
-	# Pass Request to Penoaks Framework
+	# Pass Request to Milky Framework
 	RewriteCond %{REQUEST_FILENAME} !-d
 	RewriteCond %{REQUEST_FILENAME} !-f
 	RewriteRule ^ index.php [L]

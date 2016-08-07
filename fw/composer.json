@@ -1,29 +1,17 @@
 {
   "name": "penoaks/holyworlds",
-  "description": "HolyWorlds.org",
+  "description": "Official Holy Worlds Repository",
+  "keywords": [
+    "framework",
+    "penoaks"
+  ],
   "license": "MIT",
   "type": "project",
   "require": {
     "php": ">=5.5.9",
-    "penoaks/milky-framework": "bleeding-dev",
-    "guzzlehttp/guzzle": "^6.2",
-    "graham-campbell/markdown": "^6.1",
-    "intervention/image": "^2.3",
-    "intervention/imagecache": "^2.3",
-    "fenos/notifynder": "^3.2",
-    "cboden/ratchet": "0.3.*",
-    "react/zmq": "0.2.*|0.3.*",
-    "ramsey/uuid": "^3.4",
-    "ramsey/uuid-doctrine": "^1.2",
+    "penoaks/framework": "dev-bleeding",
     "vlucas/phpdotenv": "^2.3",
-    "symfony/psr-http-message-bridge": "^0.2.0",
-    "zendframework/zend-diactoros": "^1.3",
-    "edvinaskrucas/notification": "^5.1",
-    "filp/whoops": "^2.1",
-    "codesleeve/stapler": "dev-master"
-  },
-  "require-dev": {
-    "fzaninotto/faker": "~1.4"
+    "filp/whoops": "^2.1"
   },
   "autoload": {
     "psr-4": {
@@ -31,12 +19,31 @@
     }
   },
   "autoload-dev": {
-    "classmap": [
-      "database/"
+  },
+  "authors": [
+    {
+      "name": "Penoaks Publishing Co.",
+      "email": "development@penoaks.com"
+    }
+  ],
+  "minimum-stability": "dev",
+  "scripts": {
+    "post-root-package-install": [
+      "php -r \"copy('.env.example', '.env');\""
+    ],
+    "post-create-project-cmd": [
+      "php artisan key:generate"
+    ],
+    "post-install-cmd": [
+      "Milky\\ComposerScripts::postInstall",
+      "php artisan optimize"
+    ],
+    "post-update-cmd": [
+      "Milky\\ComposerScripts::postUpdate",
+      "php artisan optimize"
     ]
   },
   "config": {
     "preferred-install": "dist"
-  },
-  "minimum-stability": "dev"
+  }
 }

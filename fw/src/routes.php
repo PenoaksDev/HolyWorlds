@@ -1,7 +1,6 @@
 <?php
 
 use HolyWorlds\Models\Article;
-use HolyWorlds\Models\Character;
 use HolyWorlds\Models\Forum\Post;
 use HolyWorlds\Models\Forum\Thread;
 use HolyWorlds\Models\ImageAlbum;
