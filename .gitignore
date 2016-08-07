@@ -1,16 +1,10 @@
-# Ignore certain development and dependency directories
+/fw/vendor
+/fw/storage
+/.idea
 /dev
-/vendor
-/node_modules
-/public/storage
-/database/db.sqlite
 
 # Ignore error log files
 error_log
-
-# Ignore Homestead confif
-Homestead.yaml
-Homestead.json
 
 # Ignore dangerous stuff
 .env

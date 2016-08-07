@@ -1,0 +1,49 @@
+{
+  "name": "penoaks/holyworlds",
+  "description": "Official Holy Worlds Repository",
+  "keywords": [
+    "framework",
+    "penoaks"
+  ],
+  "license": "MIT",
+  "type": "project",
+  "require": {
+    "php": ">=5.5.9",
+    "penoaks/framework": "dev-bleeding",
+    "vlucas/phpdotenv": "^2.3",
+    "filp/whoops": "^2.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "HolyWorlds\\": "src/HolyWorlds/"
+    }
+  },
+  "autoload-dev": {
+  },
+  "authors": [
+    {
+      "name": "Penoaks Publishing Co.",
+      "email": "development@penoaks.com"
+    }
+  ],
+  "minimum-stability": "dev",
+  "scripts": {
+    "post-root-package-install": [
+      "php -r \"copy('.env.example', '.env');\""
+    ],
+    "post-create-project-cmd": [
+      "php artisan key:generate"
+    ],
+    "post-install-cmd": [
+      "Milky\\ComposerScripts::postInstall",
+      "php artisan optimize"
+    ],
+    "post-update-cmd": [
+      "Milky\\ComposerScripts::postUpdate",
+      "php artisan optimize"
+    ]
+  },
+  "config": {
+    "preferred-install": "dist"
+  }
+}

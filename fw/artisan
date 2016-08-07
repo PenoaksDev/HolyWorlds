@@ -1,0 +1,26 @@
+#!/usr/bin/env php
+<?php
+
+use Symfony\Component\Console\Input\ArgvInput;
+use Symfony\Component\Console\Output\ConsoleOutput;
+
+ini_set( 'display_errors', 'On' );
+
+require_once realpath( __DIR__ . '/vendor/autoload.php' );
+
+try
+{
+	( new Dotenv\Dotenv( __DIR__ ) )->load();
+}
+catch ( Dotenv\Exception\InvalidPathException $e )
+{
+
+}
+
+$fw = fw( realpath( __DIR__ . '/../' ) );
+
+$fw->boot();
+
+$console = $fw->newConsoleFactory();
+
+exit( $console->handle( new ArgvInput(), new ConsoleOutput() ) );
