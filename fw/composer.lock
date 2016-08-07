@@ -4086,6 +4086,52 @@
             "time": "2016-07-17 14:02:08"
         },
         {
+            "name": "teamteatime/laravel-filer",
+            "version": "1.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Team-Tea-Time/laravel-filer.git",
+                "reference": "a72e391a9b5a346c1f0c7647642f8e15d5f6a011"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Team-Tea-Time/laravel-filer/zipball/a72e391a9b5a346c1f0c7647642f8e15d5f6a011",
+                "reference": "a72e391a9b5a346c1f0c7647642f8e15d5f6a011",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "TeamTeaTime\\Filer\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Riari",
+                    "email": "hello@ricko.me"
+                },
+                {
+                    "name": "NeeHi",
+                    "email": "nick.snape@hotmail.com"
+                }
+            ],
+            "description": "A simple Laravel ORM file attachment solution supporting multiple relationship types",
+            "keywords": [
+                "attachments",
+                "files",
+                "laravel",
+                "laravel-5"
+            ],
+            "time": "2016-06-02 16:49:09"
+        },
+        {
             "name": "vlucas/phpdotenv",
             "version": "dev-master",
             "source": {
