@@ -13,7 +13,7 @@ use Milky\Http\Routing\Router;
 
 function loadRoutes( Router $r )
 {
-	$r->group( ['namespace' => 'HolyWorlds\Controllers'], function ( Router $r )
+	$r->group( ['namespace' => 'HolyWorlds\Controllers', 'middleware' => 'web'], function ( Router $r )
 	{
 		$r->get( '/', function ()
 		{

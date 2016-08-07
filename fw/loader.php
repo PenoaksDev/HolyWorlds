@@ -52,30 +52,6 @@ $fw->providers->add( new \Fenos\Notifynder\NotifynderServiceProvider( $app ) );
 $fw->providers->add( new \HolyWorlds\Providers\FinalServiceProvider( $app ) );
 
 $fw->boot();
-
-$fw->addMiddleware( [
-	\Penoaks\Http\Middleware\CheckForMaintenanceMode::class,
-	\HolyWorlds\Middleware\ClearCache::class,
-] );
-
-$fw->addMiddlewareGroup( 'api', [
-	'throttle:60,1',
-] );
-
-$fw->addMiddlewareGroup( 'web', [
-	\HolyWorlds\Middleware\EncryptCookies::class,
-	\Penoaks\Cookie\Middleware\AddQueuedCookiesToResponse::class,
-	\Illuminate\Session\Middleware\StartSession::class,
-	\Krucas\Notification\Middleware\NotificationMiddleware::class,
-	\Illuminate\View\Middleware\ShareErrorsFromSession::class,
-	\HolyWorlds\Middleware\VerifyCsrfToken::class,
-] );
-
-$fw->addRouteMiddleware( 'auth', [
-	HolyWorlds\Middleware\Authenticate::class,
-] );
-
-$fw->terminate();
 */
 
 \Milky\Exceptions\Handler::extend( \HolyWorlds\Exceptions\Handler::class );
@@ -85,6 +61,29 @@ $fw = fw( realpath( __DIR__ . '/../' ) );
 $fw->boot();
 
 $factory = \Milky\Http\HttpFactory::i();
+
+$factory->addMiddleware( [
+	\Milky\Http\Middleware\CheckForMaintenanceMode::class,
+	// \HolyWorlds\Middleware\ClearCache::class,
+] );
+
+$factory->addMiddlewareGroup( 'api', [
+	'throttle:60,1',
+] );
+
+$factory->addMiddlewareGroup( 'web', [
+	\Milky\Http\Middleware\EncryptCookies::class,
+	\Milky\Http\Session\SessionManager::class,
+	\Milky\Http\Middleware\ShareSessionMessages::class,
+	\Milky\Http\Middleware\VerifyCsrfToken::class,
+	\Milky\Http\Middleware\AddQueuedCookiesToResponse::class,
+] );
+
+/*
+$fw->addRouteMiddleware( 'auth', [
+	HolyWorlds\Middleware\Authenticate::class,
+] );
+*/
 
 $factory->setRootControllerNamespace( 'HolyWorlds\Controllers' );
 
