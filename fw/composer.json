@@ -9,7 +9,7 @@
   "type": "project",
   "require": {
     "php": ">=5.5.9",
-    "penoaks/framework": "dev-bleeding",
+    "penoaks/milky-framework": "dev-bleeding",
     "vlucas/phpdotenv": "^2.3",
     "filp/whoops": "^2.1"
   },
