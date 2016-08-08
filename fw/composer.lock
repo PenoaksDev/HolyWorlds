@@ -838,12 +838,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/PenoaksDev/Milky-Framework.git",
-                "reference": "0a10a0e1020e4d43ce52236ca751000a743654b5"
+                "reference": "2b0e20205f91745467fd9c32e8328aa27f4b3934"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PenoaksDev/Milky-Framework/zipball/0a10a0e1020e4d43ce52236ca751000a743654b5",
-                "reference": "0a10a0e1020e4d43ce52236ca751000a743654b5",
+                "url": "https://api.github.com/repos/PenoaksDev/Milky-Framework/zipball/2b0e20205f91745467fd9c32e8328aa27f4b3934",
+                "reference": "2b0e20205f91745467fd9c32e8328aa27f4b3934",
                 "shasum": ""
             },
             "require": {
@@ -926,7 +926,7 @@
                 "framework",
                 "milky"
             ],
-            "time": "2016-08-07 19:27:47"
+            "time": "2016-08-07 20:26:35"
         },
         {
             "name": "psr/http-message",

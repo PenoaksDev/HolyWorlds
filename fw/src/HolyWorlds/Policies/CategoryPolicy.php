@@ -1,7 +1,7 @@
 <?php namespace HolyWorlds\Policies;
 
-use HolyWorlds\Middleware\Permissions;
 use HolyWorlds\Models\Forum\Category;
+use Milky\Account\Permissions\Policy;
 
 /**
  * The MIT License (MIT)
@@ -11,9 +11,9 @@ use HolyWorlds\Models\Forum\Category;
  * If a copy of the license was not distributed with this file,
  * You can obtain one at https://opensource.org/licenses/MIT.
  */
-class CategoryPolicy
+class CategoryPolicy extends Policy
 {
-	protected $permissionPrefix = 'forum.category';
+	protected $prefix = 'holyworlds.forum.category';
 
 	/**
 	 * Permission: Create threads in category.

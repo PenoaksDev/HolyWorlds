@@ -12,23 +12,13 @@ use Milky\Account\Permissions\Policy;
  */
 class ForumPolicy extends Policy
 {
-	protected $prefix = 'holyworlds.forum';
-
 	/**
-	 * Defines the permission checking methods.
-	 * $this->prefix + arrayKey = arrayValue
-	 * e.g., com.example + . + users.edit = editUsers()
+	 * Defines the permission namespace prefix.
+	 * Prefix will be prefixed to the namespace for the below methods.
 	 *
-	 * @var array
+	 * @var string
 	 */
-	protected $nodes = [
-		'categories.create' => 'createCategories',
-		'categories.manage' => 'manageCategories',
-		'categories.move' => 'moveCategories',
-		'categories.rename' => 'renameCategories',
-		'posts.trashed.view' => 'viewTrashedPosts',
-		'threads.trashed.view' => 'viewTrashedThreads',
-	];
+	protected $prefix = 'holyworlds.forum';
 
 	/**
 	 * Permission: Create categories.
@@ -36,7 +26,7 @@ class ForumPolicy extends Policy
 	 * @param  object $acct
 	 * @return bool
 	 *
-	 * @PermissionMethod(prefix="categories.create")
+	 * @PermissionMethod(namespace="categories.create")
 	 */
 	public function createCategories( $acct )
 	{
@@ -49,7 +39,7 @@ class ForumPolicy extends Policy
 	 * @param  object $acct
 	 * @return bool
 	 *
-	 * @PermissionMethod(prefix="categories.manage")
+	 * @PermissionMethod(namespace="categories.manage")
 	 */
 	public function manageCategories( $acct )
 	{
@@ -62,7 +52,7 @@ class ForumPolicy extends Policy
 	 * @param  object $acct
 	 * @return bool
 	 *
-	 * @PermissionMethod(prefix="categories.move")
+	 * @PermissionMethod(namespace="categories.move")
 	 */
 	public function moveCategories( $acct )
 	{
@@ -75,7 +65,7 @@ class ForumPolicy extends Policy
 	 * @param  object $acct
 	 * @return bool
 	 *
-	 * @PermissionMethod(prefix="categories.rename")
+	 * @PermissionMethod(namespace="categories.rename")
 	 */
 	public function renameCategories( $acct )
 	{
@@ -88,7 +78,7 @@ class ForumPolicy extends Policy
 	 * @param  object $acct
 	 * @return bool
 	 *
-	 * @PermissionMethod(prefix="posts.trashed.view")
+	 * @PermissionMethod(namespace="posts.trashed.view")
 	 */
 	public function viewTrashedThreads( $acct )
 	{
@@ -101,7 +91,7 @@ class ForumPolicy extends Policy
 	 * @param  object $acct
 	 * @return bool
 	 *
-	 * @PermissionMethod(prefix="threads.trashed.view")
+	 * @PermissionMethod(namespace="threads.trashed.view")
 	 */
 	public function viewTrashedPosts( $acct )
 	{

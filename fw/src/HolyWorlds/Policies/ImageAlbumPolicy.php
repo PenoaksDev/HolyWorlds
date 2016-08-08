@@ -1,8 +1,8 @@
 <?php namespace HolyWorlds\Policies;
 
-use Illuminate\Auth\Access\HandlesAuthorization;
 use HolyWorlds\Models\ImageAlbum;
 use HolyWorlds\Models\User;
+use Milky\Account\Permissions\Policy;
 
 /**
  * The MIT License (MIT)
@@ -12,9 +12,9 @@ use HolyWorlds\Models\User;
  * If a copy of the license was not distributed with this file,
  * You can obtain one at https://opensource.org/licenses/MIT.
  */
-class ImageAlbumPolicy
+class ImageAlbumPolicy extends Policy
 {
-	use HandlesAuthorization;
+	protected $prefix = 'holyworlds.album';
 
 	/**
 	 * Determine if the given user can add a comment on the given image album.
@@ -22,6 +22,8 @@ class ImageAlbumPolicy
 	 * @param  User $user
 	 * @param  ImageAlbum $album
 	 * @return bool
+	 *
+	 * @PermissionMethod( namespace="comment" )
 	 */
 	public function addComment( User $user, ImageAlbum $album )
 	{
@@ -34,6 +36,8 @@ class ImageAlbumPolicy
 	 * @param  User $user
 	 * @param  ImageAlbum $album
 	 * @return bool
+	 *
+	 * @PermissionMethod( namespace="edit" )
 	 */
 	public function edit( User $user, ImageAlbum $album )
 	{
@@ -46,6 +50,8 @@ class ImageAlbumPolicy
 	 * @param  User $user
 	 * @param  ImageAlbum $album
 	 * @return bool
+	 *
+	 * @PermissionMethod( namespace="delete" )
 	 */
 	public function delete( User $user, ImageAlbum $album )
 	{

@@ -1,8 +1,8 @@
 <?php namespace HolyWorlds\Policies;
 
 use HolyWorlds\Models\User;
-use Illuminate\Auth\Access\HandlesAuthorization;
-use Slynova\Commentable\Models\Comment;
+use HolyWorlds\Support\Models\Comment;
+use Milky\Account\Permissions\Policy;
 
 /**
  * The MIT License (MIT)
@@ -12,10 +12,8 @@ use Slynova\Commentable\Models\Comment;
  * If a copy of the license was not distributed with this file,
  * You can obtain one at https://opensource.org/licenses/MIT.
  */
-class CommentPolicy
+class CommentPolicy extends Policy
 {
-	use HandlesAuthorization;
-
 	/**
 	 * Determine if the given comment is editable by the given user.
 	 *

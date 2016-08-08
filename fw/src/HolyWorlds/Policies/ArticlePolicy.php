@@ -2,7 +2,7 @@
 
 use HolyWorlds\Models\Article;
 use HolyWorlds\Models\User;
-use Illuminate\Auth\Access\HandlesAuthorization;
+use Milky\Account\Permissions\Policy;
 
 /**
  * The MIT License (MIT)
@@ -12,10 +12,8 @@ use Illuminate\Auth\Access\HandlesAuthorization;
  * If a copy of the license was not distributed with this file,
  * You can obtain one at https://opensource.org/licenses/MIT.
  */
-class ArticlePolicy
+class ArticlePolicy extends Policy
 {
-	use HandlesAuthorization;
-
 	/**
 	 * Determine if the given user can add a comment on the article.
 	 *

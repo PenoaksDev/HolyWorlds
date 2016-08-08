@@ -1,7 +1,7 @@
 <?php namespace HolyWorlds\Policies;
 
-use Penoaks\Support\Facades\Gate;
 use HolyWorlds\Models\Forum\Thread;
+use Milky\Account\Permissions\Policy;
 
 /**
  * The MIT License (MIT)
@@ -11,14 +11,18 @@ use HolyWorlds\Models\Forum\Thread;
  * If a copy of the license was not distributed with this file,
  * You can obtain one at https://opensource.org/licenses/MIT.
  */
-class ThreadPolicy
+class ThreadPolicy extends Policy
 {
+	protected $prefix = "holyworlds.forum.thread";
+
 	/**
 	 * Permission: Delete posts in thread.
 	 *
 	 * @param  object  $user
 	 * @param  Thread  $thread
 	 * @return bool
+	 *
+	 * @PermissionMethod( namespace="delete" )
 	 */
 	public function deletePosts($user, Thread $thread)
 	{
@@ -31,6 +35,8 @@ class ThreadPolicy
 	 * @param  object  $user
 	 * @param  Thread  $thread
 	 * @return bool
+	 *
+	 * @PermissionMethod( namespace="rename" )
 	 */
 	public function rename($user, Thread $thread)
 	{
@@ -43,6 +49,8 @@ class ThreadPolicy
 	 * @param  object  $user
 	 * @param  Thread  $thread
 	 * @return bool
+	 *
+	 * @PermissionMethod( namespace="reply" )
 	 */
 	public function reply($user, Thread $thread)
 	{
@@ -55,6 +63,8 @@ class ThreadPolicy
 	 * @param  object  $user
 	 * @param  Thread  $thread
 	 * @return bool
+	 *
+	 * @PermissionMethod( namespace="delete" )
 	 */
 	public function delete($user, Thread $thread)
 	{

@@ -3,11 +3,14 @@
 use HolyWorlds\Account\CustomAuth;
 use HolyWorlds\Policies\AdminPolicy;
 use HolyWorlds\Policies\ForumPolicy;
+use HolyWorlds\Policies\UserProfilePolicy;
 use Milky\Account\AccountManager;
 use Milky\Account\Permissions\PermissionManager;
 use Milky\Auth\Access\Gate;
 use Milky\Facades\Blade;
+use Milky\Filesystem\Filesystem;
 use Milky\Providers\ServiceProvider;
+use Symfony\Component\Finder\Finder;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -31,30 +34,14 @@ class AuthServiceProvider extends ServiceProvider
 			// return "<?php } >";
 		} );
 
-		PermissionManager::policy( new AdminPolicy() );
-		PermissionManager::policy( new ForumPolicy() );
+		$p = PermissionManager::i();
 
-		$policies = [
-			'AdminPolicy',
-			'GeneralPolicy',
-			'ArticlePolicy',
-			'CategoryPolicy',
-			'CommentPolicy',
-			'EventPolicy',
-			'ForumPolicy',
-			'ImageAlbumPolicy',
-			'PostPolicy',
-			'ThreadPolicy',
-			'UserProfilePolicy'
-		];
+		foreach ( Finder::create()->files()->in( realpath( __DIR__ . '/../Policies' ) )->name( '*Policy.php' ) as $file )
+		{
+			require_once( $file->getRealPath() );
 
-		$policies = [
-			\HolyWorlds\Models\Article::class => \HolyWorlds\Policies\ArticlePolicy::class,
-			\HolyWorlds\Models\Character::class => \HolyWorlds\Policies\CharacterPolicy::class,
-			\HolyWorlds\Models\Event::class => \HolyWorlds\Policies\EventPolicy::class,
-			\HolyWorlds\Models\ImageAlbum::class => \HolyWorlds\Policies\ImageAlbumPolicy::class,
-			\HolyWorlds\Models\UserProfile::class => \HolyWorlds\Policies\UserProfilePolicy::class,
-			\Slynova\Commentable\Models\Comment::class => \HolyWorlds\Policies\CommentPolicy::class,
-		];
+			$class = '\\HolyWorlds\\Policies\\' . str_replace( '.php', '', $file->getFilename() );
+			$p->policy( new $class );
+		}
 	}
 }

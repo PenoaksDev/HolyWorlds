@@ -8,12 +8,15 @@
 	<div class="row">
 		<div class="col-sm-12">
 			<div class="alert alert-danger" role="alert">
-				<h1 style="margin: 0;"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Development Site Notice</h1>
-				<p>
-					This website is currently under active development. Nothing is final and things should be expected to break at any moment.
-					Changes are deployed to production every Monday at 2am, with the exception of manual deployments when patching of critical bugs is required.
-					If your interested in contributing to our codebase or would like to file a bug report, please see our GitHub repository at <a target="_blank" href="https://github.com/PenoaksDev/HolyWorlds">https://github.com/PenoaksDev/HolyWorlds</a>
-				</p>
+				<div style="float: left; width: 100px; font-size: 80px; text-align: center; min-height: 150px; margin-right: 20px;"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></div>
+				<div>
+					<h1 style="margin: 0;">Development Site Notice</h1>
+					<p>
+						This website is currently under active development. Nothing is final and things should be expected to break at any moment.
+						Changes are deployed to production every Monday at 2am, with the exception of manual deployments when patching of critical bugs is required.
+						If your interested in contributing to our codebase or would like to file a bug report, please see our GitHub repository at <a target="_blank" href="https://github.com/PenoaksDev/HolyWorlds">https://github.com/PenoaksDev/HolyWorlds</a>
+					</p>
+				</div>
 			</div>
 		</div>
 	</div>

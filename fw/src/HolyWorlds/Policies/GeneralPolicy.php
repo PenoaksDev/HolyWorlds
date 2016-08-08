@@ -2,6 +2,7 @@
 
 use Illuminate\Auth\Access\HandlesAuthorization;
 use HolyWorlds\Models\User;
+use Milky\Account\Permissions\Policy;
 
 /**
  * The MIT License (MIT)
@@ -11,9 +12,9 @@ use HolyWorlds\Models\User;
  * If a copy of the license was not distributed with this file,
  * You can obtain one at https://opensource.org/licenses/MIT.
  */
-class GeneralPolicy
+class GeneralPolicy extends Policy
 {
-	use HandlesAuthorization;
+	protected $prefix = "holyworlds";
 
 	/**
 	 * Determine if the given user is allowed to create image albums.
