@@ -1,7 +1,6 @@
 <?php namespace HolyWorlds\Controllers\Forum;
 
 use HolyWorlds\Controllers\BaseController;
-use HolyWorlds\Middleware\Permissions;
 use HolyWorlds\Models\Forum\Category;
 use Milky\Account\Permissions\PermissionManager;
 use Milky\Facades\Config;
@@ -28,7 +27,7 @@ class CategoryController extends BaseController
 
 		$categories = $categories->get()->filter( function ( $category )
 		{
-			return Permissions::checkPermission( $category->permission );
+			return PermissionManager::checkPermission( $category->permission );
 		} );
 
 		Hooks::trigger( 'app.user.viewing.index' );
@@ -49,7 +48,7 @@ class CategoryController extends BaseController
 		if ( is_null( $category ) || !$category->exists )
 			return View::render( "errors.404" );
 
-		if ( Permissions::checkPermission( $category->permission ) )
+		if ( PermissionManager::checkPermission( $category->permission ) )
 		{
 			Hooks::trigger( 'app.user.viewing.category', compact( 'category' ) );
 

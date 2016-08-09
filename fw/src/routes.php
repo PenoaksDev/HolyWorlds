@@ -69,28 +69,23 @@ function loadRoutes( Router $r )
 		$r->group( ['prefix' => 'account', 'as' => 'account.'], function ( Router $r )
 		{
 			// Settings & logins
-			$r->get( 'settings', ['as' => 'settings', 'uses' => 'User\AccountController@getSettings'] );
-			$r->post( 'settings', 'User\AccountController@postSettings' );
+			$r->get( 'settings', ['as' => 'settings', 'uses' => 'Account\AccountController@getSettings'] );
+			$r->post( 'settings', 'Account\AccountController@postSettings' );
 			$r->get( '{provider}/disconnect', [
 				'as' => 'disconnect-login',
-				'uses' => 'User\AccountController@getDisconnectLogin'
+				'uses' => 'Account\AccountController@getDisconnectLogin'
 			] );
-			$r->post( '{provider}/disconnect', 'User\AccountController@postDisconnectLogin' );
+			$r->post( '{provider}/disconnect', 'Account\AccountController@postDisconnectLogin' );
 
 			// Notifications
-			$r->get( 'notifications', ['as' => 'notifications', 'uses' => 'User\AccountController@getNotifications'] );
+			$r->get( 'notifications', ['as' => 'notifications', 'uses' => 'Account\AccountController@getNotifications'] );
 
 			// Profile
-			$r->get( 'profile', 'User\AccountController@redirectToProfile' );
-			$r->get( 'profile/edit', ['as' => 'profile.edit', 'uses' => 'User\AccountController@getEditProfile'] );
-			$r->post( 'profile/edit', 'User\AccountController@postEditProfile' );
-		} );
+			$r->get( '{id}-{name}', ['as' => 'profile', 'uses' => 'Account\ProfileController@show'] );
 
-		// User
-		$r->group( ['prefix' => 'user', 'as' => 'user.'], function ( Router $r )
-		{
-			// Profiles
-			$r->get( '{id}-{name}', ['as' => 'profile', 'uses' => 'User\ProfileController@show'] );
+			$r->get( 'profile', 'Account\AccountController@redirectToProfile' );
+			$r->get( 'profile/edit', ['as' => 'profile.edit', 'uses' => 'Account\AccountController@getEditProfile'] );
+			$r->post( 'profile/edit', 'Account\AccountController@postEditProfile' );
 		} );
 
 		// Articles

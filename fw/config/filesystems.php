@@ -45,12 +45,12 @@ return [
 
 		'local' => [
 			'driver' => 'local',
-			'root' => $fw->buildPath( 'app', 'storage' ),
+			'root' => $fw->buildPath( '__storage', 'app' ),
 		],
 
 		'public' => [
 			'driver' => 'local',
-			'root' => $fw->buildPath( 'app/public', 'storage' ),
+			'root' => $fw->buildPath( '__storage', 'app/public' ),
 			'visibility' => 'public',
 		],
 

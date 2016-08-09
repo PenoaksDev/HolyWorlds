@@ -66,8 +66,8 @@
 							{{ $thread->title }}
 						</a>
 						by
-						<a href="{{ $thread->author->profile->url }}">
-							{{ $thread->author->name }}
+						<a href="{{ $thread->author->profileUrl }}">
+							{{ $thread->author->displayName }}
 						</a>
 						<br>
 						{{ $thread->created_at->diffForHumans() }}

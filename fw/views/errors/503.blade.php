@@ -1,4 +1,4 @@
-@extends('app')
+@extends('master')
 
 @section('title', 'Site under maintenance')
 

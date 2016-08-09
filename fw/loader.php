@@ -11,6 +11,7 @@
 
 use HolyWorlds\Middleware\Authenticate;
 use Milky\Account\Middleware\RedirectIfAuthenticated;
+use Milky\Account\Permissions\CheckPermission;
 use Milky\Auth\Middleware\AuthenticateWithBasicAuth;
 
 ini_set( 'display_errors', 'On' );
@@ -165,8 +166,9 @@ $factory->addMiddlewareGroup( 'web', [
 $factory->addRouteMiddleware( 'auth', Authenticate::class );
 $factory->addRouteMiddleware( 'auth.basic', AuthenticateWithBasicAuth::class );
 // $factory->addRouteMiddleware( 'can', Authorize );
-$factory->addRouteMiddleware( 'guest', RedirectIfAuthenticated::class );
+$factory->addRouteMiddleware( 'login', RedirectIfAuthenticated::class );
 // $factory->addRouteMiddleware( 'throttle', ThrottlesRequests::class );
+$factory->addRouteMiddleware( 'perms', CheckPermission::class );
 
 /*
 $fw->addRouteMiddleware( 'auth', [
