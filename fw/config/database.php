@@ -48,7 +48,7 @@ return [
 
 		'sqlite' => [
 			'driver' => 'sqlite',
-			'database' => env('DB_DATABASE', $fw->buildPath( 'db.sqlite', 'database' )),
+			'database' => env('DB_DATABASE', $fw->buildPath( '__database', 'db.sqlite' )),
 			'prefix' => '',
 		],
 

@@ -31,8 +31,8 @@ return [
 	*/
 
 	'paths' => [
-		$fw->buildPath( null, 'storage' ),
-		$fw->buildPath( 'images', 'base' )
+		$fw->buildPath( '__storage' ),
+		$fw->buildPath( '__base', 'images' )
 	],
 
 	/*

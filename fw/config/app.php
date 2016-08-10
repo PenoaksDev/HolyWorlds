@@ -110,5 +110,6 @@ return [
 		\HolyWorlds\Providers\AuthServiceProvider::class,
 		\HolyWorlds\Providers\StaplerServiceProvider::class,
 		\HolyWorlds\Providers\FinalServiceProvider::class,
+		\Milky\Providers\MarkdownServiceProvider::class,
 	],
 ];

@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 
 	// Datatype for primary keys of your models.
 	// used in migrations only
@@ -23,4 +23,4 @@ return array(
 
 	// Model to use to store the tags in the database
 	'tag_model' => '\Conner\Tagging\Model\Tag',
-);
+];
