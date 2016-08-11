@@ -14,16 +14,7 @@ function loadRoutes( Router $r )
 {
 	$r->group( ['namespace' => 'HolyWorlds\Controllers', 'middleware' => 'web'], function ( Router $r )
 	{
-		$r->get( '/', function ()
-		{
-			return View::render( 'index', [
-				'newUsers' => User::activated()->orderBy( 'created_at', 'desc' )->limit( 5 )->get(),
-				'onlineUsers' => Session::authenticated()->groupBy( 'user_id' )->recent()->limit( 10 )->get(),
-				'newThreads' => Thread::with( ['author', 'posts'] )->orderBy( 'created_at', 'desc' )->limit( 5 )->get(),
-				'newPosts' => Post::where( 'post_id', '!=', null )->orderBy( 'created_at', 'DESC' )->limit( 5 )->get(),
-				'articles' => Article::published()->orderBy( 'published_at', 'desc' )->paginate()
-			] );
-		} );
+		$r->get( '/', ['as' => 'root', 'uses' => 'RootController@index'] );
 
 		$r->group( ["prefix" => "messages", "as" => "messages."], function ( Router $r )
 		{
@@ -36,38 +27,40 @@ function loadRoutes( Router $r )
 			} );
 		} );
 
-		// Auth
-		$r->group( ['prefix' => 'acct'], function ( Router $r )
+		$r->group( ['prefix' => 'auth', 'as' => 'auth.'], function ( Router $r )
 		{
+			// Login
+			$r->get( 'login', ['as' => 'login', 'uses' => 'Account\AuthController@getLogin'] );
+			$r->post( 'login', 'Account\AuthController@postLogin' );
+			$r->get( 'logout', ['as' => 'logout', 'uses' => 'Account\AuthController@getLogout'] );
+
 			// Registration
-			$r->get( 'register', ['as' => 'register', 'uses' => 'Acct\AuthController@getRegister'] );
-			$r->post( 'register', 'Acct\AuthController@postRegister' );
+			$r->get( 'register', ['as' => 'register', 'uses' => 'Account\AuthController@getRegister'] );
+			$r->post( 'register', 'Account\AuthController@postRegister' );
 
 			// Activation
 			$r->get( 'activate/{token}', [
 				'as' => 'auth.get.activation',
-				'uses' => 'Acct\AuthController@getActivation'
+				'uses' => 'Account\AuthController@getActivation'
 			] );
-			$r->post( 'activate', ['as' => 'auth.post.activation', 'uses' => 'Acct\AuthController@postActivation'] );
-
-			// Login
-			$r->get( 'login', ['as' => 'login', 'uses' => 'Acct\AuthController@getLogin'] );
-			$r->post( 'login', 'Acct\AuthController@postLogin' );
-			$r->get( 'logout', ['as' => 'logout', 'uses' => 'Acct\AuthController@getLogout'] );
+			$r->post( 'activate', ['as' => 'auth.post.activation', 'uses' => 'Account\AuthController@postActivation'] );
 
 			// Password reset
-			$r->get( 'password/reset/{token?}', 'Acct\PasswordController@showResetForm' );
-			$r->post( 'password/email', 'Acct\PasswordController@sendResetLinkEmail' );
-			$r->post( 'password/reset', 'Acct\PasswordController@reset' );
+			$r->get( 'password/reset/{token?}', 'Account\PasswordController@showResetForm' );
+			$r->post( 'password/email', 'Account\PasswordController@sendResetLinkEmail' );
+			$r->post( 'password/reset', 'Account\PasswordController@reset' );
 
 			// Socialite
-			$r->get( '{provider}', 'Acct\AuthController@redirectToProvider' );
-			$r->get( '{provider}/callback', 'Acct\AuthController@handleProviderCallback' );
-		} );
+			$r->get( '{provider}', 'Account\AuthController@redirectToProvider' );
+			$r->get( '{provider}/callback', 'Account\AuthController@handleProviderCallback' );
+		});
 
 		// Account
-		$r->group( ['prefix' => 'account', 'as' => 'account.'], function ( Router $r )
+		$r->group( ['prefix' => 'user', 'as' => 'user.'], function ( Router $r )
 		{
+			// Profile
+			$r->get( '{id}-{slug}', ['as' => 'show', 'uses' => 'User\Controller@show'] );
+
 			// Settings & logins
 			$r->get( 'settings', ['as' => 'settings', 'uses' => 'Account\AccountController@getSettings'] );
 			$r->post( 'settings', 'Account\AccountController@postSettings' );
@@ -80,12 +73,15 @@ function loadRoutes( Router $r )
 			// Notifications
 			$r->get( 'notifications', ['as' => 'notifications', 'uses' => 'Account\AccountController@getNotifications'] );
 
-			// Profile
-			$r->get( '{id}-{name}', ['as' => 'profile', 'uses' => 'Account\ProfileController@show'] );
-
 			$r->get( 'profile', 'Account\AccountController@redirectToProfile' );
 			$r->get( 'profile/edit', ['as' => 'profile.edit', 'uses' => 'Account\AccountController@getEditProfile'] );
 			$r->post( 'profile/edit', 'Account\AccountController@postEditProfile' );
+		} );
+
+		// Groups
+		$r->group( ['prefix' => 'group', 'as' => 'group.'], function ( Router $r )
+		{
+			$r->get( '{id}-{slug}', ['as' => 'show', 'uses' => 'Group\Controller@show'] );
 		} );
 
 		// Articles

@@ -1,4 +1,4 @@
-<?php namespace HolyWorlds\Controllers\Acct;
+<?php namespace HolyWorlds\Controllers\Account;
 
 use HolyWorlds\Controllers\BaseController;
 use HolyWorlds\Models\Setting;

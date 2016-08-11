@@ -66,10 +66,10 @@
 				@if ( Acct::isGuest() )
 					<li><p class="navbar-text">Welcome Guest</p></li>
 					<li>
-						<a href="{{ URL::route( 'login' ) }}"><i class="fa fa-sign-in" aria-hidden="true"></i> Sign In</a>
+						<a href="{{ URL::route( 'auth.login' ) }}"><i class="fa fa-sign-in" aria-hidden="true"></i> Sign In</a>
 					</li>
 					<li>
-						<a href="{{ URL::route( 'register' ) }}"><i class="fa fa-user-plus" aria-hidden="true"></i> Register</a>
+						<a href="{{ URL::route( 'auth.register' ) }}"><i class="fa fa-user-plus" aria-hidden="true"></i> Register</a>
 					</li>
 				@else
 					<li class="dropdown"> <!-- {{ url('account/notifications') }} -->
@@ -104,7 +104,7 @@
 							@endif
 							<li role="separator" class="divider"></li>
 							<li>
-								<a class="noAjax" href="{{ URL::route( 'logout' ) }}"><i class="fa fa-sign-out" aria-hidden="true"></i> Sign Out</a>
+								<a class="noAjax" href="{{ URL::route( 'auth.logout' ) }}"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout</a>
 							</li>
 						</ul>
 					</li>
@@ -122,8 +122,8 @@
 			<div class="container">
 				<div class="header-container">
 					<div class="header hidden-xs">
-						<a href="{{ url('/') }}"><img src="{{ url('images/logo.png') }}" style="height: 128px;" /></a>
-					<!-- <h1><a href="{{ url('/') }}">Holy Worlds</a></h1> -->
+						<a href="{{ URL::to('/') }}"><img src="{{ url('images/logo.png') }}" style="height: 128px;" /></a>
+					<!-- <h1><a href="{{ URL::to('/') }}">Holy Worlds</a></h1> -->
 						<p>Community of Christ-centered Creativity</p>
 					</div>
 				</div>
@@ -134,16 +134,10 @@
 			@yield('before_content')
 			<div class="panel panel-default">
 				<div class="panel-heading">
-					<h3 class="pull-left" style="margin: 5px 0; padding: 0;"><?php if ( empty( $__env->yieldContent( 'pagetitle' ) ) )
-							echo $__env->yieldContent( 'title' );
-						else echo $__env->yieldContent( 'pagetitle' ); ?></h3>
-					@if (false && array_key_exists('breadcrumbs', View::getSections()))
-						<ol class="hidden-xs hidden-sm breadcrumb pull-right" style="margin: 0;">
-							<li><a href="{{ url('/') }}">Home</a></li>
-							@section('breadcrumbs')
-							@show
-						</ol>
-					@endif
+					<h3 class="pull-left" style="margin: 5px 0; padding: 0;">
+						@yieldChoice('pagetitle', 'title')
+					</h3>
+					@include ('partials.breadcrumbs')
 					<div class="clearfix"></div>
 				</div>
 				<div class="panel-body">
@@ -158,11 +152,102 @@
 							<p class="alert alert-danger">{{ $error }}</p>
 						@endforeach
 					@endif
-					@yield('content')
+					@yieldChoice('content_override', 'content')
 				</div>
 			</div>
 			@yield('after_content')
-			@yield('bottom')
+
+			<script>
+				var toggle = $( 'input[type=checkbox][data-toggle-all]' );
+				var checkboxes = $( 'table tbody input[type=checkbox]' );
+				var actions = $( '[data-actions]' );
+				var forms = $( '[data-actions-form]' );
+				var confirmString = "{{ Lang::trans('general.generic_confirm') }}";
+
+				function setToggleStates()
+				{
+					checkboxes.prop( 'checked', toggle.is( ':checked' ) ).change();
+				}
+
+				function setSelectionStates()
+				{
+					checkboxes.each(
+							function()
+							{
+								var tr = $( this ).parents( 'tr' );
+
+								$( this ).is( ':checked' ) ? tr.addClass( 'active' ) : tr.removeClass( 'active' );
+
+								checkboxes.filter( ':checked' ).length ? $( '[data-bulk-actions]' )
+										.removeClass( 'hide' ) : $( '[data-bulk-actions]' ).addClass( 'hide' );
+							}
+					);
+				}
+
+				function setActionStates()
+				{
+					forms.each(
+							function()
+							{
+								var form = $( this );
+								var method = form.find( 'input[name=_method]' );
+								var selected = form.find( 'select[name=action] option:selected' );
+								var depends = form.find( '[data-depends]' );
+
+								selected.each(
+										function()
+										{
+											if( $( this ).attr( 'data-method' ) )
+											{
+												method.val( $( this ).data( 'method' ) );
+											}
+											else
+											{
+												method.val( 'patch' );
+											}
+										}
+								);
+
+								depends.each(
+										function()
+										{
+											(selected.val() == $( this ).data( 'depends' )) ? $( this )
+													.removeClass( 'hide' ) : $( this ).addClass( 'hide' );
+										}
+								);
+							}
+					);
+				}
+
+				setToggleStates();
+				setSelectionStates();
+				setActionStates();
+
+				toggle.click( setToggleStates );
+				checkboxes.change( setSelectionStates );
+				actions.change( setActionStates );
+
+				forms.submit(
+						function()
+						{
+							var action = $( this ).find( '[data-actions]' ).find( ':selected' );
+
+							if( action.is( '[data-confirm]' ) )
+							{
+								return confirm( confirmString );
+							}
+
+							return true;
+						}
+				);
+
+				$( 'form[data-confirm]' ).submit(
+						function()
+						{
+							return confirm( confirmString );
+						}
+				);
+			</script>
 		</div>
 
 		@if ( !Request::ajax() )

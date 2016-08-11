@@ -1,6 +1,6 @@
-<?php namespace HolyWorlds\Http\Controllers\Account;
+<?php namespace HolyWorlds\Controllers;
 
-use HolyWorlds\Controllers\BaseController;
+use HolyWorlds\Models\User;
 use HolyWorlds\Models\UserAuth;
 use HolyWorlds\Support\Image;
 use Milky\Facades\Acct;
@@ -14,7 +14,7 @@ use Milky\Helpers\Str;
 use Milky\Http\Request;
 use Milky\Http\Response;
 
-class AccountController extends BaseController
+class UserController extends BaseController
 {
 	/**
 	 * Create a new account controller instance.

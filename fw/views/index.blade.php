@@ -28,7 +28,7 @@
 				@foreach ($newUsers as $user)
 					<li class="list-group-item">
 						@include('user.partials.avatar', ['user' => $user])
-						<a href="{{ $user->profile->url }}">
+						<a href="{{ $user->profileUrl }}">
 							{{ $user->name }}
 						</a>
 						<span>joined {{ $user->created_at->diffForHumans() }}</span>
@@ -85,7 +85,7 @@
 						</a>
 						by
 						@if ( $post->author )
-							<a href="{{ $post->author->profile->url }}">
+							<a href="{{ $post->author->profileUrl }}">
 								{{ $post->author->name }}
 							</a>
 						@endif
