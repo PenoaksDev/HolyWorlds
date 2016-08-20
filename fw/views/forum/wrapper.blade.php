@@ -1,7 +1,11 @@
 @extends('wrapper')
 
+<?php
+
+?>
+
 @section('breadcrumbs')
-	<li><a href="{{ url('forum') }}">Forum</a></li>
+	<li><a href="{{ URL::route( 'forum.index' ) }}">Forum</a></li>
 	@if ( isset( $breadcrumbs ) )
 		@foreach ( $breadcrumbs as $crumb )
 			{!! "<li>$crumb</li>" !!}

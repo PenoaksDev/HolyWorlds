@@ -4,12 +4,12 @@ $cat = App\Models\Forum\Category::find( $thread->category_id );
 if ( !is_null( $cat ) )
 	do
 	{
-		array_unshift($breadcrumbs, "<a href=\"" . route('forum.category.show', $cat) . "\">" . $cat->title . "</a>");
+		array_unshift($breadcrumbs, "<a href=\"" . routeModel('forum.category.show', $cat) . "\">" . $cat->title . "</a>");
 		$cat = $cat->parent;
 	}
 	while ( $cat );
 ?>
-@extends ('forum.master', compact('breadcrumbs'))
+@extends ('forum.wrapper', compact('breadcrumbs'))
 
 @section('title', $thread->title);
 

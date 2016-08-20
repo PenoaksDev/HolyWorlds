@@ -1,4 +1,4 @@
-@extends ('forum.master')
+@extends ('forum.wrapper')
 
 @section ('title', 'Forum Index')
 

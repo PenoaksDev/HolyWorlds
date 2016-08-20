@@ -1,5 +1,5 @@
 @foreach ($model->tags as $tag)
     <div class="chip">
-        <a href="{{ url("tagged/{$tag->slug}") }}">{{ $tag->name }}</a>
+        <a href="{{ URL::to("tagged/{$tag->slug}") }}">{{ $tag->name }}</a>
     </div>
 @endforeach

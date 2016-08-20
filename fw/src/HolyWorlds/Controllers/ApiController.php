@@ -10,7 +10,7 @@ use Milky\Validation\ValidatesRequests;
 
 abstract class ApiController extends Controller
 {
-	use AuthorizesRequests, ValidatesRequests;
+	use ValidatesRequests;
 
 	/**
 	 * @var Request

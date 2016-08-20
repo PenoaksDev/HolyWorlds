@@ -137,7 +137,10 @@
 					<h3 class="pull-left" style="margin: 5px 0; padding: 0;">
 						@yieldChoice('pagetitle', 'title')
 					</h3>
-					@include ('partials.breadcrumbs')
+					<ol class="hidden-xs hidden-sm breadcrumb pull-right" style="margin: 0;">
+						@breadcrumbs
+					</ol>
+					{{-- @include ('partials.breadcrumbs') --}}
 					<div class="clearfix"></div>
 				</div>
 				<div class="panel-body">

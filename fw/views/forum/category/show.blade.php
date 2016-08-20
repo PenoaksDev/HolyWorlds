@@ -1,15 +1,14 @@
 <?php
-$breadcrumbs = [];
 $cat = $category;
 do
 {
-	array_unshift($breadcrumbs, "<a href=\"" . URL::routeModel('forum.category.show', $cat) . "\">" . $cat->title . "</a>");
+	\Milky\Helpers\Breadcrumbs::prepend( ['url' => URL::routeModel('forum.category.show', $cat), 'title' => $cat->title] );
 	$cat = $cat->parent;
 }
-while ( $cat )
+while ( $cat );
 ?>
 
-@extends ('forum.master', compact('breadcrumbs'))
+@extends ('forum.wrapper', compact('breadcrumbs'))
 @section ('pagetitle', $category->title)
 
 @section ('content')
@@ -19,7 +18,7 @@ while ( $cat )
 			@include('forum.partials.categories', compact('category'))
 		</div>
 	</div>
-	<div row="row">
+	<div class="row">
 		<div class="col-md-12">
 			<center>
 				@include('forum.partials.pagination', ['paginator' => $category->threadsPaginated])
@@ -52,7 +51,7 @@ while ( $cat )
 								<th>Subject</th>
 								<th class="col-md-2 right-align hidden-xs hidden-sm">Posts</th>
 								<th class="col-md-2 right-align">Last Post</th>
-								@can ('manageThreads', $category)
+								@can ( 'manageThreads', $category )
 									<th class="col-md-1 right-align"><input type="checkbox" data-toggle-all></th>
 								@endcan
 							</tr>
@@ -81,8 +80,8 @@ while ( $cat )
 											</a>
 											<br>
 											<p>
-												<a href="{{-- $thread->author->profile->url --}}">
-													{{-- $thread->authorName --}}
+												<a href="{{ $thread->author->profileUrl }}">
+													{{ $thread->author->getDisplayName() }}
 												</a>
 												<span class="grey-text">({{ $thread->posted }})</span>
 											</p>

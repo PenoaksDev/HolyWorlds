@@ -1,7 +1,5 @@
 <?php namespace HolyWorlds\Controllers;
 
-use Milky\Auth\Access\AuthorizesRequests;
-use Milky\Auth\Access\AuthorizesResources;
 use Milky\Bus\DispatchesJobs;
 use Milky\Database\Eloquent\Collection;
 use Milky\Facades\Redirect;
@@ -12,7 +10,7 @@ use Milky\Validation\ValidatesRequests;
 
 class BaseController extends Controller
 {
-	use AuthorizesRequests, AuthorizesResources, DispatchesJobs, ValidatesRequests;
+	use DispatchesJobs, ValidatesRequests;
 
 	private $baseRules = [
 		'author_id' => ['integer'],

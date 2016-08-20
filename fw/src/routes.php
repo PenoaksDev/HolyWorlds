@@ -12,9 +12,9 @@ use Milky\Http\Routing\Router;
 
 function loadRoutes( Router $r )
 {
-	$r->group( ['namespace' => 'HolyWorlds\Controllers', 'middleware' => 'web'], function ( Router $r )
+	$r->group( ['namespace' => 'HolyWorlds\Controllers', 'middleware' => 'web', 'crumbs' => 'Home|root'], function ( Router $r )
 	{
-		$r->get( '/', ['as' => 'root', 'uses' => 'RootController@index'] );
+		$r->get( '/', ['as' => 'root', 'uses' => 'RootController@index', 'crumbs' => 'Index'] );
 
 		$r->group( ["prefix" => "messages", "as" => "messages."], function ( Router $r )
 		{
@@ -185,7 +185,7 @@ function loadRoutes( Router $r )
 		$r->model( 'article', Article::class );
 		$r->model( 'comment', Comment::class );
 
-		$r->group( ["prefix" => "forum", "namespace" => "Forum", "as" => "forum."], function ( Router $r )
+		$r->group( ["prefix" => "forum", "namespace" => "Forum", "as" => "forum.", 'crumbs' => 'Forum|forum.index'], function ( Router $r )
 		{
 			$r->get( '/', ['as' => 'index', 'uses' => "CategoryController@index"] );
 

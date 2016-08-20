@@ -26,7 +26,7 @@ class ThreadPolicy extends Policy
 	 */
 	public function deletePosts($user, Thread $thread)
 	{
-		return true;
+		return $this->next();
 	}
 
 	/**
@@ -40,7 +40,7 @@ class ThreadPolicy extends Policy
 	 */
 	public function rename($user, Thread $thread)
 	{
-		return $user->getKey() === $thread->author_id;
+		return $user->getKey() === $thread->author_id || $this->next();
 	}
 
 	/**
@@ -54,7 +54,7 @@ class ThreadPolicy extends Policy
 	 */
 	public function reply($user, Thread $thread)
 	{
-		return !$thread->locked;
+		return !$thread->locked || $this->next();
 	}
 
 	/**
@@ -68,6 +68,6 @@ class ThreadPolicy extends Policy
 	 */
 	public function delete($user, Thread $thread)
 	{
-		return Gate::allows('deleteThreads', $thread->category) || $user->getKey() === $thread->author_id;
+		return Gate::allows('deleteThreads', $thread->category) || $user->getKey() === $thread->author_id || $this->next();
 	}
 }
