@@ -14,7 +14,7 @@
 					<p>
 						This website is currently under active development. Nothing is final and things should be expected to break at any moment.
 						Changes are deployed to production every Monday at 2am, with the exception of manual deployments when patching of critical bugs is required.
-						If your interested in contributing to our codebase or would like to file a bug report, please see our GitHub repository at <a target="_blank" href="https://github.com/PenoaksDev/HolyWorlds">https://github.com/PenoaksDev/HolyWorlds</a>
+						If you're interested in contributing to our codebase or would like to file a bug report, please see our GitHub repository at <a target="_blank" href="https://github.com/PenoaksDev/HolyWorlds">https://github.com/PenoaksDev/HolyWorlds</a>
 					</p>
 				</div>
 			</div>
