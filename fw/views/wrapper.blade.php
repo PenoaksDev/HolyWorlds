@@ -450,11 +450,13 @@
 												console.info( "Successfully AJAX navigated to " + href );
 											}
 
-											if( _gaq )
-											{
-												// Send ajax analytic data to Google
-												_gaq.push( ['_setReferrerOverride', referrer] );
-												_gaq.push( ['_trackPageview', href] );
+											if ( typeof _gaq !== "undefined") {
+												if( _gaq )
+												{
+													// Send ajax analytic data to Google
+													_gaq.push( ['_setReferrerOverride', referrer] );
+													_gaq.push( ['_trackPageview', href] );
+												}
 											}
 										}
 								).fail(
