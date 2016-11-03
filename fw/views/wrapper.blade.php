@@ -450,7 +450,8 @@
 												console.info( "Successfully AJAX navigated to " + href );
 											}
 
-											if ( typeof _gaq !== "undefined") {
+											if( typeof _gaq !== "undefined" )
+											{
 												if( _gaq )
 												{
 													// Send ajax analytic data to Google
