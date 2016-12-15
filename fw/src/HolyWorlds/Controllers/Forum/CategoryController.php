@@ -59,7 +59,7 @@ class CategoryController extends BaseController
 			return View::render( 'forum.category.show', compact( 'categories', 'category', 'threads' ) );
 		}
 
-		return $this->error( 403, "You do not have permission to view this thread." ); // TODO Redirect to forum index and display message.
+		return $this->error( 403, "You do not have permission to view this thread." ); // XXX Redirect to forum index and display message. Maybe.
 	}
 
 	/**

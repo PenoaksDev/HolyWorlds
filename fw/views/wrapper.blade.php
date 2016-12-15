@@ -260,8 +260,8 @@
 					<p class="pull-right"><a href="{{ url("pages/privacy") }}">Privacy</a> &#8226;
 						<a href="{{ url("pages/terms") }}">Terms</a> &#8226;
 						<a href="javascript: $(this).scrollTop(0);">Back to top</a></p>
-					<p>&copy; 2016 Holy Worlds &#8226; A subsidiary of
-						<a target="_blank" href="http://penoaks.com">Penoaks Publishing Co.</a> &#8226; All rights reserved
+					<p>&copy; <?=date("Y")?> Holy Worlds &#8226; A subsidiary of
+						<a target="_blank" href="http://penoaks.com">Penoaks Publishing Ltd.</a> &#8226; All rights reserved
 					</p>
 				</footer>
 			</div>
@@ -301,8 +301,10 @@
 								navigate( href, referrer );
 							};
 
-							$( 'a:not(.noAjax):not([class^="phpdebugbar"]):not([href^="javascript"])[rel!="external"][target!="_blank"][href!="#"], .ajaxLink' )
-									.click( onClickEvent );
+							// Ajaxify all links
+							// $( 'a:not(.noAjax):not([class^="phpdebugbar"]):not([href^="javascript"])[rel!="external"][target!="_blank"][href!="#"], .ajaxLink' ).click( onClickEvent );
+
+							$( 'a.ajaxLink' ).click( onClickEvent );
 
 							function navigate( href, referrer )
 							{

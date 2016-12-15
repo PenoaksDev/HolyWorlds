@@ -1,6 +1,7 @@
 /fw/vendor
 /fw/storage
 /.idea
+/.phpintel
 /dev
 
 # Ignore error log files

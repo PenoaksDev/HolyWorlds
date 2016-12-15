@@ -5,7 +5,7 @@
 @section('content')
 <div class="row">
 	<div class="col-md-9">
-		<form class="form-signin form-horizontal" action="{{ URL::route( 'account.login' ) }}" method="post" role="form">
+		<form class="form-signin form-horizontal" action="{{ URL::route( 'auth.login' ) }}" method="post" role="form">
 			{!! Session::csrfField() !!}
 			<input name="target" type="hidden" value="">
 			<div class="form-group">
@@ -31,7 +31,7 @@
 			</div>
 			<div class="form-group">
 				<div class="col-sm-offset-2 col-sm-10">
-					<a href="{{ URL::route( 'account.register' )  }}" class="btn btn-default"><span class="fa fa-pencil-square-o"></span> Registration</a>
+					<a href="{{ URL::route( 'auth.register' )  }}" class="btn btn-default"><span class="fa fa-pencil-square-o"></span> Registration</a>
 					<a class="btn btn-default" href="{{ url('auth/password/reset') }}">Reset Password</a>
 					<button class="btn btn-success pull-right" type="submit"><span class="fa fa-sign-in"></span> Sign In</button>
 				</div>
